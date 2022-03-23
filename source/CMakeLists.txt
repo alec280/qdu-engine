@@ -4,7 +4,6 @@ set(QDU_HEADERS
         World/World.hpp)
 set(QDU_SOURCES
         Application.cpp
-        World/GameObjectManager.cpp
         World/World.cpp)
 
 add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp)
