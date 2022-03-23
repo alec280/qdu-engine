@@ -1,4 +1,8 @@
 #pragma once
+#ifndef WORLD_HPP
+#define WORLD_HPP
+
+#include "../Application.hpp"
 
 namespace QDU {
     class World
@@ -29,6 +33,9 @@ namespace QDU {
          * Updates the world.
          */
         void Update(float timeStep) noexcept;
+
+        Application &m_application;
+        bool m_shouldClose;
     };
 }
 #endif

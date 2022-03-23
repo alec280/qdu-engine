@@ -1,5 +1,7 @@
 #include "QDUEngine.hpp"
 
+#include <iostream>
+
 class Demo : public QDU::Application
 {
 public:

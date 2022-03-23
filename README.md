@@ -1,16 +1,12 @@
 # qdu-engine
 
----
-
 C++ Game engine for top-down roguelikes
 
 ## Building (Windows)
 
----
-
 - Clone the repository
 - Inside the repository type: `git submodule update --init --recursive`
-- Build the game engine inside in a build folder next to the src folder
+- Build the game engine with VS 2022
   - `mkdir build`
   - `cd build`
   - `cmake ../src`
@@ -27,7 +23,5 @@ C++ Game engine for top-down roguelikes
   - Executable is generated at `examples/demo/{Release|Debug}/main.exe`
   
 ## Execution (Windows)
-
----
 
 Relative to the root, execute `examples/demo/{Release|Debug}/main.exe` according to the solution built

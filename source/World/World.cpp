@@ -1,11 +1,13 @@
 #include "World.hpp"
 
+#include <chrono>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace QDU {
     World::World(Application& app) :
         m_application(app),
+        m_shouldClose(false)
     {
         m_application = std::move(app);
         m_application.StartUp(*this);
