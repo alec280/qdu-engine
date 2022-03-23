@@ -10,8 +10,8 @@ C++ Game engine for top-down roguelikes.
   - `mkdir build`
   - `cd build`
   - `cmake ..`
-  - Open the solution `qdu-engine.sln`
-  - Build the solution in Release mode
+  - Open the solution: `qdu-engine.sln`
+  - Build the solution in Release x64 mode.
   
 ## Execute demo (Windows)
 
