@@ -3,14 +3,18 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 OFF)
 
 project(qdu-engine C CXX)
 
-add_library(math_lib STATIC
-    "src/math/vector3.h"
-    "src/math/vector3.cpp"
-)
+find_package(OpenGL REQUIRED)
+set(THIRD_PARTY_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glad/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glfw-3.3.6/include")
+set(QDU_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-add_executable(main "src/main.cpp")
-set_property(TARGET main PROPERTY CXX_STANDARD 20)
+if(MSVC)
+    set(THIRD_PARTY_LIBRARIES glad glfw ${OPENGL_LIBRARIES})
+else()
+    set(THIRD_PARTY_LIBRARIES glad glfw ${OPENGL_LIBRARIES})
+endif(MSVC)
 
-target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(main PRIVATE math_lib)
+# Include sub-projects.
+add_subdirectory(thirdParty)
+add_subdirectory(examples)
+add_subdirectory(source)
