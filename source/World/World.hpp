@@ -4,6 +4,8 @@
 
 #include "../Application.hpp"
 
+#include <GLFW/glfw3.h>
+
 namespace QDU {
     class World
     {
@@ -13,9 +15,29 @@ namespace QDU {
         World(const World& world) = delete;
 
         /**
+         * Gets the current application window.
+         */
+        GLFWwindow* GetWindow() noexcept;
+
+        /**
+         * Sets the current application window.
+         */
+        void SetWindow(char* name) noexcept;
+
+        /**
          * Ends the current application.
          */
         void EndApplication() noexcept;
+
+        void ProcessInput() noexcept;
+
+        unsigned int GetShaderProgram() const;
+
+        void SetShaderProgram(unsigned int mShaderProgram);
+
+        unsigned int GetVAO() const;
+
+        void SetVAO(unsigned int vao);
     private:
         explicit World(Application& app);
 
@@ -36,6 +58,8 @@ namespace QDU {
 
         Application &m_application;
         bool m_shouldClose;
+        GLFWwindow* m_window;
+        unsigned int m_shaderProgram, m_vao;
     };
 }
 #endif

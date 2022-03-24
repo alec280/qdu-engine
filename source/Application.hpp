@@ -1,7 +1,9 @@
 #pragma once
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
+
 #include <memory>
+#include <glad/glad.h>
 
 namespace QDU {
     class World;
