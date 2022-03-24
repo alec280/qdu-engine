@@ -1,8 +1,6 @@
 #include "World.hpp"
 
 #include <chrono>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace QDU {
     World::World(Application& app) :
