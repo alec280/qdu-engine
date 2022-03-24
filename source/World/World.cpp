@@ -39,6 +39,7 @@ namespace QDU {
         glfwMakeContextCurrent(m_window);
         glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
         gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void World::StartMainLoop() noexcept {
@@ -64,6 +65,14 @@ namespace QDU {
         ProcessInput();
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glUseProgram(m_shaderProgram);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 projection = glm::mat4(1.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
         m_application.UserUpdate(*this, timeStep);
         glfwSwapBuffers(m_window);
         glfwPollEvents();

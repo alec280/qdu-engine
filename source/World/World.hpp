@@ -3,7 +3,6 @@
 #define WORLD_HPP
 
 #include "../Application.hpp"
-#define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 
 namespace QDU {
