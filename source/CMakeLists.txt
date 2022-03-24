@@ -1,9 +1,13 @@
 set(QDU_HEADERS
         Engine.hpp
         Application.hpp
+        Geometry/Shape.hpp
+        Geometry/Shader.hpp
         World/World.hpp)
 set(QDU_SOURCES
         Application.cpp
+        Geometry/Shape.cpp
+        Geometry/Shader.cpp
         World/World.cpp)
 
 add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp)
