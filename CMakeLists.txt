@@ -5,7 +5,8 @@ project(qdu-engine C CXX)
 
 find_package(OpenGL REQUIRED)
 set(THIRD_PARTY_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glad/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glfw/include")
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glfw/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glm")
 set(QDU_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 if(MSVC)

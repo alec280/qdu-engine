@@ -3,7 +3,7 @@
 #define WORLD_HPP
 
 #include "../Application.hpp"
-
+#define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 
 namespace QDU {
@@ -22,7 +22,7 @@ namespace QDU {
         /**
          * Sets the current application window.
          */
-        void SetWindow(char* name) noexcept;
+        void CreateWindow(char* name) noexcept;
 
         /**
          * Ends the current application.

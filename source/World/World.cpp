@@ -13,12 +13,14 @@ namespace QDU {
         m_shouldClose(false),
         m_window(nullptr)
     {
+        glfwInit();
         m_application = std::move(app);
         m_application.StartUp(*this);
     }
 
     World::~World() {
         m_application.UserShutDown(*this);
+        glfwTerminate();
     }
 
     void World::EndApplication() noexcept {
@@ -29,10 +31,14 @@ namespace QDU {
         return m_window;
     }
 
-    void World::SetWindow(char* name) noexcept {
+    void World::CreateWindow(char* name) noexcept {
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         m_window = glfwCreateWindow(800, 600, name, nullptr, nullptr);
         glfwMakeContextCurrent(m_window);
         glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+        gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     }
 
     void World::StartMainLoop() noexcept {
@@ -55,7 +61,12 @@ namespace QDU {
 
     void World::Update(float timeStep) noexcept
     {
+        ProcessInput();
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_application.UserUpdate(*this, timeStep);
+        glfwSwapBuffers(m_window);
+        glfwPollEvents();
     }
 
     unsigned int World::GetShaderProgram() const {

@@ -1,20 +1,12 @@
 #include "QDUEngine.hpp"
 
-#include <iostream>
-
 class Demo : public QDU::Application
 {
 public:
     Demo() = default;
     ~Demo() = default;
     virtual void UserStartUp(QDU::World &world) noexcept override {
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        world.SetWindow(const_cast<char *>("Demo"));
-        gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        world.CreateWindow(const_cast<char *>("Demo"));
 
         const char *vertexShaderSource = "#version 330 core\n"
                                          "layout (location = 0) in vec3 aPos;\n"
@@ -39,22 +31,14 @@ public:
         int success;
         char infoLog[512];
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
+
         // fragment shader
         unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
         glCompileShader(fragmentShader);
         // check for shader compile errors
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
+
         // link shaders
         unsigned int shaderProgram = glCreateProgram();
         world.SetShaderProgram(shaderProgram);
@@ -63,10 +47,7 @@ public:
         glLinkProgram(shaderProgram);
         // check for linking errors
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-        if (!success) {
-            glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        }
+
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
 
@@ -110,29 +91,13 @@ public:
         glBindVertexArray(0);
     }
     virtual void UserShutDown(QDU::World& world) noexcept override {
-        glfwTerminate();
     }
     virtual void UserUpdate(QDU::World& world, float timeStep) noexcept override {
-        // input
-        // -----
-        world.ProcessInput();
+        //glMatrixMode();
 
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // draw our first triangle
         glUseProgram(world.GetShaderProgram());
-        glBindVertexArray(world.GetVAO()); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(world.GetVAO());
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        // glBindVertexArray(0); // no need to unbind it every time
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(world.GetWindow());
-        glfwPollEvents();
     }
 };
 
