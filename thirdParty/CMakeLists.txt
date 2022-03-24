@@ -14,3 +14,4 @@ endfunction()
 
 add_subdirectory_with_folder("thirdParty" glad)
 add_subdirectory_with_folder("thirdParty" glfw)
+add_subdirectory_with_folder("thirdParty" stb)

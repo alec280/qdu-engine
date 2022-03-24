@@ -10,7 +10,6 @@
 #include "transformations.h"
 
 #include <cmath>
-#include <numbers>
 #include <Eigen/Geometry>
 
 namespace Grafica
@@ -154,7 +153,7 @@ Matrix4f frustum(Coord left, Coord right, Coord bottom, Coord top, Coord near, C
 
 Matrix4f perspective(Coord fovy, Coord aspect, Coord near, Coord far)
 {
-    Coord halfHeight = std::tan(std::numbers::pi * fovy / 360) * near;
+    Coord halfHeight = std::tan(M_PI * fovy / 360) * near;
     Coord halfWidth = halfHeight * aspect;
 
     return frustum(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far);

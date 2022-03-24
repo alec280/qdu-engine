@@ -1,171 +1,177 @@
-#include "QDUEngine.hpp"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <grafica/shape.h>
+#include <grafica/basic_shapes.h>
+#include <grafica/load_shaders.h>
+#include <grafica/performance_monitor.h>
+#include <grafica/easy_shaders.h>
+#include <grafica/gpu_shape.h>
+#include <grafica/transformations.h>
+#include <grafica/scene_graph.h>
 
-class Demo : public QDU::Application
+namespace gr = Grafica;
+namespace tr = Grafica::Transformations;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-public:
-    Demo() = default;
-    ~Demo() = default;
-    virtual void UserStartUp(QDU::World &world) noexcept override {
-        world.CreateWindow(const_cast<char *>("Demo"));
-
-        const char *vertexShaderSource = "#version 330 core\n"
-                                         "layout (location = 0) in vec3 aPos;\n"
-
-                                         "uniform mat4 model;\n"
-                                         "uniform mat4 view;\n"
-                                         "uniform mat4 projection;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   gl_Position = projection * view * model * vec4(aPos, 1.0f);\n"
-                                         "}\0";
-        const char *fragmentShaderSource = "#version 330 core\n"
-                                           "out vec4 FragColor;\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                           "}\n\0";
-
-        // build and compile our shader program
-        // ------------------------------------
-        // vertex shader
-        unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-        glCompileShader(vertexShader);
-        // check for shader compile errors
-        int success;
-        char infoLog[512];
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-        // fragment shader
-        unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-        glCompileShader(fragmentShader);
-        // check for shader compile errors
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-        // link shaders
-        unsigned int shaderProgram = glCreateProgram();
-        world.SetShaderProgram(shaderProgram);
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
-        // check for linking errors
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
-
-        // set up vertex data (and buffer(s)) and configure vertex attributes
-        // ------------------------------------------------------------------
-        float vertices[] = {
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                -0.5f,  0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-
-                -0.5f, -0.5f,  0.5f,
-                0.5f, -0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f,  0.5f,
-                -0.5f, -0.5f,  0.5f,
-
-                -0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f,  0.5f,
-                -0.5f,  0.5f,  0.5f,
-
-                0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f,  0.5f,
-                0.5f, -0.5f,  0.5f,
-                -0.5f, -0.5f,  0.5f,
-                -0.5f, -0.5f, -0.5f,
-
-                -0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f, -0.5f
-        };
-        unsigned int indices[] = {  // note that we start from 0!
-                0, 1, 3,  // first Triangle
-                1, 2, 3   // second Triangle
-        };
-        unsigned int VBO, VAO, EBO;
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-        // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-        glBindVertexArray(VAO);
-        world.SetVAO(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)nullptr);
-        glEnableVertexAttribArray(0);
-
-        // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-        // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-        glBindVertexArray(0);
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
     }
-    virtual void UserShutDown(QDU::World& world) noexcept override {
-    }
-    virtual void UserUpdate(QDU::World& world, float timeStep) noexcept override {
-        glBindVertexArray(world.GetVAO());
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
 
-        glm::vec3 cubePositions[] = {
-                glm::vec3( 0.0f,  0.0f,  0.0f),
-                glm::vec3( 2.0f,  5.0f, -15.0f),
-                glm::vec3(-1.5f, -2.2f, -2.5f),
-                glm::vec3(-3.8f, -2.0f, -12.3f),
-                glm::vec3( 2.4f, -0.4f, -3.5f),
-                glm::vec3(-1.7f,  3.0f, -7.5f),
-                glm::vec3( 1.3f, -2.0f, -2.5f),
-                glm::vec3( 1.5f,  2.0f, -2.5f),
-                glm::vec3( 1.5f,  0.2f, -1.5f),
-                glm::vec3(-1.3f,  1.0f, -1.5f)
-        };
+template <typename PipelineT>
+gr::SceneGraphNodePtr createCar(const PipelineT& pipeline, gr::Coord r, gr::Coord g, gr::Coord b)
+{
+    // only gpu shapes created
+    auto gpuChasisPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(pipeline, gr::createColorCube(r,g,b)));
+    auto gpuWeelPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(pipeline, gr::createColorCube(0,0,0)));
 
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * (float)i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            glUniformMatrix4fv(glGetUniformLocation(world.GetShaderProgram(), "model"), 1, GL_FALSE, &model[0][0]);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-    }
-};
+    // The wheel object
+    auto wheelPtr = std::make_shared<gr::SceneGraphNode>("wheel", tr::scale(0.2, 0.8, 0.2), gpuWeelPtr);
+
+    // A node to control wheel rotations
+    auto wheelRotationPtr = std::make_shared<gr::SceneGraphNode>("wheelRotation");
+    wheelRotationPtr->childs.push_back(wheelPtr);
+
+    // creating wheels
+    auto frontWheelPtr = std::make_shared<gr::SceneGraphNode>("frontWheel", tr::translate(0.3,0,-0.3));
+    frontWheelPtr->childs.push_back(wheelRotationPtr);
+
+    auto backWheelPtr = std::make_shared<gr::SceneGraphNode>("backWheel", tr::translate(-0.3,0,-0.3));
+    backWheelPtr->childs.push_back(wheelRotationPtr);
+
+    // Creating the chasis of the car
+    auto chasisPtr = std::make_shared<gr::SceneGraphNode>("chasis", tr::scale(1,0.7,0.5), gpuChasisPtr);
+
+    auto carPtr = std::make_shared<gr::SceneGraphNode>("car");
+    carPtr->childs.push_back(chasisPtr);
+    carPtr->childs.push_back(frontWheelPtr);
+    carPtr->childs.push_back(backWheelPtr);
+
+    return carPtr;
+}
 
 int main()
 {
-    Demo app;
-    QDU::Engine engine(app);
-    engine.StartMainLoop();
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+    constexpr unsigned int SCR_WIDTH = 600;
+    constexpr unsigned int SCR_HEIGHT = 600;
+
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "ex_scene_graph", nullptr, nullptr);
+    if (window == nullptr)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // Connecting the callback function 'key_callback' to handle keyboard events
+    glfwSetKeyCallback(window, key_callback);
+
+    // Loading all OpenGL function pointers with glad
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+
+    gr::ModelViewProjectionShaderProgram pipeline;
+    glUseProgram(pipeline.shaderProgram);
+
+    // Creating shapes on GPU memory
+    gr::GPUShape gpuAxis = gr::toGPUShape(pipeline, gr::createAxis(7));
+    gr::SceneGraphNodePtr sgRedCarPtr = createCar(pipeline, 1, 0, 0);
+    gr::SceneGraphNodePtr sgBlueCarPtr = createCar(pipeline, 0, 0, 1);
+    sgBlueCarPtr->transform = tr::rotationZ(-M_PI/4) * tr::translate(3.0,0,0.5);
+
+    // Setting up the clear screen color
+    glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
+
+    // As we work in 3D, we need to check which part is in front,
+    // and which one is at the back enabling the depth testing
+    glEnable(GL_DEPTH_TEST);
+
+    // Computing some transformations
+    float t0 = glfwGetTime(), t1, dt;
+    float cameraTheta = M_PI / 4;
+
+    gr::Matrix4f projection = tr::perspective(45, float(SCR_WIDTH)/float(SCR_HEIGHT), 0.1, 100);
+
+    // Application loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Using GLFW to check and process input events
+        glfwPollEvents();
+
+        // Filling or not the shapes depending on the controller state
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        // Getting the time difference from the previous iteration
+        t1 = glfwGetTime();
+        dt = t1 - t0;
+        t0 = t1;
+
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+            cameraTheta -= 2 * dt;
+
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            cameraTheta += 2 * dt;
+
+        gr::Vector3f const viewPos(
+                8 * std::sin(cameraTheta),
+                8 * std::cos(cameraTheta),
+                4);
+        gr::Vector3f const eye(0,0,0);
+        gr::Vector3f const at(0,0,1);
+
+        gr::Matrix4f view = tr::lookAt(viewPos, eye, at);
+
+        sgRedCarPtr->transform = tr::translate(3 * std::sin( t1 ),0,0.5);
+        auto redWheelRotationNodeMaybe = gr::findNode(sgRedCarPtr, "wheelRotation");
+
+        // If the node is not found, everything is lost :(
+        assert(redWheelRotationNodeMaybe.has_value());
+
+        gr::SceneGraphNode& redWheelRotationNode = *(redWheelRotationNodeMaybe.value());
+
+        redWheelRotationNode.transform = tr::rotationY(-10 * t1);
+
+        // Uncomment to print the red car position on every iteration
+        /*auto positionMaybe = tr::findPosition(sgRedCarPtr, "car");
+        assert(positionMaybe.has_value());
+        auto& position = positionMaybe.value();
+        std::cout << position << std::endl;*/
+
+        // Clearing the screen in both, color and depth
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Drawing shapes with different model transformations
+        glUseProgram(pipeline.shaderProgram);
+        glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "view"), 1, GL_FALSE, view.data());
+        glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "projection"), 1, GL_FALSE, projection.data());
+        glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
+        pipeline.drawCall(gpuAxis, GL_LINES);
+
+        // Getting the shape to display
+        drawSceneGraphNode(sgRedCarPtr, pipeline, "model");
+        drawSceneGraphNode(sgBlueCarPtr, pipeline, "model");
+
+        // Once the drawing is rendered, buffers are swap so an uncomplete drawing is never seen.
+        glfwSwapBuffers(window);
+    }
+
+    // freeing GPU memory
+    gpuAxis.clear();
+    sgRedCarPtr->clear();
+    sgBlueCarPtr->clear();
+
+    glfwTerminate();
+    return 0;
 }

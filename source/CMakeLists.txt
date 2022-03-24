@@ -1,16 +1,27 @@
 set(QDU_HEADERS
-        Engine.hpp
-        Application.hpp
-        Geometry/Shape.hpp
-        Geometry/Shader.hpp
-        World/World.hpp)
+        grafica/basic_shapes.h
+        grafica/easy_shaders.h
+        grafica/gpu_shape.h
+        grafica/load_shaders.h
+        grafica/performance_monitor.h
+        grafica/scene_graph.h
+        grafica/shape.h
+        grafica/simple_eigen.h
+        grafica/transformations.h
+        grafica/simple_timer.h
+        )
 set(QDU_SOURCES
-        Application.cpp
-        Geometry/Shape.cpp
-        Geometry/Shader.cpp
-        World/World.cpp)
+        grafica/basic_shapes.cpp
+        grafica/easy_shaders.cpp
+        grafica/gpu_shape.cpp
+        grafica/load_shaders.cpp
+        grafica/performance_monitor.cpp
+        grafica/scene_graph.cpp
+        grafica/shape.cpp
+        grafica/transformations.cpp
+        )
 
-add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp)
+add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp ${Shaders})
 if (MSVC)
     target_compile_options(QDUEngine PUBLIC /wd5033)
 endif(MSVC)
