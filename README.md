@@ -1,6 +1,6 @@
 # qdu-engine
 
-C++ Game engine for top-down roguelikes.
+C++ Game engine for top-down roguelikes. It also includes examples.
 
 ## Building (Windows)
 
