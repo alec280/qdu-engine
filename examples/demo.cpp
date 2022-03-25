@@ -2,21 +2,42 @@
 #include <GLFW/glfw3.h>
 #include <grafica/shape.h>
 #include <grafica/basic_shapes.h>
-#include <grafica/load_shaders.h>
 #include <grafica/performance_monitor.h>
 #include <grafica/easy_shaders.h>
-#include <grafica/gpu_shape.h>
 #include <grafica/transformations.h>
 #include <grafica/scene_graph.h>
 
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
 
+struct Controller
+{
+    float cameraX = 0;
+    float cameraY = 10;
+    float playerPosX = 0;
+    float playerPosY = 0;
+} controller;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    } else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        controller.cameraY -= 1;
+    } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        controller.cameraY += 1;
+    } else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        controller.cameraX += 1;
+    } else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        controller.cameraX -= 1;
+    } else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        controller.playerPosY -= 1;
+    } else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        controller.playerPosY += 1;
+    } else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        controller.playerPosX += 1;
+    } else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        controller.playerPosX -= 1;
     }
 }
 
@@ -52,6 +73,22 @@ gr::SceneGraphNodePtr createCar(const PipelineT& pipeline, gr::Coord r, gr::Coor
     return carPtr;
 }
 
+template <typename PipelineT>
+gr::SceneGraphNodePtr createWall(const PipelineT& pipeline)
+{
+    auto gpuWallPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(pipeline, gr::createColorCube(0.7,0.7,0.7)));
+    auto wallPtr = std::make_shared<gr::SceneGraphNode>("wall", tr::identity(), gpuWallPtr);
+    return wallPtr;
+}
+
+template <typename PipelineT>
+gr::SceneGraphNodePtr createPlayer(const PipelineT& pipeline)
+{
+    auto gpuPlayerPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(pipeline, gr::createColorCube(0,1,0)));
+    auto playerPtr = std::make_shared<gr::SceneGraphNode>("player", tr::uniformScale(0.7), gpuPlayerPtr);
+    return playerPtr;
+}
+
 int main()
 {
     glfwInit();
@@ -63,7 +100,7 @@ int main()
     constexpr unsigned int SCR_WIDTH = 600;
     constexpr unsigned int SCR_HEIGHT = 600;
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "ex_scene_graph", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Demo", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -71,11 +108,8 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-
-    // Connecting the callback function 'key_callback' to handle keyboard events
     glfwSetKeyCallback(window, key_callback);
 
-    // Loading all OpenGL function pointers with glad
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -85,20 +119,23 @@ int main()
     gr::ModelViewProjectionShaderProgram pipeline;
     glUseProgram(pipeline.shaderProgram);
 
-    // Creating shapes on GPU memory
-    gr::GPUShape gpuAxis = gr::toGPUShape(pipeline, gr::createAxis(7));
-    gr::SceneGraphNodePtr sgRedCarPtr = createCar(pipeline, 1, 0, 0);
-    gr::SceneGraphNodePtr sgBlueCarPtr = createCar(pipeline, 0, 0, 1);
-    sgBlueCarPtr->transform = tr::rotationZ(-M_PI/4) * tr::translate(3.0,0,0.5);
+    gr::SceneGraphNodePtr sgPlayerPtr = createPlayer(pipeline);
+    sgPlayerPtr->transform = tr::translate(controller.playerPosX, controller.playerPosY,0);
 
-    // Setting up the clear screen color
-    glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
+    gr::SceneGraphNodePtr upperWallPtr = createWall(pipeline);
+    upperWallPtr->transform = tr::scale(8, 1, 1) * tr::translate(0, -3.5, 0);
+    gr::SceneGraphNodePtr leftWallPtr = createWall(pipeline);
+    leftWallPtr->transform = tr::scale(1, 8, 1) * tr::translate(-3.5, 0, 0);
+    gr::SceneGraphNodePtr rightWallPtr = createWall(pipeline);
+    rightWallPtr->transform = tr::scale(1, 8, 1) * tr::translate(3.5, 0, 0);
+    gr::SceneGraphNodePtr bottomWallRightPtr = createWall(pipeline);
+    bottomWallRightPtr->transform = tr::scale(2.5, 1, 1) * tr::translate(1, 3.5, 0);
+    gr::SceneGraphNodePtr bottomWallLeftPtr = createWall(pipeline);
+    bottomWallLeftPtr->transform = tr::scale(2.5, 1, 1) * tr::translate(-1, 3.5, 0);
 
-    // As we work in 3D, we need to check which part is in front,
-    // and which one is at the back enabling the depth testing
+    glClearColor(0, 0, 0, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-    // Computing some transformations
     float t0 = glfwGetTime(), t1, dt;
     float cameraTheta = M_PI / 4;
 
@@ -125,52 +162,41 @@ int main()
             cameraTheta += 2 * dt;
 
         gr::Vector3f const viewPos(
-                8 * std::sin(cameraTheta),
-                8 * std::cos(cameraTheta),
-                4);
-        gr::Vector3f const eye(0,0,0);
+                controller.cameraX,
+                controller.cameraY,
+                12);
+        gr::Vector3f const eye(controller.cameraX,controller.cameraY - 10,0);
         gr::Vector3f const at(0,0,1);
 
         gr::Matrix4f view = tr::lookAt(viewPos, eye, at);
 
-        sgRedCarPtr->transform = tr::translate(3 * std::sin( t1 ),0,0.5);
-        auto redWheelRotationNodeMaybe = gr::findNode(sgRedCarPtr, "wheelRotation");
+        sgPlayerPtr->transform = tr::translate(controller.playerPosX, controller.playerPosY, 0);
 
-        // If the node is not found, everything is lost :(
-        assert(redWheelRotationNodeMaybe.has_value());
-
-        gr::SceneGraphNode& redWheelRotationNode = *(redWheelRotationNodeMaybe.value());
-
-        redWheelRotationNode.transform = tr::rotationY(-10 * t1);
-
-        // Uncomment to print the red car position on every iteration
-        /*auto positionMaybe = tr::findPosition(sgRedCarPtr, "car");
-        assert(positionMaybe.has_value());
-        auto& position = positionMaybe.value();
-        std::cout << position << std::endl;*/
-
-        // Clearing the screen in both, color and depth
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Drawing shapes with different model transformations
         glUseProgram(pipeline.shaderProgram);
         glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "view"), 1, GL_FALSE, view.data());
         glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "projection"), 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(glGetUniformLocation(pipeline.shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
-        pipeline.drawCall(gpuAxis, GL_LINES);
 
         // Getting the shape to display
-        drawSceneGraphNode(sgRedCarPtr, pipeline, "model");
-        drawSceneGraphNode(sgBlueCarPtr, pipeline, "model");
+        drawSceneGraphNode(upperWallPtr, pipeline, "model");
+        drawSceneGraphNode(bottomWallLeftPtr, pipeline, "model");
+        drawSceneGraphNode(bottomWallRightPtr, pipeline, "model");
+        drawSceneGraphNode(leftWallPtr, pipeline, "model");
+        drawSceneGraphNode(rightWallPtr, pipeline, "model");
+        drawSceneGraphNode(sgPlayerPtr, pipeline, "model");
 
         // Once the drawing is rendered, buffers are swap so an uncomplete drawing is never seen.
         glfwSwapBuffers(window);
     }
 
     // freeing GPU memory
-    gpuAxis.clear();
-    sgRedCarPtr->clear();
-    sgBlueCarPtr->clear();
+    leftWallPtr->clear();
+    rightWallPtr->clear();
+    bottomWallLeftPtr->clear();
+    bottomWallRightPtr->clear();
+    upperWallPtr->clear();
+    sgPlayerPtr->clear();
 
     glfwTerminate();
     return 0;
