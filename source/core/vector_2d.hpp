@@ -6,6 +6,9 @@ namespace QDUEngine
     struct Vector2D
     {
         float x, y;
+        Vector2D& operator+=(const Vector2D& vector2D);
+        Vector2D& operator-=(const Vector2D& vector2D);
+        Vector2D& operator*=(float rhs);
     };
 
     Vector2D Vector(float x, float y);

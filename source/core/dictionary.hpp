@@ -13,6 +13,8 @@ namespace QDUEngine
         bool isEmpty();
         int getSize();
         void clear();
+        bool has(const K& key);
+        void remove(const K& key);
         K* getKeys();
         V* getValues();
     private:
