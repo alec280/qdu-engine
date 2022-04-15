@@ -9,6 +9,10 @@ set(QDU_HEADERS
         grafica/simple_eigen.h
         grafica/transformations.h
         grafica/simple_timer.h
+        map/map.hpp
+        core/vector_2d.hpp
+        core/dictionary.hpp
+        entity/entity.hpp
         )
 set(QDU_SOURCES
         grafica/basic_shapes.cpp
@@ -19,6 +23,10 @@ set(QDU_SOURCES
         grafica/scene_graph.cpp
         grafica/shape.cpp
         grafica/transformations.cpp
+        map/map.cpp
+        core/vector_2d.cpp
+        core/dictionary.cpp
+        entity/entity.cpp
         )
 
 add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp ${Shaders})

@@ -1,11 +1,4 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <grafica/shape.h>
-#include <grafica/basic_shapes.h>
-#include <grafica/performance_monitor.h>
-#include <grafica/easy_shaders.h>
-#include <grafica/transformations.h>
-#include <grafica/scene_graph.h>
+#include <QDUEngine.hpp>
 
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
