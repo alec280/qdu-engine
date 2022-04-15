@@ -3,11 +3,11 @@
 namespace QDUEngine
 {
     template<class K, class V>
-    Dictionary<K, V>::Dictionary(K keyType, V valueType) = default;
-
-    template<class K, class V>
-    void Dictionary<K, V>::add(const K& key, const V& value)
+    void Dictionary<K, V>::set(const K& key, const V& value)
     {
+        if (has(key)) {
+            remove(key);
+        }
         m_map.insert(std::pair<K, V>(key, value));
     }
 
@@ -72,4 +72,7 @@ namespace QDUEngine
         }
         m_map.erase(key);
     }
+
+    template<class K, class V>
+    Dictionary<K, V>::Dictionary() = default;
 }

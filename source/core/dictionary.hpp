@@ -7,8 +7,8 @@ namespace QDUEngine
     template<class K, class V>
     class Dictionary {
     public:
-        Dictionary(K keyType, V valueType);
-        void add(const K& key, const V& value);
+        Dictionary();
+        void set(const K& key, const V& value);
         V get(const K& key);
         bool isEmpty();
         int getSize();

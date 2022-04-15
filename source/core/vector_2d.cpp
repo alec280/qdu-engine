@@ -12,6 +12,11 @@ namespace QDUEngine
         return os << "( " << vector2D.x << ", " << vector2D.y << ")";
     }
 
+    bool operator==(const Vector2D& lhs, const Vector2D& rhs)
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+
     Vector2D operator+(const Vector2D& lhs, const Vector2D& rhs)
     {
         return {lhs.x + rhs.x, lhs.y + rhs.y};

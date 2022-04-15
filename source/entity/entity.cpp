@@ -23,4 +23,16 @@ namespace QDUEngine
     {
         m_position += by;
     }
+
+    void Entity::set(char *key, int value)
+    {
+        m_attr.set(key, value);
+    }
+
+    int Entity::get(char *key)
+    {
+        return m_attr.get(key);
+    }
+
+    void Entity::update(float delta) {}
 }
