@@ -24,12 +24,12 @@ namespace QDUEngine
         m_position += by;
     }
 
-    void Entity::set(char *key, int value)
+    void Entity::set(char *key, float value)
     {
         m_attr.set(key, value);
     }
 
-    int Entity::get(char *key)
+    float Entity::get(char *key)
     {
         return m_attr.get(key);
     }
