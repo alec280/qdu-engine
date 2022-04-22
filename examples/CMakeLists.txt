@@ -7,3 +7,4 @@ function(MakeExample TARGETNAME FILENAME)
 endfunction(MakeExample)
 
 MakeExample(Demo demo.cpp)
+MakeExample(Dungeon dungeon.cpp)

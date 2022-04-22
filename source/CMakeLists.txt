@@ -9,10 +9,15 @@ set(QDU_HEADERS
         grafica/simple_eigen.h
         grafica/transformations.h
         grafica/simple_timer.h
+        game_object/game_object.hpp
+        game_object/visual_component.hpp
+        game_object/attribute_component.hpp
         map/map.hpp
         core/vector_2d.hpp
         core/dictionary.hpp
         entity/entity.hpp
+        scene/scene.hpp
+        application.hpp
         )
 set(QDU_SOURCES
         grafica/basic_shapes.cpp
@@ -23,10 +28,15 @@ set(QDU_SOURCES
         grafica/scene_graph.cpp
         grafica/shape.cpp
         grafica/transformations.cpp
+        game_object/game_object.cpp
+        game_object/visual_component.cpp
+        game_object/attribute_component.cpp
         map/map.cpp
         core/vector_2d.cpp
         core/dictionary.cpp
         entity/entity.cpp
+        scene/scene.cpp
+        application.cpp
         )
 
 add_library(QDUEngine STATIC ${QDU_SOURCES} ${QDU_HEADERS} QDUEngine.hpp ${Shaders})
