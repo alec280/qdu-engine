@@ -1,9 +1,9 @@
 #pragma once
 #include "../core/dictionary.hpp"
-#include "game_object.hpp"
 
 namespace QDUEngine
 {
+    class GameObject;
     class AttributeComponent {
     public:
         explicit AttributeComponent(char *name);

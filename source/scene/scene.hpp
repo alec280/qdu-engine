@@ -1,6 +1,5 @@
 #pragma once
 #include "../game_object/game_object.hpp"
-#include "../application.hpp"
 
 namespace QDUEngine
 {
@@ -11,6 +10,5 @@ namespace QDUEngine
     private:
         void start();
         void update();
-        GameObject
     };
 }

@@ -12,6 +12,7 @@ set(QDU_HEADERS
         game_object/game_object.hpp
         game_object/visual_component.hpp
         game_object/attribute_component.hpp
+        game_object/character/character.hpp
         map/map.hpp
         core/vector_2d.hpp
         core/dictionary.hpp
@@ -31,6 +32,7 @@ set(QDU_SOURCES
         game_object/game_object.cpp
         game_object/visual_component.cpp
         game_object/attribute_component.cpp
+        game_object/character/character.cpp
         map/map.cpp
         core/vector_2d.cpp
         core/dictionary.cpp
