@@ -7,5 +7,7 @@ namespace QDUEngine
     class Application {
     public:
         void run(char *name, Vector2D& windowSize, Scene& scene);
+    private:
+        Scene* m_scene{};
     };
 }

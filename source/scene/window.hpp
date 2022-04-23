@@ -9,8 +9,13 @@
 namespace QDUEngine
 {
     class Window {
-        friend class Application;
+        friend class Scene;
     private:
-        static void start(char *name, QDUEngine::Vector2D& window_size);
+        void start(char *name, QDUEngine::Vector2D& window_size);
+        void update();
+        Grafica::ModelViewProjectionShaderProgram* m_pipeline{};
+        Grafica::Matrix4f* m_projection{};
+        GLFWwindow* m_window{};
+        bool shouldClose = false;
     };
 }

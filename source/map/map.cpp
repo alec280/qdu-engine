@@ -7,15 +7,15 @@ namespace QDUEngine
         return m_size;
     }
 
-    void Map::add(const Entity &entity, const Vector2D &position)
+    void Map::add(const GameObject& gameObject, const Vector2D &position)
     {
         if (!contains(position)) {
             return;
         }
-        if (m_entities.has(position)) {
-            m_entities.remove(position);
+        if (m_gameObjects.has(position)) {
+            m_gameObjects.remove(position);
         }
-        m_entities.set(position, entity);
+        m_gameObjects.set(position, gameObject);
     }
 
     bool Map::contains(const Vector2D &position) const
@@ -27,14 +27,14 @@ namespace QDUEngine
 
     void Map::update(float delta)
     {
-        auto entities = getEntities();
-        for (int i = 0; i < m_entities.getSize(); i++) {
-            entities[i].update(delta);
+        auto gameObjects = getGameObjects();
+        for (int i = 0; i < m_gameObjects.getSize(); i++) {
+            gameObjects[i].update(*this);
         }
     }
 
-    Entity* Map::getEntities()
+    GameObject* Map::getGameObjects()
     {
-        return m_entities.getValues();
+        return m_gameObjects.getValues();
     }
 }

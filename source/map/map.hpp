@@ -1,21 +1,23 @@
 #pragma once
 #include <map>
-#include "../entity/entity.hpp"
+#include "../game_object/game_object.hpp"
+#include "../core/dictionary.hpp"
 
 namespace QDUEngine
 {
+    class GameObject;
     class Map {
     public:
         explicit Map(const Vector2D& size);
         Map(const Map& map) = delete;
         Map& operator=(const Map& map) = delete;
         const Vector2D& getSize();
-        void add(const Entity& entity, const Vector2D& position);
+        void add(const GameObject& gameObject, const Vector2D& position);
         bool contains(const Vector2D& position) const;
-        Entity* getEntities();
+        GameObject* getGameObjects();
     private:
         void update(float delta);
         Vector2D m_size;
-        Dictionary<Vector2D, Entity> m_entities{};
+        Dictionary<Vector2D, GameObject> m_gameObjects{};
     };
 }

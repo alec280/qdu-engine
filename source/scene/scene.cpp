@@ -1,4 +1,22 @@
-//
-// Created by Windows 10 on 22/04/2022.
-//
+#include "scene.hpp"
 
+namespace QDUEngine
+{
+    void Scene::addGameObject(GameObject& gameObject)
+    {
+        m_gameObjects.push_back(gameObject);
+    }
+
+    void Scene::start(char *name, Vector2D& windowSize)
+    {
+        m_window.start(name, windowSize);
+        while (!m_window.shouldClose) {
+            update(0);
+        }
+    }
+
+    void Scene::update(float delta)
+    {
+        m_window.update();
+    }
+}

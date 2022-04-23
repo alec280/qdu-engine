@@ -6,10 +6,10 @@
 #include "../grafica/performance_monitor.h"
 #include "../grafica/transformations.h"
 #include "../grafica/scene_graph.h"
-#include "../map/map.hpp"
 
 namespace QDUEngine
 {
+    class Map;
     class GameObject;
     class VisualComponent {
     public:

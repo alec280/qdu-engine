@@ -1,5 +1,7 @@
 #pragma once
+#include <vector>
 #include "../game_object/game_object.hpp"
+#include "window.hpp"
 
 namespace QDUEngine
 {
@@ -8,7 +10,9 @@ namespace QDUEngine
     public:
         void addGameObject(GameObject& gameObject);
     private:
-        void start();
-        void update();
+        void start(char *name, Vector2D& windowSize);
+        void update(float delta);
+        std::vector<GameObject> m_gameObjects;
+        Window m_window{};
     };
 }

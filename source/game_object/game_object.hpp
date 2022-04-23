@@ -1,10 +1,10 @@
 #pragma once
-#include "../map/map.hpp"
 #include "attribute_component.hpp"
 #include "visual_component.hpp"
 
 namespace QDUEngine
 {
+    class Map;
     class GameObject {
     public:
         GameObject(AttributeComponent* attribute, VisualComponent* visual);
