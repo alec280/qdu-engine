@@ -1,5 +1,7 @@
 #include "window.hpp"
 
+namespace tr = Grafica::Transformations;
+
 namespace QDUEngine
 {
     void Window::start(char *name, Vector2D& window_size, Input& input)
@@ -50,8 +52,16 @@ namespace QDUEngine
 
     void Window::update()
     {
+        Grafica::Vector3f const viewPos(0, 10, 12);
+        Grafica::Vector3f const eye(0, 0, 0);
+        Grafica::Vector3f const at(0, 0, 1);
+        Grafica::Matrix4f view = tr::lookAt(viewPos, eye, at);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_pipeline->shaderProgram);
+        glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "view"), 1, GL_FALSE, view.data());
+        glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
+        glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
         glfwSwapBuffers(m_window);
     }
 
