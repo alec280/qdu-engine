@@ -10,11 +10,12 @@ namespace QDUEngine
     public:
         void addGameObject(GameObject& gameObject);
         VisualComponent getCube();
+        virtual void userStart() = 0;
     private:
         void start(char *name, Vector2D& windowSize);
         void update(float delta);
         void end();
-        std::vector<GameObject> m_gameObjects;
+        std::vector<GameObject*> m_gameObjects{};
         Window m_window{};
         Input m_input{};
     };

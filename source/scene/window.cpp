@@ -62,7 +62,9 @@ namespace QDUEngine
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
 
         for (auto component : visualComponents) {
-            drawSceneGraphNode(component->getGraphNodePtr(), *m_pipeline, "model");
+            auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(1, 1, 1)));
+            auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
+            drawSceneGraphNode(cubePtr, *m_pipeline, "model");
         }
 
         glfwSwapBuffers(m_window);

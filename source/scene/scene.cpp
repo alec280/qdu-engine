@@ -4,13 +4,14 @@ namespace QDUEngine
 {
     void Scene::addGameObject(GameObject& gameObject)
     {
-        m_gameObjects.push_back(gameObject);
+        m_gameObjects.push_back(&gameObject);
     }
 
     void Scene::start(char *name, Vector2D& windowSize)
     {
         m_window.start(name, windowSize, m_input);
         m_input.start();
+        userStart();
         while (!m_window.shouldClose()) {
             update(0);
         }
@@ -22,7 +23,7 @@ namespace QDUEngine
         m_input.update();
         auto visualComponents = std::vector<VisualComponent*>{};
         for (auto& gameObject : m_gameObjects) {
-            visualComponents.push_back(gameObject.getVisualComponent());
+            visualComponents.push_back(gameObject->getVisualComponent());
         }
         m_window.update(visualComponents);
     }
@@ -30,7 +31,7 @@ namespace QDUEngine
     void Scene::end()
     {
         for (auto& gameObject : m_gameObjects) {
-            gameObject.end();
+            gameObject->end();
         }
         m_window.end();
     }
