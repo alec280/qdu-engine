@@ -8,4 +8,5 @@
 #include <game_object/game_object.hpp>
 #include <game_object/character/character.hpp>
 #include <scene/scene.hpp>
+#include <scene/window.hpp>
 #include <application.hpp>

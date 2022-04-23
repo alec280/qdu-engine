@@ -18,6 +18,7 @@ set(QDU_HEADERS
         core/dictionary.hpp
         entity/entity.hpp
         scene/scene.hpp
+        scene/window.hpp
         application.hpp
         )
 set(QDU_SOURCES
@@ -38,6 +39,7 @@ set(QDU_SOURCES
         core/dictionary.cpp
         entity/entity.cpp
         scene/scene.cpp
+        scene/window.cpp
         application.cpp
         )
 
