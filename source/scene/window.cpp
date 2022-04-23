@@ -1,5 +1,6 @@
 #include "window.hpp"
 
+namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
@@ -36,33 +37,42 @@ namespace QDUEngine
             return;
         }
 
-        auto* pipeline = new Grafica::ModelViewProjectionShaderProgram;
+        auto* pipeline = new gr::ModelViewProjectionShaderProgram;
         m_pipeline = pipeline;
         glUseProgram(m_pipeline->shaderProgram);
         glClearColor(0, 0, 0, 1.0f);
         glEnable(GL_DEPTH_TEST);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        auto* projection = new Grafica::Matrix4f;
+        auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
-        Grafica::Matrix4f projection_value;
-        projection_value = Grafica::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100);
-        projection = &projection_value;
     }
 
-    void Window::update()
+    void Window::update(std::vector<VisualComponent*>& visualComponents)
     {
-        Grafica::Vector3f const viewPos(0, 10, 12);
-        Grafica::Vector3f const eye(0, 0, 0);
-        Grafica::Vector3f const at(0, 0, 1);
-        Grafica::Matrix4f view = tr::lookAt(viewPos, eye, at);
+        gr::Vector3f const viewPos(0, 10, 12);
+        gr::Vector3f const eye(0, 0, 0);
+        gr::Vector3f const at(0, 0, 1);
+        gr::Matrix4f view = tr::lookAt(viewPos, eye, at);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_pipeline->shaderProgram);
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "view"), 1, GL_FALSE, view.data());
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
+
+        for (auto component : visualComponents) {
+            drawSceneGraphNode(component->getGraphNodePtr(), *m_pipeline, "model");
+        }
+
         glfwSwapBuffers(m_window);
+    }
+
+    VisualComponent Window::getCube()
+    {
+        auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(1, 1, 1)));
+        auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
+        return VisualComponent(cubePtr);
     }
 
     void Window::end()

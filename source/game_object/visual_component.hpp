@@ -15,10 +15,10 @@ namespace QDUEngine
     public:
         VisualComponent();
         virtual ~VisualComponent() = default;
-        virtual void update(GameObject& obj, Map& map) = 0;
-        explicit VisualComponent(Grafica::SceneGraphNodePtr mGraphNodePtr);
-        void SetGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
-        Grafica::SceneGraphNodePtr GetGraphNodePtr();
+        //virtual void update(GameObject& obj, Map& map) = 0;
+        explicit VisualComponent(Grafica::SceneGraphNodePtr& graphNodePtr);
+        void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
+        Grafica::SceneGraphNodePtr getGraphNodePtr();
         Vector2D& getPosition();
         void move(const Vector2D& by);
     private:

@@ -1,9 +1,11 @@
 #include <QDUEngine.hpp>
 
 class Enemy : public QDUEngine::Character {
-    /*
 public:
-    Enemy(const std::string& name, float health, float attack) : {};
+    explicit Enemy(QDUEngine::VisualComponent* visual) :
+        QDUEngine::Character(new QDUEngine::AttributeComponent((char*)"Enemy"), visual)
+    {}
+    /*
     virtual void start(QDUEngine::Scene& scene) noexcept
     {
 
@@ -24,9 +26,12 @@ public:
 
 int main()
 {
-    char name[] = "Dungeon game";
+    char title[] = "Dungeon game";
     auto window_size = QDUEngine::Vector(600, 600);
     QDUEngine::Scene floor1;
+    auto visual = floor1.getCube();
+    auto enemy = Enemy(&visual);
+    floor1.addGameObject(enemy);
     QDUEngine::Application dungeon;
-    dungeon.run(name, window_size, floor1);
+    dungeon.run(title, window_size, floor1);
 }

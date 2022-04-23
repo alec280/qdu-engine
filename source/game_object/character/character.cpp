@@ -2,6 +2,6 @@
 
 namespace QDUEngine
 {
-    Character::Character(AttributeComponent *attribute, VisualComponent *visual) : GameObject(attribute, visual) {}
+    Character::Character(AttributeComponent* attribute, VisualComponent* visual) : GameObject(attribute, visual) {}
 }
 

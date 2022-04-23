@@ -9,6 +9,7 @@ namespace QDUEngine
         friend class Application;
     public:
         void addGameObject(GameObject& gameObject);
+        VisualComponent getCube();
     private:
         void start(char *name, Vector2D& windowSize);
         void update(float delta);

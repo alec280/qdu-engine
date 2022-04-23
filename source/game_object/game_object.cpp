@@ -9,8 +9,20 @@ namespace QDUEngine
 
     void GameObject::update(Map& map)
     {
-        m_attribute->update(*this);
-        m_visual->update(*this, map);
+        //m_attribute->update(*this);
+        //m_visual->update(*this, map);
+    }
+
+    VisualComponent* GameObject::getVisualComponent()
+    {
+        return m_visual;
+    }
+
+    void GameObject::end()
+    {
+        if (m_visual != nullptr) {
+            m_visual->getGraphNodePtr()->clear();
+        }
     }
 }
 

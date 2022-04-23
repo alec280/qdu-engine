@@ -3,8 +3,8 @@
 
 namespace QDUEngine
 {
-    class Character : GameObject {
+    class Character : public GameObject {
     public:
-        Character(AttributeComponent *attribute, VisualComponent* visual);
+        Character(AttributeComponent* attribute, VisualComponent* visual);
     };
 }

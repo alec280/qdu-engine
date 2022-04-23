@@ -20,11 +20,23 @@ namespace QDUEngine
     void Scene::update(float delta)
     {
         m_input.update();
-        m_window.update();
+        auto visualComponents = std::vector<VisualComponent*>{};
+        for (auto& gameObject : m_gameObjects) {
+            visualComponents.push_back(gameObject.getVisualComponent());
+        }
+        m_window.update(visualComponents);
     }
 
     void Scene::end()
     {
+        for (auto& gameObject : m_gameObjects) {
+            gameObject.end();
+        }
         m_window.end();
+    }
+
+    VisualComponent Scene::getCube()
+    {
+        return m_window.getCube();
     }
 }

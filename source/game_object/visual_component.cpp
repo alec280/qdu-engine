@@ -5,19 +5,19 @@ namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
 {
-    void VisualComponent::SetGraphNodePtr(const gr::SceneGraphNodePtr& graphNodePtr)
+    void VisualComponent::setGraphNodePtr(const gr::SceneGraphNodePtr& graphNodePtr)
     {
         m_graphNodePtr = graphNodePtr;
     }
 
-    VisualComponent::VisualComponent(gr::SceneGraphNodePtr graphNodePtr) :
-    m_graphNodePtr(std::move(graphNodePtr)),
+    VisualComponent::VisualComponent(gr::SceneGraphNodePtr& graphNodePtr) :
+    m_graphNodePtr(graphNodePtr),
     m_position()
     {}
 
     VisualComponent::VisualComponent() : m_graphNodePtr(), m_position() {}
 
-    Grafica::SceneGraphNodePtr VisualComponent::GetGraphNodePtr()
+    gr::SceneGraphNodePtr VisualComponent::getGraphNodePtr()
     {
         return m_graphNodePtr;
     }
