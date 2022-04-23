@@ -1,5 +1,5 @@
 #include <QDUEngine.hpp>
-
+/*
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
 
@@ -231,5 +231,10 @@ int main()
     enemyPtr->clear();
 
     glfwTerminate();
+    return 0;
+}
+*/
+
+int main() {
     return 0;
 }
