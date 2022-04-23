@@ -10,13 +10,19 @@ namespace QDUEngine
     void Scene::start(char *name, Vector2D& windowSize)
     {
         m_window.start(name, windowSize);
-        while (!m_window.shouldClose) {
+        while (!m_window.m_shouldClose) {
             update(0);
         }
+        end();
     }
 
     void Scene::update(float delta)
     {
         m_window.update();
+    }
+
+    void Scene::end()
+    {
+        m_window.end();
     }
 }

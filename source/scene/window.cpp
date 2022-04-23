@@ -9,6 +9,13 @@ namespace QDUEngine
         }
     }
 
+    void Window::keyPressed(GLFWwindow* window)
+    {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            m_shouldClose = true;
+        }
+    }
+
     void Window::start(char *name, QDUEngine::Vector2D& window_size)
     {
         glfwInit();
@@ -27,7 +34,14 @@ namespace QDUEngine
         }
 
         glfwMakeContextCurrent(window);
-        glfwSetKeyCallback(window, QDUEngine::key_callback);
+        glfwSetWindowUserPointer(window, this);
+
+        auto func = [](GLFWwindow* w, int, int, int, int)
+        {
+            static_cast<Window*>(glfwGetWindowUserPointer(w))->keyPressed(w);
+        };
+
+        glfwSetKeyCallback(window, func);
 
         if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
             std::cout << "Failed to initialize GLAD" << std::endl;
@@ -46,22 +60,20 @@ namespace QDUEngine
         Grafica::Matrix4f projection_value;
         projection_value = Grafica::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100);
         projection = &projection_value;
-
-        while (!glfwWindowShouldClose(window)) {
-            update();
-        }
     }
 
     void Window::update()
     {
-        if (!shouldClose) {
-            glfwPollEvents();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glUseProgram(m_pipeline->shaderProgram);
-            glfwSwapBuffers(m_window);
-        } else {
-            glfwTerminate();
-        }
+        glfwPollEvents();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUseProgram(m_pipeline->shaderProgram);
+        glfwSwapBuffers(m_window);
+    }
+
+    void Window::end()
+    {
+        glfwSetWindowShouldClose(m_window, true);
+        glfwTerminate();
     }
 }
 

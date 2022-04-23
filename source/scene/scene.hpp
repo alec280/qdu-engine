@@ -12,6 +12,7 @@ namespace QDUEngine
     private:
         void start(char *name, Vector2D& windowSize);
         void update(float delta);
+        void end();
         std::vector<GameObject> m_gameObjects;
         Window m_window{};
     };
