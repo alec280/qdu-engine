@@ -2,5 +2,8 @@
 
 namespace QDUEngine
 {
-    Application::Application(char* name, const Vector2D& windowSize) {}
+    void Application::run(char *name, Vector2D& windowSize, Scene& scene)
+    {
+        Window::start(name, windowSize);
+    }
 }

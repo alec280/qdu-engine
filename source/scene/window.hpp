@@ -9,7 +9,8 @@
 namespace QDUEngine
 {
     class Window {
-    public:
+        friend class Application;
+    private:
         static void start(char *name, QDUEngine::Vector2D& window_size);
     };
 }

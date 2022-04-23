@@ -25,8 +25,8 @@ public:
 int main()
 {
     char name[] = "Dungeon game";
+    auto window_size = QDUEngine::Vector(600, 600);
     QDUEngine::Scene floor1;
-    QDUEngine::Vector2D window_size = QDUEngine::Vector(600, 600);
-    //QDUEngine::Application dungeon(name, window_size));
-    QDUEngine::Window::start(name, window_size);
+    QDUEngine::Application dungeon;
+    dungeon.run(name, window_size, floor1);
 }
