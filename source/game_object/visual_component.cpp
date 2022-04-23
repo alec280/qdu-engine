@@ -12,7 +12,7 @@ namespace QDUEngine
 
     VisualComponent::VisualComponent(gr::SceneGraphNodePtr& graphNodePtr) :
     m_graphNodePtr(graphNodePtr),
-    m_position{1,1}
+    m_position{0,0}
     {}
 
     VisualComponent::VisualComponent() : m_graphNodePtr(), m_position() {}

@@ -4,8 +4,7 @@ namespace QDUEngine
 {
     void Scene::addGameObject(VisualComponent& gameObject)
     {
-        auto object = std::make_shared<VisualComponent>(gameObject);
-        m_gameObjects.push_back(object);
+        m_gameObjects.push_back(std::make_shared<VisualComponent>(gameObject));
     }
 
     void Scene::start(char *name, Vector2D& windowSize)
@@ -22,11 +21,10 @@ namespace QDUEngine
     void Scene::update(float delta)
     {
         m_input.update();
-        //auto visualComponents = std::vector<std::shared_ptr<VisualComponent>> (2);
         /*
+        auto visualComponents = std::vector<std::shared_ptr<VisualComponent>> (m_gameObjects.size());
         for (auto& gameObject : m_gameObjects) {
-            auto component = std::make_shared<VisualComponent>(gameObject.getVisualComponent());
-            //std::cout << gameObject.getVisualComponent().getPosition() << std::endl;
+            auto component = gameObject;
             visualComponents.push_back(component);
         }
         */
