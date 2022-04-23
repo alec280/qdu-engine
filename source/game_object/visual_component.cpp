@@ -12,7 +12,7 @@ namespace QDUEngine
 
     VisualComponent::VisualComponent(gr::SceneGraphNodePtr& graphNodePtr) :
     m_graphNodePtr(graphNodePtr),
-    m_position()
+    m_position{1,1}
     {}
 
     VisualComponent::VisualComponent() : m_graphNodePtr(), m_position() {}
@@ -22,7 +22,7 @@ namespace QDUEngine
         return m_graphNodePtr;
     }
 
-    Vector2D& VisualComponent::getPosition()
+    Vector2D VisualComponent::getPosition()
     {
         return m_position;
     }

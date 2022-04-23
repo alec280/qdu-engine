@@ -19,7 +19,7 @@ namespace QDUEngine
         explicit VisualComponent(Grafica::SceneGraphNodePtr& graphNodePtr);
         void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
         Grafica::SceneGraphNodePtr getGraphNodePtr();
-        Vector2D& getPosition();
+        Vector2D getPosition();
         void move(const Vector2D& by);
     private:
         Vector2D m_position;

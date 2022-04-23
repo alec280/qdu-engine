@@ -48,7 +48,7 @@ namespace QDUEngine
         m_projection = projection;
     }
 
-    void Window::update(std::vector<VisualComponent*>& visualComponents)
+    void Window::update(std::vector<std::shared_ptr<VisualComponent>>& visualComponents)
     {
         gr::Vector3f const viewPos(0, 10, 12);
         gr::Vector3f const eye(0, 0, 0);
@@ -61,10 +61,8 @@ namespace QDUEngine
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
 
-        for (auto component : visualComponents) {
-            auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(1, 1, 1)));
-            auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
-            drawSceneGraphNode(cubePtr, *m_pipeline, "model");
+        for (auto& visualComponent : visualComponents) {
+            drawSceneGraphNode(visualComponent->getGraphNodePtr(), *m_pipeline, "model");
         }
 
         glfwSwapBuffers(m_window);
@@ -74,7 +72,8 @@ namespace QDUEngine
     {
         auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(1, 1, 1)));
         auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
-        return VisualComponent(cubePtr);
+        auto component = VisualComponent(cubePtr);
+        return component;
     }
 
     void Window::end()

@@ -10,7 +10,7 @@ namespace QDUEngine
         GameObject(AttributeComponent* attribute, VisualComponent* visual);
         void update(Map& map);
         void end();
-        VisualComponent* getVisualComponent();
+        VisualComponent getVisualComponent();
     private:
         AttributeComponent* m_attribute;
         VisualComponent* m_visual;

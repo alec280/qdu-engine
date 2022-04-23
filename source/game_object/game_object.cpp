@@ -2,7 +2,7 @@
 
 namespace QDUEngine
 {
-    GameObject::GameObject(AttributeComponent *attribute, VisualComponent* visual) :
+    GameObject::GameObject(AttributeComponent* attribute, VisualComponent* visual) :
         m_attribute(attribute),
         m_visual(visual)
     {}
@@ -13,9 +13,9 @@ namespace QDUEngine
         //m_visual->update(*this, map);
     }
 
-    VisualComponent* GameObject::getVisualComponent()
+    VisualComponent GameObject::getVisualComponent()
     {
-        return m_visual;
+        return *m_visual;
     }
 
     void GameObject::end()
