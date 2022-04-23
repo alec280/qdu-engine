@@ -2,21 +2,7 @@
 
 namespace QDUEngine
 {
-    void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, true);
-        }
-    }
-
-    void Window::keyPressed(GLFWwindow* window)
-    {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            m_shouldClose = true;
-        }
-    }
-
-    void Window::start(char *name, QDUEngine::Vector2D& window_size)
+    void Window::start(char *name, Vector2D& window_size, Input& input)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -34,11 +20,11 @@ namespace QDUEngine
         }
 
         glfwMakeContextCurrent(window);
-        glfwSetWindowUserPointer(window, this);
+        glfwSetWindowUserPointer(window, &input);
 
         auto func = [](GLFWwindow* w, int, int, int, int)
         {
-            static_cast<Window*>(glfwGetWindowUserPointer(w))->keyPressed(w);
+            static_cast<Input*>(glfwGetWindowUserPointer(w))->keyPressed();
         };
 
         glfwSetKeyCallback(window, func);
@@ -64,7 +50,6 @@ namespace QDUEngine
 
     void Window::update()
     {
-        glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_pipeline->shaderProgram);
         glfwSwapBuffers(m_window);
@@ -74,6 +59,11 @@ namespace QDUEngine
     {
         glfwSetWindowShouldClose(m_window, true);
         glfwTerminate();
+    }
+
+    bool Window::shouldClose()
+    {
+        return glfwWindowShouldClose(m_window);
     }
 }
 

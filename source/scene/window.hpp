@@ -5,19 +5,20 @@
 #include "../grafica/easy_shaders.h"
 #include "../grafica/simple_eigen.h"
 #include "../grafica/transformations.h"
+#include "../input/input.hpp"
 
 namespace QDUEngine
 {
     class Window {
         friend class Scene;
-        void keyPressed(GLFWwindow* window);
+    public:
+        bool shouldClose();
     private:
-        void start(char *name, QDUEngine::Vector2D& window_size);
+        void start(char *name, Vector2D& window_size, Input& input);
         void update();
         Grafica::ModelViewProjectionShaderProgram* m_pipeline{};
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
-        bool m_shouldClose = false;
         void end();
     };
 }

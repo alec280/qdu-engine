@@ -15,5 +15,6 @@ namespace QDUEngine
         void end();
         std::vector<GameObject> m_gameObjects;
         Window m_window{};
+        Input m_input{};
     };
 }

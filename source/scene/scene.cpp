@@ -9,8 +9,9 @@ namespace QDUEngine
 
     void Scene::start(char *name, Vector2D& windowSize)
     {
-        m_window.start(name, windowSize);
-        while (!m_window.m_shouldClose) {
+        m_window.start(name, windowSize, m_input);
+        m_input.start();
+        while (!m_window.shouldClose()) {
             update(0);
         }
         end();
@@ -18,6 +19,7 @@ namespace QDUEngine
 
     void Scene::update(float delta)
     {
+        m_input.update();
         m_window.update();
     }
 
