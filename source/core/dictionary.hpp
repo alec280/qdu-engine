@@ -1,6 +1,5 @@
 #pragma once
 #include <map>
-#include "vector_2d.hpp"
 
 namespace QDUEngine
 {

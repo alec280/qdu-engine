@@ -37,5 +37,6 @@ int main()
 {
     Floor floor1;
     QDUEngine::Application dungeon;
-    dungeon.run((char*)"Dungeon game", QDUEngine::Vector(600, 600), floor1);
+    dungeon.bindKey("A", "right");
+    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), floor1);
 }

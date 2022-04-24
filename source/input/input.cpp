@@ -9,8 +9,9 @@ namespace QDUEngine
         }
     }
 
-    void Input::start()
+    void Input::start(std::map<const char*, const char*>& bindings)
     {
+        m_keyBindings = bindings;
         m_window = glfwGetCurrentContext();
     }
 

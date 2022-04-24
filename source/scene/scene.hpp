@@ -13,7 +13,7 @@ namespace QDUEngine
         VisualComponent getCube(float r, float g, float b);
         virtual void userStart() = 0;
     private:
-        void start(char* name, const Vector2D& windowSize);
+        void start(const char *name, const Vector2D &windowSize, std::map<const char*, const char*>& bindings);
         void update(float delta);
         void end();
         std::vector<std::shared_ptr<GameObject>> m_gameObjects;
