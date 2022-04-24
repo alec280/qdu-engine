@@ -19,5 +19,6 @@ namespace QDUEngine
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<const char*, const char*> m_keyBindings{};
         std::map<const char*, bool> m_actions{};
+        void joystickCallback(int jid, int event);
     };
 }

@@ -22,6 +22,20 @@ namespace QDUEngine
         }
     }
 
+    void Input::joystickCallback(int jid, int event)
+    {
+        if (event == GLFW_CONNECTED)
+        {
+            // The joystick was connected
+            std::cout << "The joystick " << jid << " was connected" << std::endl;
+        }
+        else if (event == GLFW_DISCONNECTED)
+        {
+            // The joystick was disconnected
+            std::cout << "The joystick " << jid << " was disconnected" << std::endl;
+        }
+    }
+
     void Input::start(std::map<const char*, const char*>& bindings)
     {
         m_keyBindings = bindings;

@@ -25,12 +25,23 @@ namespace QDUEngine
         glfwMakeContextCurrent(window);
         glfwSetWindowUserPointer(window, &input);
 
-        auto func = [](GLFWwindow* w, int, int, int, int)
+        for (int jid = 0; jid <= GLFW_JOYSTICK_LAST; jid++) {
+            glfwSetJoystickUserPointer(jid, &input);
+        }
+
+        auto key_callback = [](GLFWwindow* w, int, int, int, int)
         {
             static_cast<Input*>(glfwGetWindowUserPointer(w))->keyPressed();
         };
 
-        glfwSetKeyCallback(window, func);
+        glfwSetKeyCallback(window, key_callback);
+
+        auto joystick_callback = [](int jid, int event)
+        {
+            static_cast<Input*>(glfwGetJoystickUserPointer(jid))->joystickCallback(jid, event);
+        };
+
+        glfwSetJoystickCallback(joystick_callback);
 
         if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
             std::cout << "Failed to initialize GLAD" << std::endl;
