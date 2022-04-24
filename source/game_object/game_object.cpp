@@ -14,6 +14,11 @@ namespace QDUEngine
         //m_visual->update(*this, map);
     }
 
+    InputComponent GameObject::getInputComponent()
+    {
+        return *m_input;
+    }
+
     VisualComponent GameObject::getVisualComponent()
     {
         return *m_visual;
