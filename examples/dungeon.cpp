@@ -20,7 +20,7 @@ public:
     {
         auto visual = this->getCube();
         auto enemy = Enemy(&visual);
-        this->addGameObject(visual);
+        this->addGameObject(enemy);
     }
     //virtual void update(QDUEngine::Scene& scene, float timeStep) noexcept override {}
 };

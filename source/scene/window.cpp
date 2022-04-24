@@ -48,7 +48,7 @@ namespace QDUEngine
         m_projection = projection;
     }
 
-    void Window::update(std::vector<std::shared_ptr<VisualComponent>>& visualComponents)
+    void Window::update()
     {
         gr::Vector3f const viewPos(0, 10, 12);
         gr::Vector3f const eye(0, 0, 0);
@@ -61,7 +61,7 @@ namespace QDUEngine
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
 
-        for (auto& visualComponent : visualComponents) {
+        for (auto& visualComponent : m_visualComponents) {
             drawSceneGraphNode(visualComponent->getGraphNodePtr(), *m_pipeline, "model");
         }
 

@@ -8,14 +8,14 @@ namespace QDUEngine
     class Scene {
         friend class Application;
     public:
-        void addGameObject(VisualComponent& gameObject);
+        void addGameObject(GameObject& gameObject);
         VisualComponent getCube();
         virtual void userStart() = 0;
     private:
         void start(char *name, Vector2D& windowSize);
         void update(float delta);
         void end();
-        std::vector<std::shared_ptr<VisualComponent>> m_gameObjects;
+        std::vector<std::shared_ptr<GameObject>> m_gameObjects;
         Window m_window{};
         Input m_input{};
     };

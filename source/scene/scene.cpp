@@ -2,9 +2,10 @@
 
 namespace QDUEngine
 {
-    void Scene::addGameObject(VisualComponent& gameObject)
+    void Scene::addGameObject(GameObject& gameObject)
     {
-        m_gameObjects.push_back(std::make_shared<VisualComponent>(gameObject));
+        m_gameObjects.push_back(std::make_shared<GameObject>(gameObject));
+        m_window.m_visualComponents.push_back(std::make_shared<VisualComponent>(gameObject.getVisualComponent()));
     }
 
     void Scene::start(char *name, Vector2D& windowSize)
@@ -21,20 +22,13 @@ namespace QDUEngine
     void Scene::update(float delta)
     {
         m_input.update();
-        /*
-        auto visualComponents = std::vector<std::shared_ptr<VisualComponent>> (m_gameObjects.size());
-        for (auto& gameObject : m_gameObjects) {
-            auto component = gameObject;
-            visualComponents.push_back(component);
-        }
-        */
-        m_window.update(m_gameObjects);
+        m_window.update();
     }
 
     void Scene::end()
     {
         for (auto& gameObject : m_gameObjects) {
-            gameObject->getGraphNodePtr()->clear();
+            gameObject->getVisualComponent().getGraphNodePtr()->clear();
         }
         m_window.end();
     }
