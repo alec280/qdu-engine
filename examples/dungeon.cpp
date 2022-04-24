@@ -4,7 +4,7 @@
 class Player : public QDUEngine::GameObject {
 public:
     class PlayerInput : public QDUEngine::InputComponent {
-        void onKeyAction(const char* action) override
+        void onAction(const char* action) override
         {
             if (compare(action, "left")) {
                 std::cout << "Move left" << std::endl;
@@ -25,7 +25,7 @@ public:
 class Enemy : public QDUEngine::GameObject {
 public:
     class NullInput : public QDUEngine::InputComponent {
-        void onKeyAction(const char* action) override {}
+        void onAction(const char* action) override {}
     };
     explicit Enemy(QDUEngine::VisualComponent* visual) :
         QDUEngine::GameObject(nullptr, visual, new NullInput)
@@ -56,5 +56,7 @@ int main()
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
     dungeon.bindKey("D", "right");
+    dungeon.bindJoystick("LS_X", "right");
+    dungeon.bindJoystick("LS_Y", "down");
     dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), floor1);
 }

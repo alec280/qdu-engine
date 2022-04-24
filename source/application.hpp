@@ -7,8 +7,10 @@ namespace QDUEngine
     public:
         void run(const char *name, const Vector2D& windowSize, Scene& scene);
         void bindKey(const char* key, const char* action);
+        void bindJoystick(const char* key, const char* action);
     private:
         Scene* m_scene{};
         std::map<const char*, const char*> m_keyBindings{};
+        std::map<const char*, const char*> m_joystickBindings{};
     };
 }

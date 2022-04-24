@@ -9,10 +9,15 @@ namespace QDUEngine
         m_window.m_visualComponents.push_back(std::make_shared<VisualComponent>(gameObject.getVisualComponent()));
     }
 
-    void Scene::start(const char *name, const Vector2D &windowSize, std::map<const char*, const char*>& bindings)
+    void Scene::start(
+            const char *name,
+            const Vector2D &windowSize,
+            std::map<const char*, const char*>& keyBindings,
+            std::map<const char*, const char*>& joystickBindings
+            )
     {
         m_window.start(name, windowSize, m_input);
-        m_input.start(bindings);
+        m_input.start(keyBindings, joystickBindings);
         userStart();
         while (!m_window.shouldClose()) {
             update(0);
