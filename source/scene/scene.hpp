@@ -9,8 +9,8 @@ namespace QDUEngine
         friend class Application;
     public:
         void addGameObject(GameObject& gameObject);
-        VisualComponent getCube();
-        VisualComponent getCube(float r, float g, float b);
+        std::shared_ptr<VisualComponent> getCube();
+        std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
         virtual void userStart() = 0;
     private:
         void start(

@@ -101,13 +101,13 @@ namespace QDUEngine
             for (auto& binding : m_joystickBindings) {
                 if (std::strcmp("LS_X", binding.first) == 0) {
                     float value = joystick.axes[0];
-                    if (std::abs(value) > 0.3) {
-                        m_actions.at(binding.second) = value * 0.2f;
+                    if (std::abs(value) > 0.2) {
+                        m_actions.at(binding.second) = value * 0.01f;
                     }
                 } else if (std::strcmp("LS_Y", binding.first) == 0) {
                     float value = joystick.axes[1];
-                    if (std::abs(value) > 0.3) {
-                        m_actions.at(binding.second) = value * 0.2f;
+                    if (std::abs(value) > 0.2) {
+                        m_actions.at(binding.second) = value * 0.01f;
                     }
                 }
             }
@@ -123,8 +123,11 @@ namespace QDUEngine
         pollJoysticks(m_joysticks);
         for (auto& action : m_actions) {
             float value = m_actions.at(action.first);
-            for (auto& component : m_inputComponents) {
-                component->onAction(action.first, value);
+            if (std::abs(value) != 0) {
+                std::cout << action.first << " action activated." << std::endl;
+                for (auto& component : m_inputComponents) {
+                    component->onAction(action.first, value);
+                }
             }
         }
     }
@@ -132,7 +135,6 @@ namespace QDUEngine
     bool Input::checkKey(const char* key, std::pair<const char* const, const char*> binding, int code)
     {
         if (std::strcmp(key, binding.first) == 0 && glfwGetKey(m_window, code) == GLFW_PRESS) {
-            std::cout << binding.second << " action activated." << std::endl;
             m_actions.at(binding.second) = 1;
             return true;
         }

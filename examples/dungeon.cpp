@@ -1,51 +1,57 @@
 #include <QDUEngine.hpp>
 
+class PlayerInput : public QDUEngine::InputComponent {
+public:
+    explicit PlayerInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
+
+    void onAction(const char* action, float value) override
+    {
+        if (compare(action, "left")) {
+            m_visual->move(QDUEngine::Vector(-value, 0));
+        } else if (compare(action, "right")) {
+            m_visual->move(QDUEngine::Vector(value, 0));
+        } else if (compare(action, "down")) {
+            m_visual->move(QDUEngine::Vector(0, value));
+        } else if (compare(action, "up")) {
+            m_visual->move(QDUEngine::Vector(0, -value));
+        }
+    }
+    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
+};
 
 class Player : public QDUEngine::GameObject {
 public:
-    class PlayerInput : public QDUEngine::InputComponent {
-        void onAction(const char* action, float value) override
-        {
-            if (compare(action, "left")) {
-                std::cout << "Move left" << std::endl;
-            } else if (compare(action, "right")) {
-                std::cout << "Move right" << std::endl;
-            } else if (compare(action, "down")) {
-                std::cout << "Move down" << std::endl;
-            } else if (compare(action, "up")) {
-                std::cout << "Move up" << std::endl;
-            }
-        }
-    };
-    explicit Player(QDUEngine::VisualComponent* visual) :
-        QDUEngine::GameObject(nullptr, visual, new PlayerInput)
+    explicit Player(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
+        QDUEngine::GameObject(nullptr, visual, new PlayerInput(visual))
     {}
 };
+
 
 class Enemy : public QDUEngine::GameObject {
 public:
     class NullInput : public QDUEngine::InputComponent {
         void onAction(const char* action, float value) override {}
     };
-    explicit Enemy(QDUEngine::VisualComponent* visual) :
+    explicit Enemy(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
         QDUEngine::GameObject(nullptr, visual, new NullInput)
     {}
 };
+
 
 class Floor : public QDUEngine::Scene {
 public:
     void userStart() noexcept override
     {
         auto redCube = this->getCube(1, 0, 0);
-        redCube.move(QDUEngine::Vector(2, 2));
-        auto enemy = Enemy(&redCube);
+        redCube->move(QDUEngine::Vector(2, 2));
+        auto enemy = Enemy(redCube);
         this->addGameObject(enemy);
 
         auto blueCube = this->getCube(0, 0, 1);
-        auto player = Player(&blueCube);
+        blueCube->move(QDUEngine::Vector(-2, -2));
+        auto player = Player(blueCube);
         this->addGameObject(player);
     }
-    //virtual void update(QDUEngine::Scene& scene, float timeStep) noexcept override {}
 };
 
 int main()

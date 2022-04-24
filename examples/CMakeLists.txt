@@ -6,5 +6,4 @@ function(MakeExample TARGETNAME FILENAME)
     target_link_libraries(${TARGETNAME} PRIVATE QDUEngine)
 endfunction(MakeExample)
 
-MakeExample(Demo demo.cpp)
 MakeExample(Dungeon dungeon.cpp)

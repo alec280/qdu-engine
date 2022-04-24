@@ -2,7 +2,7 @@
 
 namespace QDUEngine
 {
-    GameObject::GameObject(AttributeComponent* attribute, VisualComponent* visual, InputComponent* input) :
+    GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual, InputComponent* input) :
         m_attribute(attribute),
         m_visual(visual),
         m_input(input)
@@ -19,9 +19,9 @@ namespace QDUEngine
         return std::shared_ptr<InputComponent>(m_input);
     }
 
-    VisualComponent GameObject::getVisualComponent()
+    std::shared_ptr<VisualComponent> GameObject::getVisualComponent()
     {
-        return *m_visual;
+        return m_visual;
     }
 
     void GameObject::end()

@@ -82,11 +82,11 @@ namespace QDUEngine
         glfwSwapBuffers(m_window);
     }
 
-    VisualComponent Window::getCube(float r, float g, float b)
+    std::shared_ptr<VisualComponent> Window::getCube(float r, float g, float b)
     {
         auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(r, g, b)));
         auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
-        auto component = VisualComponent(cubePtr);
+        auto component = std::make_shared<VisualComponent>(cubePtr);
         return component;
     }
 
