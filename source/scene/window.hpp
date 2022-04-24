@@ -20,7 +20,7 @@ namespace QDUEngine
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
-        VisualComponent getCube();
+        VisualComponent getCube(float r, float g, float b);
         void end();
     };
 }

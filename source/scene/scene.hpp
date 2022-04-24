@@ -10,6 +10,7 @@ namespace QDUEngine
     public:
         void addGameObject(GameObject& gameObject);
         VisualComponent getCube();
+        VisualComponent getCube(float r, float g, float b);
         virtual void userStart() = 0;
     private:
         void start(char *name, Vector2D& windowSize);

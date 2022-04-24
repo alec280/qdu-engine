@@ -50,9 +50,9 @@ namespace QDUEngine
 
     void Window::update()
     {
-        gr::Vector3f const viewPos(0, 10, 12);
+        gr::Vector3f const viewPos(0, 10, -12);
         gr::Vector3f const eye(0, 0, 0);
-        gr::Vector3f const at(0, 0, 1);
+        gr::Vector3f const at(0, 0, -1);
         gr::Matrix4f view = tr::lookAt(viewPos, eye, at);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -62,15 +62,18 @@ namespace QDUEngine
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
 
         for (auto& visualComponent : m_visualComponents) {
-            drawSceneGraphNode(visualComponent->getGraphNodePtr(), *m_pipeline, "model");
+            auto pos = visualComponent->getPosition();
+            auto nodePtr = visualComponent->getGraphNodePtr();
+            nodePtr->transform = tr::translate(pos.x, pos.y,0);
+            drawSceneGraphNode(nodePtr, *m_pipeline, "model");
         }
 
         glfwSwapBuffers(m_window);
     }
 
-    VisualComponent Window::getCube()
+    VisualComponent Window::getCube(float r, float g, float b)
     {
-        auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(1, 1, 1)));
+        auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(r, g, b)));
         auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
         auto component = VisualComponent(cubePtr);
         return component;
