@@ -12,7 +12,7 @@ namespace QDUEngine
         void update(Map& map);
         void end();
         VisualComponent getVisualComponent();
-        InputComponent getInputComponent();
+        std::shared_ptr<InputComponent> getInputComponent();
     private:
         AttributeComponent* m_attribute;
         VisualComponent* m_visual;

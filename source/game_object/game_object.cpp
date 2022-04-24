@@ -14,9 +14,9 @@ namespace QDUEngine
         //m_visual->update(*this, map);
     }
 
-    InputComponent GameObject::getInputComponent()
+    std::shared_ptr<InputComponent> GameObject::getInputComponent()
     {
-        return *m_input;
+        return std::shared_ptr<InputComponent>(m_input);
     }
 
     VisualComponent GameObject::getVisualComponent()

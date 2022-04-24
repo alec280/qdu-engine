@@ -5,7 +5,7 @@ namespace QDUEngine
     void Scene::addGameObject(GameObject& gameObject)
     {
         m_gameObjects.push_back(std::make_shared<GameObject>(gameObject));
-        m_input.m_inputComponents.push_back(std::make_shared<InputComponent>(gameObject.getInputComponent()));
+        m_input.m_inputComponents.push_back(gameObject.getInputComponent());
         m_window.m_visualComponents.push_back(std::make_shared<VisualComponent>(gameObject.getVisualComponent()));
     }
 
