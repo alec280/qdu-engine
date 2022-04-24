@@ -15,6 +15,6 @@ namespace QDUEngine
 
     void Application::bindJoystick(const char *key, const char *action)
     {
-        m_keyBindings.insert(std::pair<const char*,const char*>(key, action));
+        m_joystickBindings.insert(std::pair<const char*,const char*>(key, action));
     }
 }

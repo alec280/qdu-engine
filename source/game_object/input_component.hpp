@@ -7,7 +7,7 @@ namespace QDUEngine
     class GameObject;
     class InputComponent {
     public:
-        virtual void onAction(const char* action) = 0;
+        virtual void onAction(const char* action, float value) = 0;
         static bool compare(const char* lhs, const char* rhs);
     };
 }

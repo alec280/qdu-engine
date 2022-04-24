@@ -4,7 +4,7 @@
 class Player : public QDUEngine::GameObject {
 public:
     class PlayerInput : public QDUEngine::InputComponent {
-        void onAction(const char* action) override
+        void onAction(const char* action, float value) override
         {
             if (compare(action, "left")) {
                 std::cout << "Move left" << std::endl;
@@ -25,7 +25,7 @@ public:
 class Enemy : public QDUEngine::GameObject {
 public:
     class NullInput : public QDUEngine::InputComponent {
-        void onAction(const char* action) override {}
+        void onAction(const char* action, float value) override {}
     };
     explicit Enemy(QDUEngine::VisualComponent* visual) :
         QDUEngine::GameObject(nullptr, visual, new NullInput)
