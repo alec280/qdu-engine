@@ -2,9 +2,10 @@
 
 namespace QDUEngine
 {
-    GameObject::GameObject(AttributeComponent* attribute, VisualComponent* visual) :
+    GameObject::GameObject(AttributeComponent* attribute, VisualComponent* visual, InputComponent* input) :
         m_attribute(attribute),
-        m_visual(visual)
+        m_visual(visual),
+        m_input(input)
     {}
 
     void GameObject::update(Map& map)

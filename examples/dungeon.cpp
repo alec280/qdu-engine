@@ -1,9 +1,17 @@
 #include <QDUEngine.hpp>
 
-class Enemy : public QDUEngine::Character {
+class PlayerInput : public QDUEngine::InputComponent {
+    void onKeyAction(char* action) override
+    {
+
+    }
+};
+
+
+class Enemy : public QDUEngine::GameObject {
 public:
     explicit Enemy(QDUEngine::VisualComponent* visual) :
-        QDUEngine::Character(nullptr, visual)
+        QDUEngine::GameObject(nullptr, visual, nullptr)
     {}
     /*
     virtual void start(QDUEngine::Scene& scene) noexcept
@@ -27,9 +35,7 @@ public:
 
 int main()
 {
-    char title[] = "Dungeon game";
-    auto window_size = QDUEngine::Vector(600, 600);
     Floor floor1;
     QDUEngine::Application dungeon;
-    dungeon.run(title, window_size, floor1);
+    dungeon.run((char*)"Dungeon game", QDUEngine::Vector(600, 600), floor1);
 }

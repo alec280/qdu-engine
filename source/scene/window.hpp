@@ -14,7 +14,7 @@ namespace QDUEngine
     public:
         bool shouldClose();
     private:
-        void start(char *name, Vector2D& window_size, Input& input);
+        void start(char* name, const Vector2D& window_size, Input& input);
         void update();
         Grafica::ModelViewProjectionShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;

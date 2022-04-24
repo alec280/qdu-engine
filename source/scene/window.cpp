@@ -5,7 +5,7 @@ namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
 {
-    void Window::start(char *name, Vector2D& window_size, Input& input)
+    void Window::start(char *name, const Vector2D& window_size, Input& input)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

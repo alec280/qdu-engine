@@ -8,7 +8,7 @@ namespace QDUEngine
         m_window.m_visualComponents.push_back(std::make_shared<VisualComponent>(gameObject.getVisualComponent()));
     }
 
-    void Scene::start(char *name, Vector2D& windowSize)
+    void Scene::start(char* name, const Vector2D& windowSize)
     {
         m_window.start(name, windowSize, m_input);
         m_input.start();
