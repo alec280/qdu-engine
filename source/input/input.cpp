@@ -24,7 +24,6 @@ namespace QDUEngine
 
     void Input::joystickCallback(int jid, int event)
     {
-        std::cout << "Joystick " << jid << std::endl;
         if (event == GLFW_CONNECTED)
         {
             std::cout << "The joystick " << jid << " was connected" << std::endl;
@@ -33,6 +32,17 @@ namespace QDUEngine
         {
             std::cout << "The joystick " << jid << " was disconnected" << std::endl;
         }
+        int count = 0;
+        const float* values = glfwGetJoystickAxes(jid, &count);
+        std::cout << count << std::endl;
+        /*
+        if (count == 0) {
+            return;
+        }
+        for (int i = 0; i < count; i++) {
+            std::cout << values[i] << std::endl;
+        }
+        */
     }
 
     void Input::start(
