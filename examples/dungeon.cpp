@@ -3,6 +3,7 @@
 class PlayerInput : public QDUEngine::InputComponent {
     void onKeyAction(const char* action) override
     {
+        std::cout << "Received" << std::endl;
         if (compare(action, "left")) {
             std::cout << "Hewwo!" << std::endl;
         }
