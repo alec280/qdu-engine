@@ -4,22 +4,23 @@
 
 namespace QDUEngine
 {
-    void Input::keyPressed()
+    bool Input::keyPressed(int key, int action)
     {
-        if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(m_window, true);
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            return true;
         }
         for (auto& binding : m_keyBindings) {
-            if (checkKey("A", binding, GLFW_KEY_A)) {
+            if (checkKey("A", binding, GLFW_KEY_A, key, action)) {
 
-            } else if (checkKey("W", binding, GLFW_KEY_W)) {
+            } else if (checkKey("W", binding, GLFW_KEY_W, key, action)) {
 
-            } else if (checkKey("S", binding, GLFW_KEY_S)) {
+            } else if (checkKey("S", binding, GLFW_KEY_S, key, action)) {
 
-            } else if (checkKey("D", binding, GLFW_KEY_D)) {
+            } else if (checkKey("D", binding, GLFW_KEY_D, key, action)) {
 
             }
         }
+        return false;
     }
 
     void Input::joystickCallback(int jid, int event)
@@ -47,7 +48,6 @@ namespace QDUEngine
         for (auto& binding : joystickBindings) {
             m_actions.insert(std::pair<const char*, bool>(binding.second, 0));
         }
-        m_window = glfwGetCurrentContext();
     }
 
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)
@@ -132,13 +132,18 @@ namespace QDUEngine
         }
     }
 
-    bool Input::checkKey(const char* key, std::pair<const char* const, const char*> binding, int code)
+    bool Input::checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action)
     {
-        if (std::strcmp(key, binding.first) == 0 && glfwGetKey(m_window, code) == GLFW_PRESS) {
+        if (std::strcmp(key, binding.first) == 0 && action == GLFW_PRESS && code == keyGLFW) {
             m_actions.at(binding.second) = 1;
             return true;
         }
         return false;
+    }
+
+    void Input::cursorMoved(double xPos, double yPos)
+    {
+        //std::cout << "The joystick " << xPos << " was connected" << std::endl;
     }
 }
 

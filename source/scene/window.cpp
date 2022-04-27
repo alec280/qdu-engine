@@ -29,12 +29,27 @@ namespace QDUEngine
             glfwSetJoystickUserPointer(jid, &input);
         }
 
-        auto key_callback = [](GLFWwindow* w, int, int, int, int)
+        auto key_callback = [](GLFWwindow* w, int key, int, int action, int)
         {
-            static_cast<Input*>(glfwGetWindowUserPointer(w))->keyPressed();
+            bool shouldClose = static_cast<Input*>(glfwGetWindowUserPointer(w))->keyPressed(key, action);
+            glfwSetWindowShouldClose(w, shouldClose);
         };
 
         glfwSetKeyCallback(window, key_callback);
+
+        auto cursor_pos_callback = [](GLFWwindow* w, double xPos, double yPos)
+        {
+            static_cast<Input*>(glfwGetWindowUserPointer(w))->cursorMoved(xPos, yPos);
+        };
+
+        glfwSetCursorPosCallback(window, cursor_pos_callback);
+
+        auto mouse_button_callback = [](GLFWwindow* w, int, int, int)
+        {
+            //static_cast<Input*>(glfwGetWindowUserPointer(w))->cursorPressed(xPos, yPos);
+        };
+
+        glfwSetMouseButtonCallback(window, mouse_button_callback);
 
         auto joystick_callback = [](int jid, int event)
         {

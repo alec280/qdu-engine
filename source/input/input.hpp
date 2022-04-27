@@ -21,14 +21,14 @@ namespace QDUEngine
         friend class Scene;
         friend class Window;
     private:
-        void keyPressed();
+        bool keyPressed(int key, int action);
+        void cursorMoved(double xPos, double yPos);
         void start(
                 std::map<const char*, const char*>& keyBindings,
                 std::map<const char*, const char*>& joystickBindings
                 );
         void update();
-        bool checkKey(const char* key, std::pair<const char* const, const char*> binding, int code);
-        GLFWwindow* m_window{};
+        bool checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action);
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<const char*, const char*> m_keyBindings{};
         std::map<const char*, const char*> m_joystickBindings{};
