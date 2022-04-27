@@ -4,7 +4,6 @@ namespace QDUEngine
 {
     void Scene::addGameObject(GameObject& gameObject)
     {
-        m_gameObjects.push_back(std::make_shared<GameObject>(gameObject));
         m_input.m_inputComponents.push_back(gameObject.getInputComponent());
         m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
     }
@@ -14,9 +13,14 @@ namespace QDUEngine
         m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
     }
 
-    std::vector<std::shared_ptr<GameObject>> Scene::getGameObjects()
+    std::shared_ptr<GameObject> Scene::getGameObject(int idx)
     {
-        return m_gameObjects;
+
+        return std::make_shared<GameObject>(
+                GameObject(nullptr,
+                           m_window.m_visualComponents[0],
+                           m_input.m_inputComponents[0]
+                ));
     }
 
     std::shared_ptr<InputComponent> Scene::getInputComponent()
@@ -55,8 +59,8 @@ namespace QDUEngine
 
     void Scene::end()
     {
-        for (auto& gameObject : m_gameObjects) {
-            gameObject->getVisualComponent()->getGraphNodePtr()->clear();
+        for (auto& visualComponent : m_window.m_visualComponents) {
+            visualComponent->getGraphNodePtr()->clear();
         }
         m_window.end();
     }

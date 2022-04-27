@@ -69,7 +69,7 @@ public:
     void addCompanion()
     {
         auto greenCube = this->getCube(0, 1, 0);
-        greenCube->move(this->getGameObjects()[0]->getVisualComponent()->getPosition());
+        greenCube->move(this->getGameObject(0)->getVisualComponent()->getPosition());
         auto companion = Static(greenCube);
         this->addVisualComponent(companion);
     }
