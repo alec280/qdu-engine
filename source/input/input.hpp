@@ -23,11 +23,7 @@ namespace QDUEngine
     private:
         bool keyPressed(int key, int action);
         void cursorMoved(double xPos, double yPos);
-        void start(
-                std::map<const char*, const char*>& cursorBindings,
-                std::map<const char*, const char*>& keyBindings,
-                std::map<const char*, const char*>& joystickBindings
-                );
+        void start();
         void update();
         bool checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action);
         Vector2D m_cursorPos{};

@@ -18,6 +18,16 @@ namespace QDUEngine
 
             } else if (checkKey("D", binding, GLFW_KEY_D, key, action)) {
 
+            } else if (checkKey("I", binding, GLFW_KEY_I, key, action)) {
+
+            } else if (checkKey("K", binding, GLFW_KEY_K, key, action)) {
+
+            } else if (checkKey("L", binding, GLFW_KEY_L, key, action)) {
+
+            } else if (checkKey("J", binding, GLFW_KEY_J, key, action)) {
+
+            } else if (checkKey("M", binding, GLFW_KEY_M, key, action)) {
+
             }
         }
         return false;
@@ -35,24 +45,9 @@ namespace QDUEngine
         }
     }
 
-    void Input::start(
-            std::map<const char*, const char*>& cursorBindings,
-            std::map<const char*, const char*>& keyBindings,
-            std::map<const char*, const char*>& joystickBindings
-            )
+    void Input::start()
     {
-        m_cursorBindings = cursorBindings;
-        m_keyBindings = keyBindings;
-        m_joystickBindings = joystickBindings;
-        for (auto& binding : cursorBindings) {
-            m_cursorActions.insert(std::pair<const char*, bool>(binding.second, 0));
-        }
-        for (auto& binding : keyBindings) {
-            m_actions.insert(std::pair<const char*, bool>(binding.second, 0));
-        }
-        for (auto& binding : joystickBindings) {
-            m_actions.insert(std::pair<const char*, bool>(binding.second, 0));
-        }
+
     }
 
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)

@@ -112,7 +112,7 @@ int main()
 {
     Floor floor1;
     FloorInput floorInput(&floor1);
-    QDUEngine::Application dungeon;
+    QDUEngine::Application dungeon(&floor1);
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
@@ -122,5 +122,5 @@ int main()
     dungeon.bindCursorButton("LEFT", "customNema");
     dungeon.bindCursorButton("MIDDLE", "middleClick");
     dungeon.bindCursorButton("RIGHT", "rightClick");
-    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), &floor1);
+    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600));
 }

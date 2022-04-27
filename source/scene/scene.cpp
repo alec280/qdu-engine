@@ -18,8 +18,8 @@ namespace QDUEngine
 
         return std::make_shared<GameObject>(
                 GameObject(nullptr,
-                           m_window.m_visualComponents[0],
-                           m_input.m_inputComponents[0]
+                           m_window.m_visualComponents[idx],
+                           m_input.m_inputComponents[idx]
                 ));
     }
 
@@ -34,16 +34,10 @@ namespace QDUEngine
         m_input.m_inputComponents.push_back(getInputComponent());
     }
 
-    void Scene::start(
-            const char *name,
-            const Vector2D &windowSize,
-            std::map<const char*, const char*>& cursorBindings,
-            std::map<const char*, const char*>& keyBindings,
-            std::map<const char*, const char*>& joystickBindings
-            )
+    void Scene::start(const char* name, const Vector2D& windowSize)
     {
         m_window.start(name, windowSize, m_input);
-        m_input.start(cursorBindings, keyBindings, joystickBindings);
+        m_input.start();
         userStart();
         while (!m_window.shouldClose()) {
             update(0);
@@ -75,5 +69,23 @@ namespace QDUEngine
     {
         auto component = m_window.getCube(r, g, b);
         return component;
+    }
+
+    void Scene::bindCursorButton(const char* key, const char* action)
+    {
+        m_input.m_cursorBindings.insert(std::pair<const char*, const char*>(key, action));
+        m_input.m_cursorActions.insert(std::pair<const char*, bool>(action, 0));
+    }
+
+    void Scene::bindKey(const char* key, const char* action)
+    {
+        m_input.m_keyBindings.insert(std::pair<const char*, const char*>(key, action));
+        m_input.m_actions.insert(std::pair<const char*, bool>(action, 0));
+    }
+
+    void Scene::bindJoystick(const char* key, const char* action)
+    {
+        m_input.m_joystickBindings.insert(std::pair<const char*, const char*>(key, action));
+        m_input.m_actions.insert(std::pair<const char*, bool>(action, 0));
     }
 }
