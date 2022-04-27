@@ -44,9 +44,9 @@ namespace QDUEngine
 
         glfwSetCursorPosCallback(window, cursor_pos_callback);
 
-        auto mouse_button_callback = [](GLFWwindow* w, int, int, int)
+        auto mouse_button_callback = [](GLFWwindow* w, int button, int action, int)
         {
-            //static_cast<Input*>(glfwGetWindowUserPointer(w))->cursorPressed(xPos, yPos);
+            static_cast<Input*>(glfwGetWindowUserPointer(w))->cursorPressed(button, action);
         };
 
         glfwSetMouseButtonCallback(window, mouse_button_callback);

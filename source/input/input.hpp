@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include "../game_object/input_component.hpp"
+#include "../core/vector_2d.hpp"
 
 namespace QDUEngine
 {
@@ -29,6 +30,7 @@ namespace QDUEngine
                 );
         void update();
         bool checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action);
+        Vector2D m_cursorPos{};
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<const char*, const char*> m_keyBindings{};
         std::map<const char*, const char*> m_joystickBindings{};
@@ -36,5 +38,6 @@ namespace QDUEngine
         std::map<std::size_t, Joystick> m_joysticks{};
         void joystickCallback(int jid, int event);
         void pollJoysticks(std::map<std::size_t, Joystick> &joysticks);
+        void cursorPressed(int button, int action);
     };
 }

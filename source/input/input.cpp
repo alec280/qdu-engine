@@ -143,7 +143,14 @@ namespace QDUEngine
 
     void Input::cursorMoved(double xPos, double yPos)
     {
-        //std::cout << "The joystick " << xPos << " was connected" << std::endl;
+        m_cursorPos = Vector((float)xPos, (float)yPos);
+    }
+
+    void Input::cursorPressed(int button, int action)
+    {
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            std::cout << "Cursor pressed at " << m_cursorPos << std::endl;
+        }
     }
 }
 
