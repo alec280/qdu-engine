@@ -8,7 +8,8 @@ namespace QDUEngine
     class Map;
     class GameObject {
     public:
-        GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual, InputComponent* input);
+        GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual);
+        GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input);
         void update(Map& map);
         void end();
         std::shared_ptr<VisualComponent> getVisualComponent();
@@ -16,6 +17,6 @@ namespace QDUEngine
     private:
         AttributeComponent* m_attribute;
         std::shared_ptr<QDUEngine::VisualComponent> m_visual;
-        InputComponent* m_input;
+        std::shared_ptr<QDUEngine::InputComponent> m_input;
     };
 }

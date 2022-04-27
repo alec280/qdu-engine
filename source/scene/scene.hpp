@@ -12,6 +12,10 @@ namespace QDUEngine
         std::shared_ptr<VisualComponent> getCube();
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
         virtual void userStart() = 0;
+        std::shared_ptr<InputComponent> getInputComponent();
+        void addVisualComponent(GameObject &gameObject);
+        void setInputComponent(InputComponent* inputComponent);
+        std::vector<std::shared_ptr<GameObject>> getGameObjects();
     private:
         void start(
                 const char *name,
@@ -23,6 +27,7 @@ namespace QDUEngine
         void update(float delta);
         void end();
         std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+        InputComponent* m_inputComponent;
         Window m_window{};
         Input m_input{};
     };

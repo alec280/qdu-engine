@@ -19,13 +19,6 @@ public:
     std::shared_ptr<QDUEngine::VisualComponent> m_visual;
 };
 
-class Player : public QDUEngine::GameObject {
-public:
-    explicit Player(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
-        QDUEngine::GameObject(nullptr, visual, new PlayerInput(visual))
-    {}
-};
-
 class EnemyInput : public QDUEngine::InputComponent {
 public:
     explicit EnemyInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
@@ -43,10 +36,17 @@ public:
     std::shared_ptr<QDUEngine::VisualComponent> m_visual;
 };
 
-class Enemy : public QDUEngine::GameObject {
+class Static : public QDUEngine::GameObject {
 public:
-    explicit Enemy(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
-        QDUEngine::GameObject(nullptr, visual, new EnemyInput(visual))
+    explicit Static(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
+            QDUEngine::GameObject(nullptr, visual)
+    {}
+};
+
+class Character : public QDUEngine::GameObject {
+public:
+    explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
+        QDUEngine::GameObject(nullptr, visual, input)
     {}
 };
 
@@ -54,21 +54,46 @@ class Floor : public QDUEngine::Scene {
 public:
     void userStart() noexcept override
     {
-        auto redCube = this->getCube(1, 0, 0);
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Enemy(redCube);
-        this->addGameObject(enemy);
-
         auto blueCube = this->getCube(0, 0, 1);
+        auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Player(blueCube);
+        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
         this->addGameObject(player);
+
+        auto redCube = this->getCube(1, 0, 0);
+        auto enemyInput = std::make_shared<EnemyInput>(redCube);
+        redCube->move(QDUEngine::Vector(2, 2));
+        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
+        this->addGameObject(enemy);
+    }
+    void addCompanion()
+    {
+        auto greenCube = this->getCube(0, 1, 0);
+        greenCube->move(this->getGameObjects()[0]->getVisualComponent()->getPosition());
+        auto companion = Static(greenCube);
+        this->addVisualComponent(companion);
     }
 };
+
+class FloorInput : public QDUEngine::InputComponent {
+public:
+    explicit FloorInput(std::shared_ptr<Floor>& floor) : m_floor(floor) {m_floor->setInputComponent(this);}
+    void onAction(const char* action, float value) override {}
+    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    {
+        if (compare(action, "middleClick")) {
+            m_floor->addCompanion();
+        }
+    }
+    std::shared_ptr<Floor> m_floor;
+};
+
 
 int main()
 {
     Floor floor1;
+    auto sharedFloor = std::make_shared<Floor>(floor1);
+    FloorInput floorInput(sharedFloor);
     QDUEngine::Application dungeon;
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
@@ -78,5 +103,5 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindCursorButton("LEFT", "customNema");
     dungeon.bindCursorButton("MIDDLE", "middleClick");
-    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), floor1);
+    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), (std::shared_ptr<QDUEngine::Scene>&)sharedFloor);
 }
