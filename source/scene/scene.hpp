@@ -16,6 +16,7 @@ namespace QDUEngine
         void start(
                 const char *name,
                 const Vector2D &windowSize,
+                std::map<const char*, const char*>& cursorBindings,
                 std::map<const char*, const char*>& keyBindings,
                 std::map<const char*, const char*>& joystickBindings
                 );

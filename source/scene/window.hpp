@@ -16,6 +16,7 @@ namespace QDUEngine
     private:
         void start(const char* name, const Vector2D& window_size, Input& input);
         void update();
+        Vector2D screenToPos();
         Grafica::ModelViewProjectionShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;
         Grafica::Matrix4f* m_projection{};

@@ -16,6 +16,14 @@ public:
             m_visual->move(QDUEngine::Vector(0, -value));
         }
     }
+
+    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    {
+        if (compare(action, "goto")) {
+            std::cout << "Cursor pressed at " << pos << std::endl;
+        }
+    }
+
     std::shared_ptr<QDUEngine::VisualComponent> m_visual;
 };
 
@@ -31,6 +39,7 @@ class Enemy : public QDUEngine::GameObject {
 public:
     class NullInput : public QDUEngine::InputComponent {
         void onAction(const char* action, float value) override {}
+        void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override {}
     };
     explicit Enemy(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
         QDUEngine::GameObject(nullptr, visual, new NullInput)
@@ -64,5 +73,6 @@ int main()
     dungeon.bindKey("D", "right");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");
+    dungeon.bindCursorButton("LEFT", "goto");
     dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), floor1);
 }

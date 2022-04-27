@@ -12,12 +12,13 @@ namespace QDUEngine
     void Scene::start(
             const char *name,
             const Vector2D &windowSize,
+            std::map<const char*, const char*>& cursorBindings,
             std::map<const char*, const char*>& keyBindings,
             std::map<const char*, const char*>& joystickBindings
             )
     {
         m_window.start(name, windowSize, m_input);
-        m_input.start(keyBindings, joystickBindings);
+        m_input.start(cursorBindings, keyBindings, joystickBindings);
         userStart();
         while (!m_window.shouldClose()) {
             update(0);
