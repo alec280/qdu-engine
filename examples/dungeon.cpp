@@ -77,23 +77,41 @@ public:
 
 class FloorInput : public QDUEngine::InputComponent {
 public:
-    explicit FloorInput(std::shared_ptr<Floor>& floor) : m_floor(floor) {m_floor->setInputComponent(this);}
+    explicit FloorInput(Floor* floor) : m_floor(floor) {m_floor->setInputComponent(this);}
     void onAction(const char* action, float value) override {}
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
     {
-        if (compare(action, "middleClick")) {
-            m_floor->addCompanion();
+        if (compare(action, "customNema")) {
+            m_combo[0] = pos.x < 200;
+            m_combo[1] = false;
+        } else if (compare(action, "middleClick")) {
+            if (!m_combo[0] || m_combo[1]) {
+                m_combo[1] = false;
+            } else if (pos.x > 200 && pos.x < 400) {
+                m_combo[1] = true;
+            } else {
+                m_combo[0] = false;
+            }
+        } else if (compare(action, "rightClick")) {
+            if (!m_combo[0] || !m_combo[1]) {
+                return;
+            }
+            if (pos.x > 400) {
+                m_floor->addCompanion();
+            }
+            m_combo[0] = false;
+            m_combo[1] = false;
         }
     }
-    std::shared_ptr<Floor> m_floor;
+    bool m_combo[2]{false, false};
+    Floor* m_floor;
 };
 
 
 int main()
 {
     Floor floor1;
-    auto sharedFloor = std::make_shared<Floor>(floor1);
-    FloorInput floorInput(sharedFloor);
+    FloorInput floorInput(&floor1);
     QDUEngine::Application dungeon;
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
@@ -103,5 +121,6 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindCursorButton("LEFT", "customNema");
     dungeon.bindCursorButton("MIDDLE", "middleClick");
-    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), (std::shared_ptr<QDUEngine::Scene>&)sharedFloor);
+    dungeon.bindCursorButton("RIGHT", "rightClick");
+    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), &floor1);
 }
