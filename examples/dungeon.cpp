@@ -3,7 +3,6 @@
 class PlayerInput : public QDUEngine::InputComponent {
 public:
     explicit PlayerInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
-
     void onAction(const char* action, float value) override
     {
         if (compare(action, "left")) {
@@ -16,14 +15,7 @@ public:
             m_visual->move(QDUEngine::Vector(0, -value));
         }
     }
-
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
-    {
-        if (compare(action, "goto")) {
-            std::cout << "Cursor pressed at " << pos << std::endl;
-        }
-    }
-
+    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override {}
     std::shared_ptr<QDUEngine::VisualComponent> m_visual;
 };
 
@@ -34,18 +26,29 @@ public:
     {}
 };
 
+class EnemyInput : public QDUEngine::InputComponent {
+public:
+    explicit EnemyInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
+    void onAction(const char* action, float value) override {}
+    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    {
+        if (compare(action, "customNema")) {
+            if (pos.x < 300) {
+                m_visual->move(QDUEngine::Vector(-1, 0));
+            } else {
+                m_visual->move(QDUEngine::Vector(1, 0));
+            }
+        }
+    }
+    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
+};
 
 class Enemy : public QDUEngine::GameObject {
 public:
-    class NullInput : public QDUEngine::InputComponent {
-        void onAction(const char* action, float value) override {}
-        void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override {}
-    };
     explicit Enemy(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
-        QDUEngine::GameObject(nullptr, visual, new NullInput)
+        QDUEngine::GameObject(nullptr, visual, new EnemyInput(visual))
     {}
 };
-
 
 class Floor : public QDUEngine::Scene {
 public:
@@ -73,6 +76,7 @@ int main()
     dungeon.bindKey("D", "right");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");
-    dungeon.bindCursorButton("LEFT", "goto");
+    dungeon.bindCursorButton("LEFT", "customNema");
+    dungeon.bindCursorButton("MIDDLE", "middleClick");
     dungeon.run("Dungeon game", QDUEngine::Vector(600, 600), floor1);
 }

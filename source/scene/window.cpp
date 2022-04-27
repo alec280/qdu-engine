@@ -107,26 +107,7 @@ namespace QDUEngine
 
     Vector2D Window::screenToPos()
     {
-        /*
-        GLdouble xPos, yPos;
-        glfwGetCursorPos(m_window, &xPos, &yPos);
-        GLint viewport[4];
-        GLdouble modelview[16];
-        GLdouble projection[16];
-        GLfloat winX, winY, winZ;
-        GLdouble posX, posY, posZ;
-
-        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-        glGetDoublev(GL_PROJECTION_MATRIX, projection);
-        glGetIntegerv(GL_VIEWPORT, viewport);
-
-        winX = (float)xPos;
-        winY = (float)viewport[3] - (float)yPos;
-        glReadPixels((int)xPos, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-
-        glu
-        gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
-        */
+        return Vector(0, 0);
     }
 
     void Window::end()
