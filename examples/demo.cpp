@@ -83,28 +83,40 @@ public:
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";
-            m_left = std::cin.get();
+            char tmp = (char)std::cin.get();
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&m_left, "left");
-            std::cout << std::endl;
-            /*
-            std::cout << "Rebind down: ";
-            m_down = std::cin.get();
-            m_floor->bindKey(&m_down, "down");
-            std::cout << std::endl;
+            m_floor->bindKey(&tmp, "left");
+
             std::cout << "Rebind up: ";
-            m_up = std::cin.get();
-            m_floor->bindKey(&m_up, "up");
-            std::cout << std::endl;
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_floor->bindKey(&tmp, "up");
+
+            std::cout << "Rebind down: ";
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_floor->bindKey(&tmp, "down");
+
             std::cout << "Rebind right: ";
-            m_right = std::cin.get();
-            m_floor->bindKey(&m_right, "right");
-            std::cout << std::endl;
-            */
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_floor->bindKey(&tmp, "right");
         }
     }
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
@@ -131,7 +143,6 @@ public:
             m_combo[1] = false;
         }
     }
-    char m_left{}, m_up{}, m_down{}, m_right{};
     bool m_combo[2]{false, false};
     Floor* m_floor;
 };

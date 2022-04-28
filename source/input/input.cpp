@@ -10,29 +10,31 @@ namespace QDUEngine
             return true;
         }
         for (auto& binding : m_keyBindings) {
-            if (checkKey("A", binding, GLFW_KEY_A, key, action)) {
+            auto string = binding.first;
+            auto act = binding.second;
+            if (checkKey("A", string, act, GLFW_KEY_A, key, action)) {
 
-            } else if (checkKey("W", binding, GLFW_KEY_W, key, action)) {
+            } else if (checkKey("W", string, act, GLFW_KEY_W, key, action)) {
 
-            } else if (checkKey("S", binding, GLFW_KEY_S, key, action)) {
+            } else if (checkKey("S", string, act, GLFW_KEY_S, key, action)) {
 
-            } else if (checkKey("D", binding, GLFW_KEY_D, key, action)) {
+            } else if (checkKey("D", string, act, GLFW_KEY_D, key, action)) {
 
-            } else if (checkKey("I", binding, GLFW_KEY_I, key, action)) {
+            } else if (checkKey("I", string, act, GLFW_KEY_I, key, action)) {
 
-            } else if (checkKey("K", binding, GLFW_KEY_K, key, action)) {
+            } else if (checkKey("K", string, act, GLFW_KEY_K, key, action)) {
 
-            } else if (checkKey("L", binding, GLFW_KEY_L, key, action)) {
+            } else if (checkKey("L", string, act, GLFW_KEY_L, key, action)) {
 
-            } else if (checkKey("J", binding, GLFW_KEY_J, key, action)) {
+            } else if (checkKey("J", string, act, GLFW_KEY_J, key, action)) {
 
-            } else if (checkKey("M", binding, GLFW_KEY_M, key, action)) {
+            } else if (checkKey("M", string, act, GLFW_KEY_M, key, action)) {
 
-            } else if (checkKey("U", binding, GLFW_KEY_U, key, action)) {
+            } else if (checkKey("U", string, act, GLFW_KEY_U, key, action)) {
 
-            } else if (checkKey("H", binding, GLFW_KEY_H, key, action)) {
+            } else if (checkKey("H", string, act, GLFW_KEY_H, key, action)) {
 
-            } else if (checkKey("O", binding, GLFW_KEY_O, key, action)) {
+            } else if (checkKey("O", string, act, GLFW_KEY_O, key, action)) {
 
             }
         }
@@ -150,10 +152,10 @@ namespace QDUEngine
         }
     }
 
-    bool Input::checkKey(const char* key, std::pair<const char*, const char*> binding, int code, int keyGLFW, int action)
+    bool Input::checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW)
     {
-        if (std::strcmp(key, binding.first) == 0 && action == GLFW_PRESS && code == keyGLFW) {
-            m_actions.at(binding.second) = 1;
+        if (std::strcmp(key, string.c_str()) == 0 && actionGLFW == GLFW_PRESS && code == keyGLFW) {
+            m_actions.at(action) = 1;
             return true;
         }
         return false;

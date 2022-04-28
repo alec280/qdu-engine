@@ -79,7 +79,7 @@ namespace QDUEngine
 
     void Scene::bindKey(const char* key, const char* action)
     {
-        m_input.m_keyBindings.insert(std::pair<const char*, const char*>(key, action));
+        m_input.m_keyBindings[std::string(key)] = action;
         m_input.m_actions.insert(std::pair<const char*, bool>(action, 0));
     }
 

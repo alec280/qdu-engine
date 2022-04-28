@@ -17,6 +17,14 @@ namespace QDUEngine
         {}
     };
 
+    struct cmp_str
+    {
+        bool operator()(char const *a, char const *b) const
+        {
+            return std::strcmp(a, b) < 0;
+        }
+    };
+
     class Input {
         friend class Scene;
         friend class Window;
@@ -25,11 +33,11 @@ namespace QDUEngine
         void cursorMoved(double xPos, double yPos);
         void start();
         void update();
-        bool checkKey(const char* key, std::pair<const char*, const char*> binding, int code, int keyGLFW, int action);
+        bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<const char*, const char*> m_cursorBindings{};
-        std::map<const char*, const char*> m_keyBindings{};
+        std::map<std::string, const char*> m_keyBindings{};
         std::map<const char*, const char*> m_joystickBindings{};
         std::map<const char*, float> m_actions{};
         std::map<const char*, float> m_cursorActions{};
