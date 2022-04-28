@@ -160,6 +160,8 @@ int main()
     dungeon.bindKey("M", "map");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");
+    dungeon.bindJoystick("RS_X", "right");
+    dungeon.bindJoystick("RS_Y", "down");
     dungeon.bindCursorButton("LEFT", "customNema");
     dungeon.bindCursorButton("MIDDLE", "middleClick");
     dungeon.bindCursorButton("RIGHT", "rightClick");

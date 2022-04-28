@@ -45,5 +45,6 @@ namespace QDUEngine
         void joystickCallback(int jid, int event);
         void pollJoysticks(std::map<std::size_t, Joystick> &joysticks);
         void cursorPressed(int button, int action);
+        bool checkJoystick(const char *key, std::string &string, const char *action, Joystick &joystick, int ax);
     };
 }

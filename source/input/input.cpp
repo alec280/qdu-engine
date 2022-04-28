@@ -107,16 +107,15 @@ namespace QDUEngine
             auto &joystick = elem.second;
 
             for (auto& binding : m_joystickBindings) {
-                if (std::strcmp("LS_X", binding.first.c_str()) == 0) {
-                    float value = joystick.axes[0];
-                    if (std::abs(value) > 0.2) {
-                        m_actions.at(binding.second) = value * 0.01f;
-                    }
-                } else if (std::strcmp("LS_Y", binding.first.c_str()) == 0) {
-                    float value = joystick.axes[1];
-                    if (std::abs(value) > 0.2) {
-                        m_actions.at(binding.second) = value * 0.01f;
-                    }
+                auto string = binding.first;
+                if (checkJoystick("LS_X", string, binding.second, joystick, 0)) {
+
+                } else if (checkJoystick("LS_Y", string, binding.second, joystick, 1)) {
+
+                } else if (checkJoystick("RS_X", string, binding.second, joystick, 2)) {
+
+                } else if (checkJoystick("RS_Y", string, binding.second, joystick, 5)) {
+
                 }
             }
         }
@@ -150,6 +149,18 @@ namespace QDUEngine
                 }
             }
         }
+    }
+
+    bool Input::checkJoystick(const char* key, std::string& string, const char* action, Joystick& joystick, int ax)
+    {
+        if (std::strcmp(key, string.c_str()) == 0) {
+            float value = joystick.axes[ax];
+            if (std::abs(value) > 0.2) {
+                m_actions.at(action) = value * 0.01f;
+            }
+            return true;
+        }
+        return false;
     }
 
     bool Input::checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW)
