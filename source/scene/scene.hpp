@@ -16,11 +16,11 @@ namespace QDUEngine
         void addVisualComponent(GameObject &gameObject);
         void setInputComponent(InputComponent* inputComponent);
         std::shared_ptr<GameObject> getGameObject(int idx);
-    private:
-        void start(const char* name, const Vector2D& windowSize);
         void bindCursorButton(const char* key, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
+    private:
+        void start(const char* name, const Vector2D& windowSize);
         void update(float delta);
         void end();
         InputComponent* m_inputComponent;

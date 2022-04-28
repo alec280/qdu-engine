@@ -28,6 +28,12 @@ namespace QDUEngine
 
             } else if (checkKey("M", binding, GLFW_KEY_M, key, action)) {
 
+            } else if (checkKey("U", binding, GLFW_KEY_U, key, action)) {
+
+            } else if (checkKey("H", binding, GLFW_KEY_H, key, action)) {
+
+            } else if (checkKey("O", binding, GLFW_KEY_O, key, action)) {
+
             }
         }
         return false;
@@ -144,7 +150,7 @@ namespace QDUEngine
         }
     }
 
-    bool Input::checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action)
+    bool Input::checkKey(const char* key, std::pair<const char*, const char*> binding, int code, int keyGLFW, int action)
     {
         if (std::strcmp(key, binding.first) == 0 && action == GLFW_PRESS && code == keyGLFW) {
             m_actions.at(binding.second) = 1;

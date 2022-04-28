@@ -25,7 +25,7 @@ namespace QDUEngine
         void cursorMoved(double xPos, double yPos);
         void start();
         void update();
-        bool checkKey(const char* key, std::pair<const char* const, const char*> binding, int code, int keyGLFW, int action);
+        bool checkKey(const char* key, std::pair<const char*, const char*> binding, int code, int keyGLFW, int action);
         Vector2D m_cursorPos{};
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<const char*, const char*> m_cursorBindings{};

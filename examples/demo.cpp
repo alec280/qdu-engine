@@ -72,13 +72,38 @@ public:
         greenCube->move(this->getGameObject(0)->getVisualComponent()->getPosition());
         auto companion = Static(greenCube);
         this->addVisualComponent(companion);
+        std::cout << "Companion added!" << std::endl;
     }
 };
 
 class FloorInput : public QDUEngine::InputComponent {
 public:
     explicit FloorInput(Floor* floor) : m_floor(floor) {m_floor->setInputComponent(this);}
-    void onAction(const char* action, float value) override {}
+    void onAction(const char* action, float value) override
+    {
+        if (compare(action, "map")) {
+            std::cin.clear();
+            std::cin.ignore(INT_MAX);
+            std::cout << "Rebind left: ";
+            m_left = std::cin.get();
+            m_floor->bindKey(&m_left, "left");
+            std::cout << std::endl;
+            /*
+            std::cout << "Rebind down: ";
+            m_down = std::cin.get();
+            m_floor->bindKey(&m_down, "down");
+            std::cout << std::endl;
+            std::cout << "Rebind up: ";
+            m_up = std::cin.get();
+            m_floor->bindKey(&m_up, "up");
+            std::cout << std::endl;
+            std::cout << "Rebind right: ";
+            m_right = std::cin.get();
+            m_floor->bindKey(&m_right, "right");
+            std::cout << std::endl;
+            */
+        }
+    }
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
     {
         if (compare(action, "customNema")) {
@@ -103,6 +128,7 @@ public:
             m_combo[1] = false;
         }
     }
+    char m_left{}, m_up{}, m_down{}, m_right{};
     bool m_combo[2]{false, false};
     Floor* m_floor;
 };
@@ -117,6 +143,7 @@ int main()
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
     dungeon.bindKey("D", "right");
+    dungeon.bindKey("M", "map");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindCursorButton("LEFT", "customNema");
