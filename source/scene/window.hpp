@@ -16,12 +16,13 @@ namespace QDUEngine
     private:
         void start(const char* name, const Vector2D& window_size, Input& input);
         void update();
+        void end();
         Vector2D screenToPos();
-        Grafica::ModelViewProjectionShaderProgram* m_pipeline{};
+        Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
-        void end();
+        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
     };
 }

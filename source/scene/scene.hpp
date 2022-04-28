@@ -11,6 +11,7 @@ namespace QDUEngine
         void addGameObject(GameObject& gameObject);
         std::shared_ptr<VisualComponent> getCube();
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
+        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         virtual void userStart() = 0;
         std::shared_ptr<InputComponent> getInputComponent();
         void addVisualComponent(GameObject &gameObject);

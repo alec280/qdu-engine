@@ -71,6 +71,12 @@ namespace QDUEngine
         return component;
     }
 
+    std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath)
+    {
+        auto component = m_window.getTexturedCube(texturePath);
+        return component;
+    }
+
     void Scene::bindCursorButton(const char* key, const char* action)
     {
         m_input.m_cursorBindings[std::string(key)] = action;

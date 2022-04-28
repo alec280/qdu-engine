@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "../grafica/root_directory.h"
 
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
@@ -63,12 +64,27 @@ namespace QDUEngine
             return;
         }
 
-        auto* pipeline = new gr::ModelViewProjectionShaderProgram;
+        auto* pipeline = new gr::PhongTextureShaderProgram;
         m_pipeline = pipeline;
         glUseProgram(m_pipeline->shaderProgram);
         glClearColor(0, 0, 0, 1.0f);
         glEnable(GL_DEPTH_TEST);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "La"), 1.0, 1.0, 1.0);
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "Ld"), 1.0, 1.0, 1.0);
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "Ls"), 1.0, 1.0, 1.0);
+
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "Ka"), 0.4, 0.4, 0.4);
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "Kd"), 0.9, 0.9, 0.9);
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "Ks"), 1.0, 1.0, 1.0);
+
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "lightPosition"), 5, 5, 5);
+        glUniform1ui(glGetUniformLocation(m_pipeline->shaderProgram, "shininess"), 100);
+
+        glUniform1f(glGetUniformLocation(m_pipeline->shaderProgram, "constantAttenuation"), 0.0001);
+        glUniform1f(glGetUniformLocation(m_pipeline->shaderProgram, "linearAttenuation"), 0.03);
+        glUniform1f(glGetUniformLocation(m_pipeline->shaderProgram, "quadraticAttenuation"), 0.01);
 
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
@@ -85,7 +101,7 @@ namespace QDUEngine
         glUseProgram(m_pipeline->shaderProgram);
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "view"), 1, GL_FALSE, view.data());
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
-        glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "model"), 1, GL_FALSE, tr::identity().data());
+        glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "viewPosition"), viewPos[0], viewPos[1], viewPos[2]);
 
         for (auto& visualComponent : m_visualComponents) {
             auto pos = visualComponent->getPosition();
@@ -101,6 +117,65 @@ namespace QDUEngine
     {
         auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(r, g, b)));
         auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
+        auto component = std::make_shared<VisualComponent>(cubePtr);
+        return component;
+    }
+
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
+    {
+        gr::Shape shape(8);
+        shape.vertices = {
+                //   positions         tex coords   normals
+                // Z+: number 1
+                -0.5f, -0.5f,  0.5f, 0.0f, 1.0f/3,  0.0f, 0.0f, 1.0f,
+                0.5f, -0.5f,  0.5f, 0.5f, 1.0f/3,  0.0f, 0.0f, 1.0f,
+                0.5f,  0.5f,  0.5f, 0.5f, 0.0f,    0.0f, 0.0f, 1.0f,
+                -0.5f,  0.5f,  0.5f, 0.0f, 0.0f,    0.0f, 0.0f, 1.0f,
+
+                // Z-: number 6
+                -0.5f, -0.5f, -0.5f, 0.5f, 1.0f,      0.0f, 0.0f, -1.0f,
+                0.5f, -0.5f, -0.5f, 1.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+                0.5f,  0.5f, -0.5f, 1.0f, 2.0f/3,    0.0f, 0.0f, -1.0f,
+                -0.5f,  0.5f, -0.5f, 0.5f, 2.0f/3,    0.0f, 0.0f, -1.0f,
+
+                // X+: number 5
+                0.5f, -0.5f, -0.5f, 0.0f,   1.0f,   1.0f, 0.0f, 0.0f,
+                0.5f,  0.5f, -0.5f, 0.5f,   1.0f,   1.0f, 0.0f, 0.0f,
+                0.5f,  0.5f,  0.5f, 0.5f, 2.0f/3,   1.0f, 0.0f, 0.0f,
+                0.5f, -0.5f,  0.5f, 0.0f, 2.0f/3,   1.0f, 0.0f, 0.0f,
+
+                // X-: number 2
+                -0.5f, -0.5f, -0.5f, 0.5f, 1.0f/3,   -1.0f, 0.0f, 0.0f,
+                -0.5f,  0.5f, -0.5f, 1.0f, 1.0f/3,   -1.0f, 0.0f, 0.0f,
+                -0.5f,  0.5f,  0.5f, 1.0f,   0.0f,   -1.0f, 0.0f, 0.0f,
+                -0.5f, -0.5f,  0.5f, 0.5f,   0.0f,   -1.0f, 0.0f, 0.0f,
+
+                // Y+: number 4
+                -0.5f,  0.5f, -0.5f, 0.5f, 2.0f/3,   0.0f, 1.0f, 0.0f,
+                0.5f,  0.5f, -0.5f, 1.0f, 2.0f/3,   0.0f, 1.0f, 0.0f,
+                0.5f,  0.5f,  0.5f, 1.0f, 1.0f/3,   0.0f, 1.0f, 0.0f,
+                -0.5f,  0.5f,  0.5f, 0.5f, 1.0f/3,   0.0f, 1.0f, 0.0f,
+
+                // Y-: number 3
+                -0.5f, -0.5f, -0.5f, 0.0f, 2.0f/3,   0.0f, -1.0f, 0.0f,
+                0.5f, -0.5f, -0.5f, 0.5f, 2.0f/3,   0.0f, -1.0f, 0.0f,
+                0.5f, -0.5f,  0.5f, 0.5f, 1.0f/3,   0.0f, -1.0f, 0.0f,
+                -0.5f, -0.5f,  0.5f, 0.0f, 1.0f/3,   0.0f, -1.0f, 0.0f
+        };
+        // One face of the cube per row
+        shape.indices = {
+                0, 1, 2, 2, 3, 0, // Z+
+                7, 6, 5, 5, 4, 7, // Z-
+                8, 9,10,10,11, 8, // X+
+                15,14,13,13,12,15, // X-
+                19,18,17,17,16,19, // Y+
+                20,21,22,22,23,20 // Y-
+        };
+        auto texturedPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, shape));
+        texturedPtr->texture = gr::textureSimpleSetup(
+                gr::getPath(texturePath), GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_NEAREST, GL_NEAREST);
+
+        auto cubePtr = std::make_shared<gr::SceneGraphNode>("textured", tr::identity(), texturedPtr);
         auto component = std::make_shared<VisualComponent>(cubePtr);
         return component;
     }

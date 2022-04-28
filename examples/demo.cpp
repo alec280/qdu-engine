@@ -54,13 +54,13 @@ class Floor : public QDUEngine::Scene {
 public:
     void userStart() noexcept override
     {
-        auto blueCube = this->getCube(0, 0, 1);
+        auto blueCube = this->getTexturedCube("examples/assets/player.png");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
         this->addGameObject(player);
 
-        auto redCube = this->getCube(1, 0, 0);
+        auto redCube = this->getTexturedCube("examples/assets/enemy.png");
         auto enemyInput = std::make_shared<EnemyInput>(redCube);
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
@@ -68,7 +68,7 @@ public:
     }
     void addCompanion()
     {
-        auto greenCube = this->getCube(0, 1, 0);
+        auto greenCube = this->getTexturedCube("examples/assets/companion.png");
         greenCube->move(this->getGameObject(0)->getVisualComponent()->getPosition());
         auto companion = Static(greenCube);
         this->addVisualComponent(companion);
