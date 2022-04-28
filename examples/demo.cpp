@@ -82,10 +82,13 @@ public:
     void onAction(const char* action, float value) override
     {
         if (compare(action, "map")) {
-            std::cin.clear();
-            std::cin.ignore(INT_MAX);
             std::cout << "Rebind left: ";
             m_left = std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
             m_floor->bindKey(&m_left, "left");
             std::cout << std::endl;
             /*
