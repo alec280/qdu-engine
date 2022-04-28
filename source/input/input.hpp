@@ -36,11 +36,11 @@ namespace QDUEngine
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
-        std::map<const char*, const char*> m_cursorBindings{};
+        std::map<std::string, const char*> m_cursorBindings{};
         std::map<std::string, const char*> m_keyBindings{};
-        std::map<const char*, const char*> m_joystickBindings{};
-        std::map<const char*, float> m_actions{};
-        std::map<const char*, float> m_cursorActions{};
+        std::map<std::string, const char*> m_joystickBindings{};
+        std::map<std::string, float> m_actions{};
+        std::map<std::string, float> m_cursorActions{};
         std::map<std::size_t, Joystick> m_joysticks{};
         void joystickCallback(int jid, int event);
         void pollJoysticks(std::map<std::size_t, Joystick> &joysticks);

@@ -107,12 +107,12 @@ namespace QDUEngine
             auto &joystick = elem.second;
 
             for (auto& binding : m_joystickBindings) {
-                if (std::strcmp("LS_X", binding.first) == 0) {
+                if (std::strcmp("LS_X", binding.first.c_str()) == 0) {
                     float value = joystick.axes[0];
                     if (std::abs(value) > 0.2) {
                         m_actions.at(binding.second) = value * 0.01f;
                     }
-                } else if (std::strcmp("LS_Y", binding.first) == 0) {
+                } else if (std::strcmp("LS_Y", binding.first.c_str()) == 0) {
                     float value = joystick.axes[1];
                     if (std::abs(value) > 0.2) {
                         m_actions.at(binding.second) = value * 0.01f;
@@ -137,7 +137,7 @@ namespace QDUEngine
             if (std::abs(value) != 0) {
                 std::cout << action.first << " action activated." << std::endl;
                 for (auto& component : m_inputComponents) {
-                    component->onCursorAction(action.first, m_cursorPos);
+                    component->onCursorAction(action.first.c_str(), m_cursorPos);
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace QDUEngine
             if (std::abs(value) != 0) {
                 std::cout << action.first << " action activated." << std::endl;
                 for (auto& component : m_inputComponents) {
-                    component->onAction(action.first, value);
+                    component->onAction(action.first.c_str(), value);
                 }
             }
         }
@@ -169,11 +169,11 @@ namespace QDUEngine
     void Input::cursorPressed(int button, int action)
     {
         for (auto& binding : m_cursorBindings) {
-            if (std::strcmp("LEFT", binding.first) == 0 && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            if (std::strcmp("LEFT", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
-            } else if (std::strcmp("MIDDLE", binding.first) == 0 && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
+            } else if (std::strcmp("MIDDLE", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
-            } else if (std::strcmp("RIGHT", binding.first) == 0 && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+            } else if (std::strcmp("RIGHT", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
             }
         }

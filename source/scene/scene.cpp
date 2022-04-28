@@ -73,19 +73,19 @@ namespace QDUEngine
 
     void Scene::bindCursorButton(const char* key, const char* action)
     {
-        m_input.m_cursorBindings.insert(std::pair<const char*, const char*>(key, action));
-        m_input.m_cursorActions.insert(std::pair<const char*, bool>(action, 0));
+        m_input.m_cursorBindings[std::string(key)] = action;
+        m_input.m_cursorActions[std::string(action)] = 0;
     }
 
     void Scene::bindKey(const char* key, const char* action)
     {
         m_input.m_keyBindings[std::string(key)] = action;
-        m_input.m_actions.insert(std::pair<const char*, bool>(action, 0));
+        m_input.m_actions[std::string(action)] = 0;
     }
 
     void Scene::bindJoystick(const char* key, const char* action)
     {
-        m_input.m_joystickBindings.insert(std::pair<const char*, const char*>(key, action));
-        m_input.m_actions.insert(std::pair<const char*, bool>(action, 0));
+        m_input.m_joystickBindings[std::string(key)] = action;
+        m_input.m_actions[std::string(action)] = 0;
     }
 }
