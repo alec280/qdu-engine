@@ -10,7 +10,8 @@ set(THIRD_PARTY_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glad
         "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glfw/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/eigen"
         "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glm"
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/stb")
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/stb"
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/json/include")
 set(QDU_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 if(MSVC)

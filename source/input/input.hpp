@@ -33,6 +33,7 @@ namespace QDUEngine
         void cursorMoved(double xPos, double yPos);
         void start();
         void update();
+        void clear();
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;

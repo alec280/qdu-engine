@@ -37,4 +37,9 @@ namespace QDUEngine
     {
         return m_gameObjects.getValues();
     }
+
+    void Map::load(const char *path)
+    {
+        Grafica::getPath(path);
+    }
 }

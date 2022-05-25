@@ -17,6 +17,7 @@ namespace QDUEngine
         void start(const char* name, const Vector2D& window_size, Input& input);
         void update();
         void end();
+        void clear();
         Vector2D screenToPos();
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;

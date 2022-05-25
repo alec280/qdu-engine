@@ -53,9 +53,7 @@ namespace QDUEngine
 
     void Scene::end()
     {
-        for (auto& visualComponent : m_window.m_visualComponents) {
-            visualComponent->getGraphNodePtr()->clear();
-        }
+        m_window.clear();
         m_window.end();
     }
 
@@ -93,5 +91,18 @@ namespace QDUEngine
     {
         m_input.m_joystickBindings[std::string(key)] = action;
         m_input.m_actions[std::string(action)] = 0;
+    }
+
+    void Scene::load(const char *path)
+    {
+        clear();
+        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
+    }
+
+    void Scene::clear()
+    {
+        m_window.clear();
+        m_input.clear();
+        m_input.m_inputComponents.push_back(getInputComponent());
     }
 }

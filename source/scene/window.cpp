@@ -195,5 +195,13 @@ namespace QDUEngine
     {
         return glfwWindowShouldClose(m_window);
     }
+
+    void Window::clear()
+    {
+        for (auto& visualComponent : m_visualComponents) {
+            visualComponent->getGraphNodePtr()->clear();
+        }
+        m_visualComponents.clear();
+    }
 }
 

@@ -1,7 +1,10 @@
 #pragma once
 #include <vector>
 #include "../game_object/game_object.hpp"
+#include "../grafica/root_directory.h"
 #include "window.hpp"
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 namespace QDUEngine
 {
@@ -16,6 +19,7 @@ namespace QDUEngine
         std::shared_ptr<InputComponent> getInputComponent();
         void addVisualComponent(GameObject &gameObject);
         void setInputComponent(InputComponent* inputComponent);
+        void load(const char* path);
         std::shared_ptr<GameObject> getGameObject(int idx);
         void bindCursorButton(const char* key, const char* action);
         void bindKey(const char* key, const char* action);
@@ -24,6 +28,7 @@ namespace QDUEngine
         void start(const char* name, const Vector2D& windowSize);
         void update(float delta);
         void end();
+        void clear();
         InputComponent* m_inputComponent;
         Window m_window{};
         Input m_input{};

@@ -189,5 +189,10 @@ namespace QDUEngine
             }
         }
     }
+
+    void Input::clear()
+    {
+        m_inputComponents.clear();
+    }
 }
 
