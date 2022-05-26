@@ -87,7 +87,6 @@ namespace QDUEngine
     {
         clear();
         nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
-        std::cout << jf << std::endl;
         auto map = jf["map"].get<std::map<std::string, std::string>>();
         for (auto& it : map) {
             auto cube = getTexturedCube(jf["objects"][it.second].get<std::string>().c_str());

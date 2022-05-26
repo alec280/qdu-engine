@@ -199,7 +199,7 @@ namespace QDUEngine
     void Window::clear()
     {
         for (auto& visualComponent : m_visualComponents) {
-            visualComponent->getGraphNodePtr()->clear();
+            visualComponent->clear();
         }
         m_visualComponents.clear();
     }

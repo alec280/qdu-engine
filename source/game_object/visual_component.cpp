@@ -31,4 +31,10 @@ namespace QDUEngine
     {
         m_position += by;
     }
+
+    void VisualComponent::clear()
+    {
+        m_graphNodePtr->clear();
+        m_position = {};
+    }
 }

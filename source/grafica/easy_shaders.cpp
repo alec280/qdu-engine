@@ -39,9 +39,11 @@ GLuint textureSimpleSetup(
     // load image, create texture and generate mipmaps
 	int width, height, nrChannels;
 
+    /*
     std::cout << "std::filesystem::path " << imgPath << std::endl;
     std::cout << " imgPath.string() " << imgPath.string() << std::endl;
     std::cout << " imgPath.string().c_str() " << imgPath.string().c_str() << std::endl;
+    */
 
     unsigned char *data = stbi_load(imgPath.string().c_str(), &width, &height, &nrChannels, 0);
     if (data == nullptr)
