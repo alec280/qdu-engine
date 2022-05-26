@@ -7,6 +7,29 @@ namespace QDUEngine
         return Vector2D{x, y};
     }
 
+    Vector2D Vector(std::string& str)
+    {
+        std::vector<float> preVector;
+        float sign = 1;
+        for (auto c : str) {
+            if (c == '-') {
+                sign = -1;
+            } else if (std::isdigit(c)) {
+                preVector.push_back(sign * (float)(c - '0'));
+                sign = 1;
+            } else {
+                sign = 1;
+            }
+        }
+        return Vector2D{preVector[0], preVector[1]};
+    }
+
+    Vector2D Vector(const std::string& str)
+    {
+        std::string copy = str;
+        return Vector(copy);
+    }
+
     std::ostream &operator<<(std::ostream& os, const Vector2D& vector2D)
     {
         return os << "( " << vector2D.x << ", " << vector2D.y << ")";

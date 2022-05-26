@@ -88,6 +88,15 @@ namespace QDUEngine
         clear();
         nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
         std::cout << jf << std::endl;
+        auto map = jf["map"].get<std::map<std::string, std::string>>();
+        auto commonPath = jf["objects"]["wall"].get<std::string>();
+        for (auto& it : map) {
+            auto cube = getTexturedCube(commonPath.c_str());
+            //auto object = GameObject(nullptr, cube);
+            cube->move(QDUEngine::Vector(it.first));
+            //addGameObject(object);
+            m_window.m_visualComponents.push_back(cube);
+        }
     }
 
     void Scene::clear()
