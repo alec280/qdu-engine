@@ -20,7 +20,6 @@ namespace QDUEngine
         void addVisualComponent(GameObject &gameObject);
         void setInputComponent(InputComponent* inputComponent);
         void fromJSON(const char* path);
-        //std::shared_ptr<GameObject> getGameObject(int idx);
         void bindCursorButton(const char* key, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);

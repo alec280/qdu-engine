@@ -13,17 +13,6 @@ namespace QDUEngine
         m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
     }
 
-    /*
-    std::shared_ptr<GameObject> Scene::getGameObject(int idx)
-    {
-        return std::make_shared<GameObject>(
-                GameObject(nullptr,
-                           m_window.m_visualComponents[idx],
-                           m_input.m_inputComponents[idx]
-                ));
-    }
-    */
-
     std::shared_ptr<InputComponent> Scene::getInputComponent()
     {
         return std::shared_ptr<InputComponent>(m_inputComponent);
@@ -103,8 +92,8 @@ namespace QDUEngine
 
     void Scene::clear()
     {
-        //m_window.clear();
-        //m_input.clear();
-        //m_input.m_inputComponents.push_back(getInputComponent());
+        m_window.clear();
+        m_input.clear();
+        m_input.m_inputComponents.push_back(getInputComponent());
     }
 }
