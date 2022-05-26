@@ -52,6 +52,14 @@ public:
 
 class Floor : public QDUEngine::Scene {
 public:
+    void goTo(int place)
+    {
+        if (place == 0) {
+            fromJSON("examples/data/warehouse.json");
+        } else if (place == 1) {
+            fromJSON("examples/data/garden.json");
+        }
+    }
     void userStart() noexcept override
     {
         auto blueCube = this->getTexturedCube("examples/assets/player.png");
@@ -122,6 +130,7 @@ public:
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
     {
         if (compare(action, "customNema")) {
+            m_floor->goTo(0);
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
         } else if (compare(action, "middleClick")) {
@@ -133,7 +142,7 @@ public:
                 m_combo[0] = false;
             }
         } else if (compare(action, "rightClick")) {
-            m_floor->fromJSON("examples/data/warehouse.json");
+            m_floor->goTo(1);
             if (!m_combo[0] || !m_combo[1]) {
                 return;
             }
