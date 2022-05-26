@@ -36,6 +36,7 @@ namespace QDUEngine
         void clear();
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
+        std::shared_ptr<InputComponent> m_appInputComponent;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::map<std::string, const char*> m_cursorBindings{};
         std::map<std::string, const char*> m_keyBindings{};

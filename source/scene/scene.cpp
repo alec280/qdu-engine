@@ -21,7 +21,7 @@ namespace QDUEngine
     void Scene::setInputComponent(InputComponent* inputComponent)
     {
         m_inputComponent = inputComponent;
-        m_input.m_inputComponents.push_back(getInputComponent());
+        m_input.m_appInputComponent = getInputComponent();
     }
 
     void Scene::start(const char* name, const Vector2D& windowSize)
@@ -101,6 +101,5 @@ namespace QDUEngine
     {
         m_window.clear();
         m_input.clear();
-        m_input.m_inputComponents.push_back(getInputComponent());
     }
 }
