@@ -66,10 +66,10 @@ public:
         auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
         this->addGameObject(enemy);
     }
-    void addCompanion()
+    void addCompanion(QDUEngine::Vector2D& pos)
     {
         auto greenCube = this->getTexturedCube("examples/assets/companion.png");
-        greenCube->move(this->getGameObject(0)->getVisualComponent()->getPosition());
+        greenCube->move(pos);
         auto companion = Static(greenCube);
         this->addVisualComponent(companion);
         std::cout << "Companion added!" << std::endl;
@@ -78,7 +78,7 @@ public:
 
 class FloorInput : public QDUEngine::InputComponent {
 public:
-    explicit FloorInput(Floor* floor) : m_floor(floor) {m_floor->setInputComponent(this);}
+    explicit FloorInput(Floor* floor) : m_floor(floor), m_spawn(QDUEngine::Vector(0, 0)) {m_floor->setInputComponent(this);}
     void onAction(const char* action, float value) override
     {
         if (compare(action, "map")) {
@@ -133,11 +133,13 @@ public:
                 m_combo[0] = false;
             }
         } else if (compare(action, "rightClick")) {
+            m_floor->fromJSON("examples/data/warehouse.json");
             if (!m_combo[0] || !m_combo[1]) {
                 return;
             }
             if (pos.x > 400) {
-                m_floor->addCompanion();
+                m_floor->addCompanion(m_spawn);
+                m_spawn += QDUEngine::Vector(1, 1);
             }
             m_combo[0] = false;
             m_combo[1] = false;
@@ -145,6 +147,7 @@ public:
     }
     bool m_combo[2]{false, false};
     Floor* m_floor;
+    QDUEngine::Vector2D m_spawn;
 };
 
 
