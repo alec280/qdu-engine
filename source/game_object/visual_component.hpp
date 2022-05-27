@@ -22,8 +22,11 @@ namespace QDUEngine
         Vector2D getPosition();
         void move(const Vector2D& by);
         void clear();
+        bool isMain();
+        void setMain(bool value);
     private:
         Vector2D m_position;
+        bool m_main = false;
         Grafica::SceneGraphNodePtr m_graphNodePtr;
     };
 }

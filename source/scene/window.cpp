@@ -216,9 +216,8 @@ namespace QDUEngine
         m_visualComponents.clear();
     }
 
-    void Window::preloadJSON(const char *path)
+    void Window::preloadJSON(nlohmann::json& jf)
     {
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
         auto objects = jf["objects"].get<std::map<std::string, std::string>>();
         for (auto& it : objects) {
             m_preloadPaths[it.first] = it.second;

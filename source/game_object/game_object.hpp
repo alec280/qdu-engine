@@ -10,6 +10,7 @@ namespace QDUEngine
     public:
         GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual);
         GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input);
+        GameObject(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input, bool main);
         void update(Map& map);
         void end();
         std::shared_ptr<VisualComponent> getVisualComponent();

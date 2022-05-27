@@ -3,6 +3,9 @@
     "bush": "examples/assets/bush.png",
     "wall": "examples/assets/wall.png"
   },
+  "transitions": {
+    "(0,-8)": ["examples/data/warehouse.json", "(0,3)"]
+  },
   "map": {
     "(-4,-8)": "wall",
     "(-3,-8)": "wall",

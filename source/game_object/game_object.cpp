@@ -36,5 +36,13 @@ namespace QDUEngine
             m_visual->getGraphNodePtr()->clear();
         }
     }
+
+    GameObject::GameObject(std::shared_ptr<QDUEngine::VisualComponent> &visual, std::shared_ptr<QDUEngine::InputComponent> &input, bool main) :
+        m_attribute(nullptr),
+        m_visual(visual),
+        m_input(input)
+    {
+        m_visual->setMain(main);
+    }
 }
 

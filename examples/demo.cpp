@@ -46,7 +46,7 @@ public:
 class Character : public QDUEngine::GameObject {
 public:
     explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
-        QDUEngine::GameObject(nullptr, visual, input)
+        QDUEngine::GameObject(visual, input, true)
     {}
 };
 
@@ -62,6 +62,7 @@ public:
     }
     void userStart() noexcept override
     {
+        goTo(1);
         auto blueCube = this->getTexturedCube("examples/assets/player.png");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
@@ -130,7 +131,6 @@ public:
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
     {
         if (compare(action, "customNema")) {
-            m_floor->goTo(0);
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
         } else if (compare(action, "middleClick")) {
@@ -142,7 +142,6 @@ public:
                 m_combo[0] = false;
             }
         } else if (compare(action, "rightClick")) {
-            m_floor->goTo(1);
             if (!m_combo[0] || !m_combo[1]) {
                 return;
             }

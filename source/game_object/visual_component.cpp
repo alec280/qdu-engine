@@ -37,4 +37,14 @@ namespace QDUEngine
         m_graphNodePtr->clear();
         m_position = {};
     }
+
+    bool VisualComponent::isMain()
+    {
+        return m_main;
+    }
+
+    void VisualComponent::setMain(bool value)
+    {
+        m_main = value;
+    }
 }
