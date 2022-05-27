@@ -1,10 +1,7 @@
 #pragma once
-#include <vector>
 #include "../game_object/game_object.hpp"
 #include "../grafica/root_directory.h"
 #include "window.hpp"
-#include <nlohmann/json.hpp>
-#include <fstream>
 
 namespace QDUEngine
 {
@@ -28,6 +25,7 @@ namespace QDUEngine
         void update(float delta);
         void end();
         void clear();
+        void preloadJSON(const char* path);
         InputComponent* m_inputComponent;
         Window m_window{};
         Input m_input{};

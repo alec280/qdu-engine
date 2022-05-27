@@ -88,6 +88,11 @@ namespace QDUEngine
 
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
+
+        for (auto& it : m_preloadPaths) {
+            std::shared_ptr<VisualComponent> cube = getTexturedCube(it.second.c_str());
+            m_preloadComponents[it.first] = cube;
+        }
     }
 
     void Window::update()
@@ -173,11 +178,18 @@ namespace QDUEngine
         };
         auto texturedPtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, shape));
         texturedPtr->texture = gr::textureSimpleSetup(
-                gr::getPath(texturePath), GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_NEAREST, GL_NEAREST);
-
-        auto cubePtr = std::make_shared<gr::SceneGraphNode>("textured", tr::identity(), texturedPtr);
-        auto component = std::make_shared<VisualComponent>(cubePtr);
-        return component;
+                gr::getPath(texturePath),
+                GL_CLAMP_TO_EDGE,
+                GL_CLAMP_TO_EDGE,
+                GL_NEAREST,
+                GL_NEAREST
+        );
+        auto cubePtr = std::make_shared<gr::SceneGraphNode>(
+                "textured",
+                tr::identity(),
+                texturedPtr
+        );
+        return std::make_shared<VisualComponent>(cubePtr);
     }
 
     Vector2D Window::screenToPos()
@@ -202,6 +214,31 @@ namespace QDUEngine
             visualComponent->clear();
         }
         m_visualComponents.clear();
+    }
+
+    void Window::preloadJSON(const char *path)
+    {
+        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
+        auto objects = jf["objects"].get<std::map<std::string, std::string>>();
+        for (auto& it : objects) {
+            m_preloadPaths[it.first] = it.second;
+        }
+    }
+
+    void Window::fromJSON(const char *path)
+    {
+        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
+        auto map = jf["map"].get<std::map<std::string, std::string>>();
+        for (auto& it : map) {
+            auto graph = Grafica::SceneGraphNode(it.first);
+            graph.childs.push_back(m_preloadComponents[it.second]->getGraphNodePtr());
+            auto tmp = std::make_shared<Grafica::SceneGraphNode>(graph);
+            auto graphComponent = std::make_shared<VisualComponent>(tmp);
+            //auto object = GameObject(nullptr, cube);
+            graphComponent->move(QDUEngine::Vector(it.first));
+            //addGameObject(object);
+            m_visualComponents.push_back(graphComponent);
+        }
     }
 }
 

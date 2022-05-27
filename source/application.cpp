@@ -9,6 +9,11 @@ namespace QDUEngine
         m_scene->start(name, windowSize);
     }
 
+    void Application::run(const char *name, float x, float y)
+    {
+        run(name, Vector(x, y));
+    }
+
     void Application::bindCursorButton(const char *key, const char *action)
     {
         m_scene->bindCursorButton(key, action);
@@ -22,5 +27,10 @@ namespace QDUEngine
     void Application::bindJoystick(const char *key, const char *action)
     {
         m_scene->bindJoystick(key, action);
+    }
+
+    void Application::preloadJSON(const char *path)
+    {
+        m_scene->preloadJSON(path);
     }
 }

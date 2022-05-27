@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "../game_object/game_object.hpp"
@@ -18,9 +20,13 @@ namespace QDUEngine
         void update();
         void end();
         void clear();
+        void preloadJSON(const char* path);
+        void fromJSON(const char* path);
         Vector2D screenToPos();
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;
+        std::map<std::string, std::string> m_preloadPaths;
+        std::map<std::string, std::shared_ptr<VisualComponent>> m_preloadComponents;
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);

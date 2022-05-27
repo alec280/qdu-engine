@@ -177,5 +177,7 @@ int main()
     dungeon.bindCursorButton("LEFT", "customNema");
     dungeon.bindCursorButton("MIDDLE", "middleClick");
     dungeon.bindCursorButton("RIGHT", "rightClick");
-    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600));
+    dungeon.preloadJSON("examples/data/garden.json");
+    dungeon.preloadJSON("examples/data/warehouse.json");
+    dungeon.run("Dungeon game", 600, 600);
 }

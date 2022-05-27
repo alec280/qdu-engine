@@ -61,8 +61,7 @@ namespace QDUEngine
 
     std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath)
     {
-        auto component = m_window.getTexturedCube(texturePath);
-        return component;
+        return m_window.getTexturedCube(texturePath);
     }
 
     void Scene::bindCursorButton(const char* key, const char* action)
@@ -86,15 +85,12 @@ namespace QDUEngine
     void Scene::fromJSON(const char *path)
     {
         clear();
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
-        auto map = jf["map"].get<std::map<std::string, std::string>>();
-        for (auto& it : map) {
-            auto cube = getTexturedCube(jf["objects"][it.second].get<std::string>().c_str());
-            //auto object = GameObject(nullptr, cube);
-            cube->move(QDUEngine::Vector(it.first));
-            //addGameObject(object);
-            m_window.m_visualComponents.push_back(cube);
-        }
+        m_window.fromJSON(path);
+    }
+
+    void Scene::preloadJSON(const char *path)
+    {
+        m_window.preloadJSON(path);
     }
 
     void Scene::clear()
