@@ -25,6 +25,8 @@ namespace QDUEngine
         bool isMain();
         void setMain(bool value);
         void setName(std::string& name);
+        std::string& getName();
+        std::string& getSource();
         void setSource(std::string& path);
         std::pair<std::string, std::string> getJSON();
     private:

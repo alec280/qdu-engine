@@ -22,6 +22,7 @@ namespace QDUEngine
         void clear();
         void preload(std::map<std::string, std::string>& objects);
         void fromMap(std::map<std::string, std::string>& map);
+        void addVisualComponent(const std::shared_ptr<VisualComponent>& component);
         Vector2D screenToPos();
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;

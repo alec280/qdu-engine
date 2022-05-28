@@ -248,5 +248,13 @@ namespace QDUEngine
             m_visualComponents.push_back(graphComponent);
         }
     }
+
+    void Window::addVisualComponent(const std::shared_ptr<VisualComponent>& component)
+    {
+        std::shared_ptr<VisualComponent> cube = getTexturedCube(component->getSource().c_str(), component->getName().c_str());
+        m_preloadPaths[component->getName()] = component->getSource();
+        m_preloadComponents[component->getName()] = cube;
+        m_visualComponents.push_back(component);
+    }
 }
 

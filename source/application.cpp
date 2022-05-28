@@ -38,5 +38,8 @@ namespace QDUEngine
     {
         m_tempDir = const_cast<char *>(path);
         m_scene->m_tempDir = m_tempDir;
+        if (m_tempDir != nullptr) {
+            std::filesystem::remove_all(Grafica::getPath(m_tempDir));
+        }
     }
 }

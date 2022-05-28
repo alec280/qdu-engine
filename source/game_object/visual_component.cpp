@@ -62,4 +62,14 @@ namespace QDUEngine
     {
         m_name = name;
     }
+
+    std::string& VisualComponent::getName()
+    {
+        return m_name;
+    }
+
+    std::string& VisualComponent::getSource()
+    {
+        return m_source;
+    }
 }

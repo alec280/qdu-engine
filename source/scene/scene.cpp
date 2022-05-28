@@ -10,7 +10,7 @@ namespace QDUEngine
 
     void Scene::addVisualComponent(GameObject& gameObject)
     {
-        m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
+        m_window.addVisualComponent(gameObject.getVisualComponent());
     }
 
     std::shared_ptr<InputComponent> Scene::getInputComponent()
@@ -110,7 +110,14 @@ namespace QDUEngine
         clear();
         auto fullPath = Grafica::getPath(path);
         m_name = fullPath.filename().string();
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(fullPath));
+        std::string fileName = "/" + m_name;
+        auto tempPath = Grafica::getPath(m_tempDir + fileName);
+        nlohmann::json jf;
+        if (std::filesystem::exists(tempPath)) {
+            jf = nlohmann::json::parse(std::ifstream(tempPath));
+        } else {
+            jf = nlohmann::json::parse(std::ifstream(fullPath));
+        }
         auto map = jf["map"].get<std::map<std::string, std::string>>();
         m_window.fromMap(map);
     }
@@ -158,6 +165,9 @@ namespace QDUEngine
         std::map<std::string, std::string> map{};
         std::map<std::string, std::string> objects{};
         for (auto& component : m_window.m_visualComponents) {
+            if (component->isMain() || component->getName() == "enemy") {
+                continue;
+            }
             auto jsonData = component->getJSON();
             map[component->getPosition().toString()] = jsonData.first;
             objects[jsonData.first] = jsonData.second;
