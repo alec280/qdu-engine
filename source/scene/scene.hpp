@@ -26,10 +26,10 @@ namespace QDUEngine
         void end();
         void clear();
         void preloadJSON(const char* path);
-        void addTransition(int fromScene, int toScene, const Vector2D& fromTile, const Vector2D& toTile);
+        void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         InputComponent* m_inputComponent;
         Window m_window{};
         Input m_input{};
-        std::map<int, std::pair<int, std::pair<Vector2D, Vector2D>>> m_transitions{};
+        std::map<std::string, std::pair<Vector2D, Vector2D>> m_transitions{};
     };
 }

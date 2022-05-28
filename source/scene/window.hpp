@@ -20,8 +20,8 @@ namespace QDUEngine
         void update();
         void end();
         void clear();
-        void preloadJSON(nlohmann::json& jf);
-        void fromJSON(const char* path);
+        void preload(std::map<std::string, std::string>& objects);
+        void fromMap(std::map<std::string, std::string>& map);
         Vector2D screenToPos();
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<std::shared_ptr<VisualComponent>> m_visualComponents;

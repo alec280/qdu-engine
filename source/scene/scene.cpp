@@ -39,14 +39,19 @@ namespace QDUEngine
     {
         m_input.update();
         m_window.update();
-        bool transition = false;
+        std::string go;
         for (auto& component : m_window.m_visualComponents) {
-            if (component->getPosition() == Vector(0, -7) && component->isMain()) {
-                transition = true;
+            if (component->isMain()) {
+                auto pos = component->getPosition();
+                for (auto& transition : m_transitions) {
+                    if (pos == transition.second.first) {
+                        go = transition.first;
+                    }
+                }
             }
         }
-        if (transition) {
-            fromJSON("examples/data/warehouse.json");
+        if (!go.empty()) {
+            fromJSON(go.c_str());
         }
     }
 
@@ -94,20 +99,20 @@ namespace QDUEngine
     void Scene::fromJSON(const char* path)
     {
         clear();
-        m_window.fromJSON(path);
+        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
+        auto map = jf["map"].get<std::map<std::string, std::string>>();
+        m_window.fromMap(map);
     }
 
     void Scene::preloadJSON(const char* path)
     {
         nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
-        m_window.preloadJSON(jf);
-        addTransition(1, 0, Vector(0, -8), Vector(0, 3));
-        /*
-        auto objects = jf["transitions"].get<std::map<std::string, std::string>>();
-        for (auto& it : objects) {
-            addTransition(1, 0, Vector(0, -8), Vector(0, 3));
+        auto objects = jf["objects"].get<std::map<std::string, std::string>>();
+        m_window.preload(objects);
+        auto transitions = jf["transitions"].get<std::map<std::string, std::map<std::string, std::string>>>();
+        for (auto& it : transitions) {
+            addTransition(it.second["target"], Vector(it.first), Vector(it.second["at"]));
         }
-        */
     }
 
     void Scene::clear()
@@ -116,11 +121,8 @@ namespace QDUEngine
         m_input.clear();
     }
 
-    void Scene::addTransition(int fromScene, int toScene, const Vector2D& fromTile, const Vector2D& toTile)
+    void Scene::addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile)
     {
-        m_transitions[fromScene] = std::pair<int, std::pair<Vector2D, Vector2D>>(
-                toScene,
-                std::pair<Vector2D, Vector2D>(fromTile, toTile)
-        );
+        m_transitions[toScene] = std::pair<Vector2D, Vector2D>(fromTile, toTile);
     }
 }

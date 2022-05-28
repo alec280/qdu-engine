@@ -216,18 +216,15 @@ namespace QDUEngine
         m_visualComponents.clear();
     }
 
-    void Window::preloadJSON(nlohmann::json& jf)
+    void Window::preload(std::map<std::string, std::string>& objects)
     {
-        auto objects = jf["objects"].get<std::map<std::string, std::string>>();
         for (auto& it : objects) {
             m_preloadPaths[it.first] = it.second;
         }
     }
 
-    void Window::fromJSON(const char *path)
+    void Window::fromMap(std::map<std::string, std::string>& map)
     {
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
-        auto map = jf["map"].get<std::map<std::string, std::string>>();
         for (auto& it : map) {
             auto graph = Grafica::SceneGraphNode(it.first);
             graph.childs.push_back(m_preloadComponents[it.second]->getGraphNodePtr());

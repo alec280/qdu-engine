@@ -4,7 +4,10 @@
     "wall": "examples/assets/wall.png"
   },
   "transitions": {
-    "(0,4)": ["examples/data/garden.json", "(0,-7)"]
+    "(0,4)": {
+      "target": "examples/data/garden.json",
+      "at": "(0,-7)"
+    }
   },
   "map": {
     "(-4,-8)": "wall",
