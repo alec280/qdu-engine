@@ -177,7 +177,7 @@ namespace QDUEngine
         jf["transitions"] = data.transitions;
         std::string fileName = "/temp.json";
         std::ofstream file;
-        std::filesystem::create_directories(m_tempDir);
+        std::filesystem::create_directories(Grafica::getPath(m_tempDir));
         auto path = Grafica::getPath(m_tempDir + fileName);
         file.open(path);
         file << jf;
