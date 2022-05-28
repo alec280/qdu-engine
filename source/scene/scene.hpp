@@ -40,6 +40,7 @@ namespace QDUEngine
         void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         InputComponent* m_inputComponent;
         std::shared_ptr<GameObject> m_mainObject = nullptr;
+        std::string m_name;
         Window m_window{};
         Input m_input{};
         char* m_tempDir;

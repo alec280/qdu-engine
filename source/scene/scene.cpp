@@ -62,6 +62,9 @@ namespace QDUEngine
     {
         m_window.clear();
         m_window.end();
+        if (m_tempDir != nullptr) {
+            std::filesystem::remove_all(Grafica::getPath(m_tempDir));
+        }
     }
 
     std::shared_ptr<VisualComponent> Scene::getCube()
@@ -101,9 +104,13 @@ namespace QDUEngine
 
     void Scene::fromJSON(const char* path)
     {
-        saveJSON();
+        if (!m_name.empty()) {
+            saveJSON();
+        }
         clear();
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
+        auto fullPath = Grafica::getPath(path);
+        m_name = fullPath.filename().string();
+        nlohmann::json jf = nlohmann::json::parse(std::ifstream(fullPath));
         auto map = jf["map"].get<std::map<std::string, std::string>>();
         m_window.fromMap(map);
     }
@@ -175,7 +182,7 @@ namespace QDUEngine
         jf["objects"] = data.objects;
         jf["map"] = data.map;
         jf["transitions"] = data.transitions;
-        std::string fileName = "/temp.json";
+        std::string fileName = "/" + m_name;
         std::ofstream file;
         std::filesystem::create_directories(Grafica::getPath(m_tempDir));
         auto path = Grafica::getPath(m_tempDir + fileName);
