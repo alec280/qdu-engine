@@ -39,19 +39,22 @@ namespace QDUEngine
     {
         m_input.update();
         m_window.update();
+        if (m_mainObject == nullptr) {
+            return;
+        }
         std::string go;
-        for (auto& component : m_window.m_visualComponents) {
-            if (component->isMain()) {
-                auto pos = component->getPosition();
-                for (auto& transition : m_transitions) {
-                    if (pos == transition.second.first) {
-                        go = transition.first;
-                    }
-                }
+        Vector2D at{0, 0};
+        auto pos = m_mainObject->getVisualComponent()->getPosition();
+        for (auto& transition : m_transitions) {
+            if (pos == transition.second.first) {
+                go = transition.first;
+                at = transition.second.second;
+                break;
             }
         }
         if (!go.empty()) {
             fromJSON(go.c_str());
+            m_mainObject->getVisualComponent()->move(at);
         }
     }
 
@@ -118,7 +121,13 @@ namespace QDUEngine
     void Scene::clear()
     {
         m_window.clear();
+        if (m_mainObject != nullptr) {
+            m_window.m_visualComponents.push_back(m_mainObject->getVisualComponent());
+        }
         m_input.clear();
+        if (m_mainObject != nullptr) {
+            m_input.m_inputComponents.push_back(m_mainObject->getInputComponent());
+        }
     }
 
     void Scene::addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile)
@@ -126,7 +135,7 @@ namespace QDUEngine
         m_transitions[toScene] = std::pair<Vector2D, Vector2D>(fromTile, toTile);
     }
 
-    void Scene::addMainObject(GameObject &gameObject)
+    void Scene::addMainObject(GameObject& gameObject)
     {
         auto mainInput = gameObject.getInputComponent();
         auto mainVisual = gameObject.getVisualComponent();
@@ -134,5 +143,6 @@ namespace QDUEngine
         mainVisual->setMain(true);
         m_input.m_inputComponents.push_back(mainInput);
         m_window.m_visualComponents.push_back(mainVisual);
+        m_mainObject = std::make_shared<GameObject>(gameObject);
     }
 }

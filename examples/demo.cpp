@@ -52,17 +52,9 @@ public:
 
 class Floor : public QDUEngine::Scene {
 public:
-    void goTo(int place)
-    {
-        if (place == 0) {
-            fromJSON("examples/data/warehouse.json");
-        } else if (place == 1) {
-            fromJSON("examples/data/garden.json");
-        }
-    }
     void userStart() noexcept override
     {
-        goTo(1);
+        fromJSON("examples/data/garden.json");
         auto blueCube = this->getTexturedCube("examples/assets/player.png");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
