@@ -175,9 +175,13 @@ namespace QDUEngine
         jf["objects"] = data.objects;
         jf["map"] = data.map;
         jf["transitions"] = data.transitions;
-        std::string tmp = "/temp.json";
-        //std::ofstream file(m_tempDir+tmp);
-        //file << jf;
+        std::string fileName = "/temp.json";
+        std::ofstream file;
+        std::filesystem::create_directories(m_tempDir);
+        auto path = Grafica::getPath(m_tempDir + fileName);
+        file.open(path);
+        file << jf;
+        file.close();
     }
 
     std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath, const char* name)
