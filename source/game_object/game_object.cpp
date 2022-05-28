@@ -37,12 +37,10 @@ namespace QDUEngine
         }
     }
 
-    GameObject::GameObject(std::shared_ptr<QDUEngine::VisualComponent> &visual, std::shared_ptr<QDUEngine::InputComponent> &input, bool main) :
+    GameObject::GameObject(std::shared_ptr<QDUEngine::VisualComponent> &visual, std::shared_ptr<QDUEngine::InputComponent> &input) :
         m_attribute(nullptr),
         m_visual(visual),
         m_input(input)
-    {
-        m_visual->setMain(main);
-    }
+    {}
 }
 

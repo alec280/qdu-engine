@@ -11,5 +11,9 @@ namespace QDUEngine
         virtual void onAction(const char* action, float value) = 0;
         virtual void onCursorAction(const char* action, Vector2D& pos) = 0;
         static bool compare(const char* lhs, const char* rhs);
+        void setMain(bool value);
+        bool isMain();
+    private:
+        bool m_main = false;
     };
 }

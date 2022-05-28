@@ -9,6 +9,7 @@ namespace QDUEngine
         friend class Application;
     public:
         void addGameObject(GameObject& gameObject);
+        void addMainObject(GameObject& gameObject);
         std::shared_ptr<VisualComponent> getCube();
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
@@ -28,6 +29,7 @@ namespace QDUEngine
         void preloadJSON(const char* path);
         void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         InputComponent* m_inputComponent;
+        GameObject* m_mainObject;
         Window m_window{};
         Input m_input{};
         std::map<std::string, std::pair<Vector2D, Vector2D>> m_transitions{};

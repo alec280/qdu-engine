@@ -46,7 +46,7 @@ public:
 class Character : public QDUEngine::GameObject {
 public:
     explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
-        QDUEngine::GameObject(visual, input, true)
+        QDUEngine::GameObject(visual, input)
     {}
 };
 
@@ -67,7 +67,7 @@ public:
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
-        this->addGameObject(player);
+        this->addMainObject(player);
 
         auto redCube = this->getTexturedCube("examples/assets/enemy.png");
         auto enemyInput = std::make_shared<EnemyInput>(redCube);

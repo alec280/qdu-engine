@@ -125,4 +125,14 @@ namespace QDUEngine
     {
         m_transitions[toScene] = std::pair<Vector2D, Vector2D>(fromTile, toTile);
     }
+
+    void Scene::addMainObject(GameObject &gameObject)
+    {
+        auto mainInput = gameObject.getInputComponent();
+        auto mainVisual = gameObject.getVisualComponent();
+        mainInput->setMain(true);
+        mainVisual->setMain(true);
+        m_input.m_inputComponents.push_back(mainInput);
+        m_window.m_visualComponents.push_back(mainVisual);
+    }
 }
