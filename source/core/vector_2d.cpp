@@ -30,6 +30,12 @@ namespace QDUEngine
         return Vector(copy);
     }
 
+    std::string Vector2D::toString() const
+    {
+        std::string result = "(" + std::to_string((int)x) + "," + std::to_string((int)y) + ")";
+        return result;
+    }
+
     std::ostream &operator<<(std::ostream& os, const Vector2D& vector2D)
     {
         return os << "( " << vector2D.x << ", " << vector2D.y << ")";

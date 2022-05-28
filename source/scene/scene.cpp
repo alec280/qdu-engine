@@ -78,7 +78,7 @@ namespace QDUEngine
 
     std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath)
     {
-        return m_window.getTexturedCube(texturePath);
+        return getTexturedCube(texturePath, "");
     }
 
     void Scene::bindCursorButton(const char* key, const char* action)
@@ -101,6 +101,7 @@ namespace QDUEngine
 
     void Scene::fromJSON(const char* path)
     {
+        saveJSON();
         clear();
         nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
         auto map = jf["map"].get<std::map<std::string, std::string>>();
@@ -144,5 +145,43 @@ namespace QDUEngine
         m_input.m_inputComponents.push_back(mainInput);
         m_window.m_visualComponents.push_back(mainVisual);
         m_mainObject = std::make_shared<GameObject>(gameObject);
+    }
+
+    SceneData Scene::getData() {
+        std::map<std::string, std::string> map{};
+        std::map<std::string, std::string> objects{};
+        for (auto& component : m_window.m_visualComponents) {
+            auto jsonData = component->getJSON();
+            map[component->getPosition().toString()] = jsonData.first;
+            objects[jsonData.first] = jsonData.second;
+        }
+        std::map<std::string, std::map<std::string, std::string>> transitions{};
+        for (auto& transition : m_transitions) {
+            std::map<std::string, std::string> temp{};
+            temp["target"] = transition.first;
+            temp["at"] = transition.second.second.toString();
+            transitions[transition.second.first.toString()] = temp;
+        }
+        return {map, objects, transitions};
+    }
+
+    void Scene::saveJSON()
+    {
+        if (m_tempDir == nullptr) {
+            return;
+        }
+        auto data = getData();
+        nlohmann::json jf{};
+        jf["objects"] = data.objects;
+        jf["map"] = data.map;
+        jf["transitions"] = data.transitions;
+        std::string tmp = "/temp.json";
+        //std::ofstream file(m_tempDir+tmp);
+        //file << jf;
+    }
+
+    std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath, const char* name)
+    {
+        return m_window.getTexturedCube(texturePath, name);
     }
 }

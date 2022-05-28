@@ -11,8 +11,8 @@ namespace QDUEngine
     }
 
     VisualComponent::VisualComponent(gr::SceneGraphNodePtr& graphNodePtr) :
-    m_graphNodePtr(graphNodePtr),
-    m_position{0,0}
+        m_graphNodePtr(graphNodePtr),
+        m_position{0,0}
     {}
 
     VisualComponent::VisualComponent() : m_graphNodePtr(), m_position() {}
@@ -46,5 +46,20 @@ namespace QDUEngine
     void VisualComponent::setMain(bool value)
     {
         m_main = value;
+    }
+
+    void VisualComponent::setSource(std::string& path)
+    {
+        m_source = path;
+    }
+
+    std::pair<std::string, std::string> VisualComponent::getJSON()
+    {
+        return {m_name, m_source};
+    }
+
+    void VisualComponent::setName(std::string& name)
+    {
+        m_name = name;
     }
 }

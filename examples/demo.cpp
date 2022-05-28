@@ -55,13 +55,13 @@ public:
     void userStart() noexcept override
     {
         fromJSON("examples/data/garden.json");
-        auto blueCube = this->getTexturedCube("examples/assets/player.png");
+        auto blueCube = this->getTexturedCube("examples/assets/player.png", "player");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
         this->addMainObject(player);
 
-        auto redCube = this->getTexturedCube("examples/assets/enemy.png");
+        auto redCube = this->getTexturedCube("examples/assets/enemy.png", "enemy");
         auto enemyInput = std::make_shared<EnemyInput>(redCube);
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
@@ -170,5 +170,6 @@ int main()
     dungeon.bindCursorButton("RIGHT", "rightClick");
     dungeon.preloadJSON("examples/data/garden.json");
     dungeon.preloadJSON("examples/data/warehouse.json");
+    dungeon.setTempDir("examples/tmp");
     dungeon.run("Dungeon game", 600, 600);
 }

@@ -24,13 +24,19 @@ namespace QDUEngine
         m_scene->bindKey(key, action);
     }
 
-    void Application::bindJoystick(const char *key, const char *action)
+    void Application::bindJoystick(const char* key, const char* action)
     {
         m_scene->bindJoystick(key, action);
     }
 
-    void Application::preloadJSON(const char *path)
+    void Application::preloadJSON(const char* path)
     {
         m_scene->preloadJSON(path);
+    }
+
+    void Application::setTempDir(const char* path)
+    {
+        m_tempDir = const_cast<char *>(path);
+        m_scene->m_tempDir = m_tempDir;
     }
 }

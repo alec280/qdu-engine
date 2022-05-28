@@ -24,9 +24,14 @@ namespace QDUEngine
         void clear();
         bool isMain();
         void setMain(bool value);
+        void setName(std::string& name);
+        void setSource(std::string& path);
+        std::pair<std::string, std::string> getJSON();
     private:
         Vector2D m_position;
         bool m_main = false;
+        std::string m_name;
+        std::string m_source;
         Grafica::SceneGraphNodePtr m_graphNodePtr;
     };
 }

@@ -126,7 +126,7 @@ namespace QDUEngine
         return component;
     }
 
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath, const char* name)
     {
         gr::Shape shape(8);
         shape.vertices = {
@@ -189,7 +189,17 @@ namespace QDUEngine
                 tr::identity(),
                 texturedPtr
         );
-        return std::make_shared<VisualComponent>(cubePtr);
+        auto visualComponent = std::make_shared<VisualComponent>(cubePtr);
+        std::string source = texturePath;
+        std::string stringName = name;
+        visualComponent->setSource(source);
+        visualComponent->setName(stringName);
+        return visualComponent;
+    }
+
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
+    {
+        return getTexturedCube(texturePath, "");
     }
 
     Vector2D Window::screenToPos()
@@ -232,6 +242,8 @@ namespace QDUEngine
             auto graphComponent = std::make_shared<VisualComponent>(tmp);
             //auto object = GameObject(nullptr, cube);
             graphComponent->move(QDUEngine::Vector(it.first));
+            graphComponent->setName(it.second);
+            graphComponent->setSource(m_preloadPaths[it.second]);
             //addGameObject(object);
             m_visualComponents.push_back(graphComponent);
         }

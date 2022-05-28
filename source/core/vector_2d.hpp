@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
 
 namespace QDUEngine
 {
@@ -10,6 +11,7 @@ namespace QDUEngine
         Vector2D& operator+=(const Vector2D& vector2D);
         Vector2D& operator-=(const Vector2D& vector2D);
         Vector2D& operator*=(float rhs);
+        std::string toString() const;
     };
 
     Vector2D Vector(float x, float y);

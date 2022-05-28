@@ -12,7 +12,9 @@ namespace QDUEngine
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
         void preloadJSON(const char* path);
+        void setTempDir(const char* path);
     private:
         Scene* m_scene{};
+        char* m_tempDir = nullptr;
     };
 }

@@ -30,6 +30,7 @@ namespace QDUEngine
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
+        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath, const char* name);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
     };
 }
