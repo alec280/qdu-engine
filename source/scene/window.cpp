@@ -90,7 +90,7 @@ namespace QDUEngine
         m_projection = projection;
 
         for (auto& it : m_preloadPaths) {
-            std::shared_ptr<VisualComponent> cube = getTexturedCube(it.second.c_str());
+            std::shared_ptr<VisualComponent> cube = getTexturedCube(it.second.c_str(), it.first.c_str());
             m_preloadComponents[it.first] = cube;
         }
     }
@@ -236,7 +236,7 @@ namespace QDUEngine
     void Window::fromMap(std::map<std::string, std::string>& map)
     {
         for (auto& it : map) {
-            auto graph = Grafica::SceneGraphNode(it.first);
+            auto graph = Grafica::SceneGraphNode(it.second);
             graph.childs.push_back(m_preloadComponents[it.second]->getGraphNodePtr());
             auto tmp = std::make_shared<Grafica::SceneGraphNode>(graph);
             auto graphComponent = std::make_shared<VisualComponent>(tmp);

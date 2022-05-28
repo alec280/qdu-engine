@@ -5,7 +5,7 @@ namespace QDUEngine
     void Scene::addGameObject(GameObject& gameObject)
     {
         m_input.m_inputComponents.push_back(gameObject.getInputComponent());
-        m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
+        addVisualComponent(gameObject);
     }
 
     void Scene::addVisualComponent(GameObject& gameObject)
@@ -165,7 +165,7 @@ namespace QDUEngine
         std::map<std::string, std::string> map{};
         std::map<std::string, std::string> objects{};
         for (auto& component : m_window.m_visualComponents) {
-            if (component->isMain() || component->getName() == "enemy") {
+            if (component->isMain()) {
                 continue;
             }
             auto jsonData = component->getJSON();
