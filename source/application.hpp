@@ -13,7 +13,7 @@ namespace QDUEngine
         void preloadJSON(const char* path);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
-        void setGlobalInput(InputComponent* inputComponent);
+        void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setTempDir(const char* path);
     protected:
         Application();

@@ -2,7 +2,7 @@
 
 namespace QDUEngine
 {
-    Application::Application() : m_scene{} {}
+    Application::Application() : m_scene(new Scene()) {}
     Application::Application(Scene* scene) : m_scene(scene) {}
 
     void Application::bindCursorButton(Input::CursorButton cursorButton, const char* action)
@@ -33,6 +33,7 @@ namespace QDUEngine
             m_scene->update(0);
         }
         m_scene->end();
+        delete m_scene;
     }
 
     void Application::run(const char* name, float x, float y)
@@ -40,9 +41,9 @@ namespace QDUEngine
         run(name, Vector(x, y));
     }
 
-    void Application::setGlobalInput(InputComponent* inputComponent)
+    void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
-        m_scene->setInputComponent(inputComponent);
+        m_scene->setInputComponent(inputComponent.get());
     }
 
     void Application::setTempDir(const char* path)

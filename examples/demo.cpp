@@ -25,7 +25,7 @@ public:
     void onAction(const char* action, float value) override {}
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
     {
-        if (compare(action, "customNema")) {
+        if (compare(action, "leftClick")) {
             if (pos.x < 300) {
                 m_visual->move(QDUEngine::Vector(-1, 0));
             } else {
@@ -48,34 +48,6 @@ public:
     explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
         QDUEngine::GameObject(visual, input)
     {}
-};
-
-class Floor : public QDUEngine::Scene {
-public:
-    void userStart() noexcept override
-    {
-        fromJSON("examples/data/garden.json");
-        auto blueCube = this->getTexturedCube("examples/assets/player.png", "player");
-        auto playerInput = std::make_shared<PlayerInput>(blueCube);
-        blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
-        this->addMainObject(player);
-
-        auto redCube = this->getTexturedCube("examples/assets/enemy.png", "enemy");
-        auto enemyInput = std::make_shared<EnemyInput>(redCube);
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        this->addGameObject(enemy);
-    }
-    void addCompanion(QDUEngine::Vector2D& pos)
-    {
-        auto greenCube = this->getTexturedCube("examples/assets/companion.png", "companion");
-        auto enemyInput = std::make_shared<EnemyInput>(greenCube);
-        greenCube->move(pos);
-        auto companion = Character(greenCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        this->addGameObject(companion);
-        std::cout << "Companion added!" << std::endl;
-    }
 };
 
 using namespace QDUEngine;
@@ -115,7 +87,7 @@ public:
         m_application(dungeon),
         m_spawnPos(Vector(0, 0))
     {
-        m_application->setGlobalInput(this);
+        //m_application->setGlobalInput(this);
     }
     void onAction(const char* action, float value) override
     {
@@ -159,7 +131,7 @@ public:
     }
     void onCursorAction(const char* action, Vector2D& pos) override
     {
-        if (compare(action, "customNema")) {
+        if (compare(action, "leftClick")) {
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
         } else if (compare(action, "middleClick")) {
@@ -189,11 +161,13 @@ public:
 
 int main()
 {
-    Floor floor1;
     auto dungeon = Dungeon();
-    dungeon.m_scene = &floor1;
-    auto input = GlobalInput(&dungeon);
-    //QDUEngine::Application dungeon(&floor1);
+    auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
+    dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
+
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::LEFT, "leftClick");
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::MIDDLE, "middleClick");
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::RIGHT, "rightClick");
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
@@ -203,9 +177,6 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
     dungeon.bindJoystick("RS_Y", "down");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::LEFT, "customNema");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::MIDDLE, "middleClick");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::RIGHT, "rightClick");
     dungeon.preloadJSON("examples/data/garden.json");
     dungeon.preloadJSON("examples/data/warehouse.json");
     dungeon.setTempDir("examples/tmp");
