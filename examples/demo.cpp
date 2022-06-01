@@ -50,37 +50,39 @@ public:
     {}
 };
 
-class Floor : public QDUEngine::Scene {
-public:
-    void userStart() noexcept override
-    {
-        fromJSON("examples/data/garden.json");
-        auto blueCube = this->getTexturedCube("examples/assets/player.png", "player");
-        auto playerInput = std::make_shared<PlayerInput>(blueCube);
-        blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
-        this->addMainObject(player);
+using namespace QDUEngine;
 
-        auto redCube = this->getTexturedCube("examples/assets/enemy.png", "enemy");
-        auto enemyInput = std::make_shared<EnemyInput>(redCube);
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        this->addGameObject(enemy);
-    }
-    void addCompanion(QDUEngine::Vector2D& pos)
+class Dungeon : public Application {
+public:
+    void addCompanion(Vector2D& pos)
     {
-        auto greenCube = this->getTexturedCube("examples/assets/companion.png", "companion");
+        auto greenCube = m_scene->getTexturedCube("examples/assets/companion.png", "companion");
         auto enemyInput = std::make_shared<EnemyInput>(greenCube);
         greenCube->move(pos);
-        auto companion = Character(greenCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        this->addGameObject(companion);
+        auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        m_scene->addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
+    }
+    void userStart() noexcept override
+    {
+        m_scene->fromJSON("examples/data/garden.json");
+        auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");
+        auto playerInput = std::make_shared<PlayerInput>(blueCube);
+        blueCube->move(Vector(-2, -2));
+        auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
+        m_scene->addMainObject(player);
+
+        auto redCube = m_scene->getTexturedCube("examples/assets/enemy.png", "enemy");
+        auto enemyInput = std::make_shared<EnemyInput>(redCube);
+        redCube->move(Vector(2, 2));
+        auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        m_scene->addGameObject(enemy);
     }
 };
 
-class FloorInput : public QDUEngine::InputComponent {
+class GlobalInput : public InputComponent {
 public:
-    explicit FloorInput(Floor* floor) : m_floor(floor), m_spawn(QDUEngine::Vector(0, 0)) {m_floor->setInputComponent(this);}
+    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
     void onAction(const char* action, float value) override
     {
         if (compare(action, "map")) {
@@ -91,7 +93,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "left");
+            m_application->bindKey(&tmp, "left");
 
             std::cout << "Rebind up: ";
             tmp = (char)std::cin.get();
@@ -100,7 +102,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "up");
+            m_application->bindKey(&tmp, "up");
 
             std::cout << "Rebind down: ";
             tmp = (char)std::cin.get();
@@ -109,7 +111,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "down");
+            m_application->bindKey(&tmp, "down");
 
             std::cout << "Rebind right: ";
             tmp = (char)std::cin.get();
@@ -118,7 +120,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "right");
+            m_application->bindKey(&tmp, "right");
         }
     }
     void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
@@ -139,46 +141,27 @@ public:
                 return;
             }
             if (pos.x > 400) {
-                m_floor->addCompanion(m_spawn);
-                m_spawn += QDUEngine::Vector(1, 1);
+                m_application->addCompanion(m_spawnPos);
+                m_spawnPos += QDUEngine::Vector(1, 1);
             }
             m_combo[0] = false;
             m_combo[1] = false;
         }
     }
     bool m_combo[2]{false, false};
-    Floor* m_floor;
-    QDUEngine::Vector2D m_spawn;
-};
-
-using namespace QDUEngine;
-
-class Dungeon : public Application {
-public:
-    explicit Dungeon(Scene* scene) : Application(scene) {}
-    void userStart() noexcept override
-    {
-        m_scene->fromJSON("examples/data/garden.json");
-        auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");
-        auto playerInput = std::make_shared<PlayerInput>(blueCube);
-        blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
-        m_scene->addMainObject(player);
-
-        auto redCube = m_scene->getTexturedCube("examples/assets/enemy.png", "enemy");
-        auto enemyInput = std::make_shared<EnemyInput>(redCube);
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        m_scene->addGameObject(enemy);
-    }
+    Dungeon* m_application;
+    Vector2D m_spawnPos;
 };
 
 int main()
 {
-    Floor floor1;
-    FloorInput floorInput(&floor1);
-    auto dungeon = Dungeon(&floor1);
+    auto dungeon = Dungeon();
+    //auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
+    //dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
     //QDUEngine::Application dungeon(&floor1);
+    dungeon.bindCursorButton(Input::CursorButton::LEFT, "leftClick");
+    dungeon.bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
+    dungeon.bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
@@ -188,9 +171,6 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
     dungeon.bindJoystick("RS_Y", "down");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::LEFT, "customNema");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::MIDDLE, "middleClick");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::RIGHT, "rightClick");
     dungeon.preloadJSON("examples/data/garden.json");
     dungeon.preloadJSON("examples/data/warehouse.json");
     dungeon.setTempDir("examples/tmp");

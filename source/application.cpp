@@ -2,6 +2,7 @@
 
 namespace QDUEngine
 {
+    Application::Application() : m_scene{} {}
     Application::Application(Scene* scene) : m_scene(scene) {}
 
     void Application::bindCursorButton(Input::CursorButton cursorButton, const char* action)
@@ -57,5 +58,11 @@ namespace QDUEngine
     void Application::loadSceneFrom(const char* path)
     {
 
+    }
+
+    void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
+    {
+        m_globalInput = inputComponent;
+        m_scene->setInputComponent(inputComponent);
     }
 }

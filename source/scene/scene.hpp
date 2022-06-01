@@ -21,11 +21,10 @@ namespace QDUEngine
         std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath, const char* name);
-        virtual void userStart() = 0;
         std::shared_ptr<InputComponent> getInputComponent();
         void addInputComponent(GameObject& gameObject);
         void addVisualComponent(GameObject& gameObject);
-        void setInputComponent(InputComponent* inputComponent);
+        void setInputComponent(std::shared_ptr<InputComponent>& inputComponent);
         void fromJSON(const char* path);
         SceneData getData();
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);
@@ -39,7 +38,7 @@ namespace QDUEngine
         void clear();
         void preloadJSON(const char* path);
         void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
-        InputComponent* m_inputComponent;
+        std::shared_ptr<InputComponent> m_inputComponent;
         std::shared_ptr<GameObject> m_mainObject = nullptr;
         std::string m_name;
         Window m_window{};

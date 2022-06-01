@@ -23,7 +23,7 @@ namespace QDUEngine
         return std::shared_ptr<InputComponent>(m_inputComponent);
     }
 
-    void Scene::setInputComponent(InputComponent* inputComponent)
+    void Scene::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)
     {
         m_inputComponent = inputComponent;
         m_input.m_appInputComponent = getInputComponent();
