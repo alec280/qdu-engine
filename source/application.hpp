@@ -14,13 +14,10 @@ namespace QDUEngine
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
         void setTempDir(const char* path);
-        void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
     protected:
-        Application();
         explicit Application(Scene* scene);
-        Scene* m_scene = nullptr;
+        Scene* m_scene{};
     private:
-        std::shared_ptr<InputComponent> m_globalInput = nullptr;
         bool m_shouldClose = false;
         char* m_tempDir = nullptr;
         void swapScenes(Scene* from, Scene* to);
