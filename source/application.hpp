@@ -5,16 +5,20 @@ namespace QDUEngine
 {
     class Application {
     public:
-        explicit Application(Scene* scene);
-        void run(const char* name, const Vector2D& windowSize);
-        void run(const char *name, float x, float y);
+        virtual void userStart() = 0;
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
+        void loadSceneFrom(const char* path);
         void preloadJSON(const char* path);
+        void run(const char* name, const Vector2D& windowSize);
+        void run(const char *name, float x, float y);
         void setTempDir(const char* path);
-    private:
+    protected:
+        explicit Application(Scene* scene);
         Scene* m_scene{};
+    private:
+        bool m_shouldClose = false;
         char* m_tempDir = nullptr;
         void swapScenes(Scene* from, Scene* to);
     };

@@ -33,11 +33,6 @@ namespace QDUEngine
     {
         m_window.start(name, windowSize, m_input);
         m_input.start();
-        userStart();
-        while (!m_window.shouldClose()) {
-            update(0);
-        }
-        end();
     }
 
     void Scene::update(float delta)

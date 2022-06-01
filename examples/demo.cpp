@@ -151,12 +151,34 @@ public:
     QDUEngine::Vector2D m_spawn;
 };
 
+using namespace QDUEngine;
+
+class Dungeon : public Application {
+public:
+    explicit Dungeon(Scene* scene) : Application(scene) {}
+    void userStart() noexcept override
+    {
+        m_scene->fromJSON("examples/data/garden.json");
+        auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");
+        auto playerInput = std::make_shared<PlayerInput>(blueCube);
+        blueCube->move(QDUEngine::Vector(-2, -2));
+        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
+        m_scene->addMainObject(player);
+
+        auto redCube = m_scene->getTexturedCube("examples/assets/enemy.png", "enemy");
+        auto enemyInput = std::make_shared<EnemyInput>(redCube);
+        redCube->move(QDUEngine::Vector(2, 2));
+        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
+        m_scene->addGameObject(enemy);
+    }
+};
 
 int main()
 {
     Floor floor1;
     FloorInput floorInput(&floor1);
-    QDUEngine::Application dungeon(&floor1);
+    auto dungeon = Dungeon(&floor1);
+    //QDUEngine::Application dungeon(&floor1);
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
