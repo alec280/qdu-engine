@@ -24,7 +24,6 @@ namespace QDUEngine
         std::shared_ptr<InputComponent> getInputComponent();
         void addInputComponent(GameObject& gameObject);
         void addVisualComponent(GameObject& gameObject);
-        void setInputComponent(InputComponent* inputComponent);
         void fromJSON(const char* path);
         SceneData getData();
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);

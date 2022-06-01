@@ -18,7 +18,6 @@ namespace QDUEngine
     protected:
         Application();
         explicit Application(Scene* scene);
-    public:
         Scene* m_scene{};
     private:
         bool m_shouldClose = false;

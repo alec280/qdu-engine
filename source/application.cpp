@@ -43,7 +43,7 @@ namespace QDUEngine
 
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
-        m_scene->setInputComponent(inputComponent.get());
+        m_scene->m_input.m_globalInput = inputComponent;
     }
 
     void Application::setTempDir(const char* path)

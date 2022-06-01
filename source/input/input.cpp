@@ -138,7 +138,7 @@ namespace QDUEngine
                 for (auto& component : m_inputComponents) {
                     component->onCursorAction(action.first.c_str(), m_cursorPos);
                 }
-                m_appInputComponent->onCursorAction(action.first.c_str(), m_cursorPos);
+                m_globalInput->onCursorAction(action.first.c_str(), m_cursorPos);
             }
         }
         for (auto& action : m_actions) {
@@ -148,7 +148,7 @@ namespace QDUEngine
                 for (auto& component : m_inputComponents) {
                     component->onAction(action.first.c_str(), value);
                 }
-                m_appInputComponent->onAction(action.first.c_str(), value);
+                m_globalInput->onAction(action.first.c_str(), value);
             }
         }
         while (!m_inputComponentsQueue.empty()) {
