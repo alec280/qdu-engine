@@ -1,56 +1,54 @@
 #include <QDUEngine.hpp>
 
-class PlayerInput : public QDUEngine::InputComponent {
+using namespace QDUEngine;
+
+class PlayerInput : public InputComponent {
 public:
-    explicit PlayerInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
+    explicit PlayerInput(std::shared_ptr<VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override
     {
         if (compare(action, "left")) {
-            m_visual->move(QDUEngine::Vector(-value, 0));
+            m_visual->move(Vector(-value, 0));
         } else if (compare(action, "right")) {
-            m_visual->move(QDUEngine::Vector(value, 0));
+            m_visual->move(Vector(value, 0));
         } else if (compare(action, "down")) {
-            m_visual->move(QDUEngine::Vector(0, value));
+            m_visual->move(Vector(0, value));
         } else if (compare(action, "up")) {
-            m_visual->move(QDUEngine::Vector(0, -value));
+            m_visual->move(Vector(0, -value));
         }
     }
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override {}
-    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
+    void onCursorAction(const char* action, Vector2D& pos) override {}
+    std::shared_ptr<VisualComponent> m_visual;
 };
 
-class EnemyInput : public QDUEngine::InputComponent {
+class EnemyInput : public InputComponent {
 public:
-    explicit EnemyInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
+    explicit EnemyInput(std::shared_ptr<VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override {}
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    void onCursorAction(const char* action, Vector2D& pos) override
     {
         if (compare(action, "leftClick")) {
             if (pos.x < 300) {
-                m_visual->move(QDUEngine::Vector(-1, 0));
+                m_visual->move(Vector(-1, 0));
             } else {
-                m_visual->move(QDUEngine::Vector(1, 0));
+                m_visual->move(Vector(1, 0));
             }
         }
     }
-    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
+    std::shared_ptr<VisualComponent> m_visual;
 };
 
-class Static : public QDUEngine::GameObject {
+class Static : public GameObject {
 public:
-    explicit Static(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
-            QDUEngine::GameObject(nullptr, visual)
+    explicit Static(std::shared_ptr<VisualComponent>& visual) : GameObject(nullptr, visual) {}
+};
+
+class Character : public GameObject {
+public:
+    explicit Character(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
+        GameObject(visual, input)
     {}
 };
-
-class Character : public QDUEngine::GameObject {
-public:
-    explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
-        QDUEngine::GameObject(visual, input)
-    {}
-};
-
-using namespace QDUEngine;
 
 class Dungeon : public Application {
 public:
@@ -70,25 +68,20 @@ public:
         auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
+        auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
         m_scene->addMainObject(player);
 
         auto redCube = m_scene->getTexturedCube("examples/assets/enemy.png", "enemy");
         auto enemyInput = std::make_shared<EnemyInput>(redCube);
         redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
+        auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
         m_scene->addGameObject(enemy);
     }
 };
 
 class GlobalInput : public InputComponent {
 public:
-    explicit GlobalInput(Dungeon* dungeon) :
-        m_application(dungeon),
-        m_spawnPos(Vector(0, 0))
-    {
-        //m_application->setGlobalInput(this);
-    }
+    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
     void onAction(const char* action, float value) override
     {
         if (compare(action, "map")) {
