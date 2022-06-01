@@ -15,7 +15,6 @@ namespace QDUEngine
     public:
         VisualComponent();
         virtual ~VisualComponent() = default;
-        //virtual void update(GameObject& obj, Map& map) = 0;
         explicit VisualComponent(Grafica::SceneGraphNodePtr& graphNodePtr);
         void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
         Grafica::SceneGraphNodePtr getGraphNodePtr();

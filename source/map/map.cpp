@@ -27,10 +27,7 @@ namespace QDUEngine
 
     void Map::update(float delta)
     {
-        auto gameObjects = getGameObjects();
-        for (int i = 0; i < m_gameObjects.getSize(); i++) {
-            gameObjects[i].update(*this);
-        }
+
     }
 
     GameObject* Map::getGameObjects()

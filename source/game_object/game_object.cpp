@@ -14,12 +14,6 @@ namespace QDUEngine
         m_input(input)
     {}
 
-    void GameObject::update(Map& map)
-    {
-        //m_attribute->update(*this);
-        //m_visual->update(*this, map);
-    }
-
     std::shared_ptr<InputComponent> GameObject::getInputComponent()
     {
         return m_input;
