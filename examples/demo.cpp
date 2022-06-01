@@ -111,9 +111,11 @@ public:
 
 class GlobalInput : public InputComponent {
 public:
-    explicit GlobalInput(Dungeon* dungeon) : m_application(reinterpret_cast<Floor*>(dungeon->m_scene)), m_spawnPos(Vector(0, 0))
+    explicit GlobalInput(Dungeon* dungeon) :
+        m_application(dungeon),
+        m_spawnPos(Vector(0, 0))
     {
-        m_application->setInputComponent(this);
+        m_application->setGlobalInput(this);
     }
     void onAction(const char* action, float value) override
     {
@@ -181,7 +183,7 @@ public:
         }
     }
     bool m_combo[2]{false, false};
-    Floor* m_application;
+    Dungeon* m_application;
     Vector2D m_spawnPos;
 };
 
