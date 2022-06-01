@@ -7,17 +7,20 @@ namespace QDUEngine
 
     void Application::bindCursorButton(Input::CursorButton cursorButton, const char* action)
     {
-        m_scene->bindCursorButton(cursorButton, action);
+        m_scene->m_input.m_cursorBindings[cursorButton] = action;
+        m_scene->m_input.m_cursorActions[std::string(action)] = 0;
     }
 
     void Application::bindKey(const char* key, const char* action)
     {
-        m_scene->bindKey(key, action);
+        m_scene->m_input.m_keyBindings[std::string(key)] = action;
+        m_scene->m_input.m_actions[std::string(action)] = 0;
     }
 
     void Application::bindJoystick(const char* key, const char* action)
     {
-        m_scene->bindJoystick(key, action);
+        m_scene->m_input.m_joystickBindings[std::string(key)] = action;
+        m_scene->m_input.m_actions[std::string(action)] = 0;
     }
 
     void Application::preloadJSON(const char* path)

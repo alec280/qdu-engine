@@ -78,24 +78,6 @@ namespace QDUEngine
         return getTexturedCube(texturePath, "");
     }
 
-    void Scene::bindCursorButton(Input::CursorButton cursorButton, const char* action)
-    {
-        m_input.m_cursorBindings[cursorButton] = action;
-        m_input.m_cursorActions[std::string(action)] = 0;
-    }
-
-    void Scene::bindKey(const char* key, const char* action)
-    {
-        m_input.m_keyBindings[std::string(key)] = action;
-        m_input.m_actions[std::string(action)] = 0;
-    }
-
-    void Scene::bindJoystick(const char* key, const char* action)
-    {
-        m_input.m_joystickBindings[std::string(key)] = action;
-        m_input.m_actions[std::string(action)] = 0;
-    }
-
     void Scene::fromJSON(const char* path)
     {
         if (!m_name.empty()) {

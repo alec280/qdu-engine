@@ -26,9 +26,6 @@ namespace QDUEngine
         void addVisualComponent(GameObject& gameObject);
         void fromJSON(const char* path);
         SceneData getData();
-        void bindCursorButton(Input::CursorButton cursorButton, const char* action);
-        void bindKey(const char* key, const char* action);
-        void bindJoystick(const char* key, const char* action);
         void saveJSON();
     private:
         void start(const char* name, const Vector2D& windowSize);

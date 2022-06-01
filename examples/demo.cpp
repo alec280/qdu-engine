@@ -158,9 +158,9 @@ int main()
     auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
     dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
 
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::LEFT, "leftClick");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::MIDDLE, "middleClick");
-    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::RIGHT, "rightClick");
+    dungeon.bindCursorButton(Input::CursorButton::LEFT, "leftClick");
+    dungeon.bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
+    dungeon.bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
