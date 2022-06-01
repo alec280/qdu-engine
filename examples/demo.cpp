@@ -72,9 +72,8 @@ public:
         auto greenCube = this->getTexturedCube("examples/assets/companion.png");
         auto enemyInput = std::make_shared<EnemyInput>(greenCube);
         greenCube->move(pos);
-        auto companion = Static(greenCube);
-        //this->addGameObject(companion);
-        this->addVisualComponent(companion);
+        auto companion = Character(greenCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
+        this->addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
     }
 };

@@ -205,6 +205,9 @@ namespace QDUEngine
 
     void Input::addInputComponent(const std::shared_ptr<InputComponent>& component)
     {
+        if (component == nullptr) {
+            return;
+        }
         m_inputComponentsQueue.push_back(component);
     }
 }

@@ -251,6 +251,9 @@ namespace QDUEngine
 
     void Window::addVisualComponent(const std::shared_ptr<VisualComponent>& component)
     {
+        if (component == nullptr) {
+            return;
+        }
         std::shared_ptr<VisualComponent> cube = getTexturedCube(component->getSource().c_str(), component->getName().c_str());
         m_preloadPaths[component->getName()] = component->getSource();
         m_preloadComponents[component->getName()] = cube;
