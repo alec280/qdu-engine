@@ -70,8 +70,10 @@ public:
     void addCompanion(QDUEngine::Vector2D& pos)
     {
         auto greenCube = this->getTexturedCube("examples/assets/companion.png");
+        auto enemyInput = std::make_shared<EnemyInput>(greenCube);
         greenCube->move(pos);
         auto companion = Static(greenCube);
+        //this->addGameObject(companion);
         this->addVisualComponent(companion);
         std::cout << "Companion added!" << std::endl;
     }

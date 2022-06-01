@@ -4,8 +4,13 @@ namespace QDUEngine
 {
     void Scene::addGameObject(GameObject& gameObject)
     {
-        m_input.m_inputComponents.push_back(gameObject.getInputComponent());
+        addInputComponent(gameObject);
         addVisualComponent(gameObject);
+    }
+
+    void Scene::addInputComponent(GameObject& gameObject)
+    {
+        m_input.addInputComponent(gameObject.getInputComponent());
     }
 
     void Scene::addVisualComponent(GameObject& gameObject)

@@ -151,6 +151,11 @@ namespace QDUEngine
                 m_appInputComponent->onAction(action.first.c_str(), value);
             }
         }
+        while (!m_inputComponentsQueue.empty()) {
+            auto component = m_inputComponentsQueue.front();
+            m_inputComponents.push_back(component);
+            m_inputComponentsQueue.erase(m_inputComponentsQueue.begin());
+        }
     }
 
     bool Input::checkJoystick(const char* key, std::string& string, const char* action, Joystick& joystick, int ax)
@@ -194,7 +199,13 @@ namespace QDUEngine
 
     void Input::clear()
     {
+        m_inputComponentsQueue.clear();
         m_inputComponents.clear();
+    }
+
+    void Input::addInputComponent(const std::shared_ptr<InputComponent>& component)
+    {
+        m_inputComponentsQueue.push_back(component);
     }
 }
 

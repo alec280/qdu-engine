@@ -38,12 +38,14 @@ namespace QDUEngine
         Vector2D m_cursorPos{};
         std::shared_ptr<InputComponent> m_appInputComponent;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
+        std::vector<std::shared_ptr<InputComponent>> m_inputComponentsQueue;
         std::map<std::string, const char*> m_cursorBindings{};
         std::map<std::string, const char*> m_keyBindings{};
         std::map<std::string, const char*> m_joystickBindings{};
         std::map<std::string, float> m_actions{};
         std::map<std::string, float> m_cursorActions{};
         std::map<std::size_t, Joystick> m_joysticks{};
+        void addInputComponent(const std::shared_ptr<InputComponent>& component);
         void joystickCallback(int jid, int event);
         void pollJoysticks(std::map<std::size_t, Joystick> &joysticks);
         void cursorPressed(int button, int action);
