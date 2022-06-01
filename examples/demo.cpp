@@ -78,84 +78,20 @@ public:
     }
 };
 
-class FloorInput : public QDUEngine::InputComponent {
-public:
-    explicit FloorInput(Floor* floor) : m_floor(floor), m_spawn(QDUEngine::Vector(0, 0)) {m_floor->setInputComponent(this);}
-    void onAction(const char* action, float value) override
-    {
-        if (compare(action, "map")) {
-            std::cout << "Rebind left: ";
-            char tmp = (char)std::cin.get();
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore();
-            }
-            std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "left");
-
-            std::cout << "Rebind up: ";
-            tmp = (char)std::cin.get();
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore();
-            }
-            std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "up");
-
-            std::cout << "Rebind down: ";
-            tmp = (char)std::cin.get();
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore();
-            }
-            std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "down");
-
-            std::cout << "Rebind right: ";
-            tmp = (char)std::cin.get();
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore();
-            }
-            std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "right");
-        }
-    }
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
-    {
-        if (compare(action, "customNema")) {
-            m_combo[0] = pos.x < 200;
-            m_combo[1] = false;
-        } else if (compare(action, "middleClick")) {
-            if (!m_combo[0] || m_combo[1]) {
-                m_combo[1] = false;
-            } else if (pos.x > 200 && pos.x < 400) {
-                m_combo[1] = true;
-            } else {
-                m_combo[0] = false;
-            }
-        } else if (compare(action, "rightClick")) {
-            if (!m_combo[0] || !m_combo[1]) {
-                return;
-            }
-            if (pos.x > 400) {
-                m_floor->addCompanion(m_spawn);
-                m_spawn += QDUEngine::Vector(1, 1);
-            }
-            m_combo[0] = false;
-            m_combo[1] = false;
-        }
-    }
-    bool m_combo[2]{false, false};
-    Floor* m_floor;
-    QDUEngine::Vector2D m_spawn;
-};
-
 using namespace QDUEngine;
 
 class Dungeon : public Application {
 public:
-    explicit Dungeon(Scene* scene) : Application(scene) {}
+    explicit Dungeon() : Application() {}
+    void addCompanion(Vector2D& pos)
+    {
+        auto greenCube = m_scene->getTexturedCube("examples/assets/companion.png", "companion");
+        auto enemyInput = std::make_shared<EnemyInput>(greenCube);
+        greenCube->move(pos);
+        auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        m_scene->addGameObject(companion);
+        std::cout << "Companion added!" << std::endl;
+    }
     void userStart() noexcept override
     {
         m_scene->fromJSON("examples/data/garden.json");
@@ -173,11 +109,88 @@ public:
     }
 };
 
+class GlobalInput : public InputComponent {
+public:
+    explicit GlobalInput(Dungeon* dungeon) : m_application(reinterpret_cast<Floor*>(dungeon->m_scene)), m_spawnPos(Vector(0, 0))
+    {
+        m_application->setInputComponent(this);
+    }
+    void onAction(const char* action, float value) override
+    {
+        if (compare(action, "map")) {
+            std::cout << "Rebind left: ";
+            char tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_application->bindKey(&tmp, "left");
+
+            std::cout << "Rebind up: ";
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_application->bindKey(&tmp, "up");
+
+            std::cout << "Rebind down: ";
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_application->bindKey(&tmp, "down");
+
+            std::cout << "Rebind right: ";
+            tmp = (char)std::cin.get();
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+            }
+            std::cin.ignore(1);
+            m_application->bindKey(&tmp, "right");
+        }
+    }
+    void onCursorAction(const char* action, Vector2D& pos) override
+    {
+        if (compare(action, "customNema")) {
+            m_combo[0] = pos.x < 200;
+            m_combo[1] = false;
+        } else if (compare(action, "middleClick")) {
+            if (!m_combo[0] || m_combo[1]) {
+                m_combo[1] = false;
+            } else if (pos.x > 200 && pos.x < 400) {
+                m_combo[1] = true;
+            } else {
+                m_combo[0] = false;
+            }
+        } else if (compare(action, "rightClick")) {
+            if (!m_combo[0] || !m_combo[1]) {
+                return;
+            }
+            if (pos.x > 400) {
+                m_application->addCompanion(m_spawnPos);
+                m_spawnPos += QDUEngine::Vector(1, 1);
+            }
+            m_combo[0] = false;
+            m_combo[1] = false;
+        }
+    }
+    bool m_combo[2]{false, false};
+    Floor* m_application;
+    Vector2D m_spawnPos;
+};
+
 int main()
 {
     Floor floor1;
-    FloorInput floorInput(&floor1);
-    auto dungeon = Dungeon(&floor1);
+    auto dungeon = Dungeon();
+    dungeon.m_scene = &floor1;
+    auto input = GlobalInput(&dungeon);
     //QDUEngine::Application dungeon(&floor1);
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");

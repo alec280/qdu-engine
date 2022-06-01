@@ -13,9 +13,12 @@ namespace QDUEngine
         void preloadJSON(const char* path);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
+        void setGlobalInput(InputComponent* inputComponent);
         void setTempDir(const char* path);
     protected:
+        Application();
         explicit Application(Scene* scene);
+    public:
         Scene* m_scene{};
     private:
         bool m_shouldClose = false;
