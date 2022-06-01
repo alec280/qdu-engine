@@ -11,7 +11,6 @@ namespace QDUEngine
     {
         std::vector<bool> buttons;
         std::vector<float> axes;
-
         Joystick(std::size_t const numberOfButtons, std::size_t const numberOfAxes):
                 buttons(numberOfButtons, false), axes(numberOfAxes, 0.0f)
         {}
@@ -28,6 +27,8 @@ namespace QDUEngine
     class Input {
         friend class Scene;
         friend class Window;
+    public:
+        enum CursorButton { LEFT, MIDDLE, RIGHT };
     private:
         bool keyPressed(int key, int action);
         void cursorMoved(double xPos, double yPos);
@@ -39,7 +40,7 @@ namespace QDUEngine
         std::shared_ptr<InputComponent> m_appInputComponent;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponentsQueue;
-        std::map<std::string, const char*> m_cursorBindings{};
+        std::map<CursorButton, const char*> m_cursorBindings{};
         std::map<std::string, const char*> m_keyBindings{};
         std::map<std::string, const char*> m_joystickBindings{};
         std::map<std::string, float> m_actions{};

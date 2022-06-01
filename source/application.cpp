@@ -14,9 +14,9 @@ namespace QDUEngine
         run(name, Vector(x, y));
     }
 
-    void Application::bindCursorButton(const char *key, const char *action)
+    void Application::bindCursorButton(Input::CursorButton cursorButton, const char *action)
     {
-        m_scene->bindCursorButton(key, action);
+        m_scene->bindCursorButton(cursorButton, action);
     }
 
     void Application::bindKey(const char* key, const char* action)

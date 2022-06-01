@@ -28,7 +28,7 @@ namespace QDUEngine
         void setInputComponent(InputComponent* inputComponent);
         void fromJSON(const char* path);
         SceneData getData();
-        void bindCursorButton(const char* key, const char* action);
+        void bindCursorButton(Input::CursorButton cursorButton, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
         void saveJSON();

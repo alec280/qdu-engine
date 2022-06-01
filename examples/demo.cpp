@@ -166,9 +166,9 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
     dungeon.bindJoystick("RS_Y", "down");
-    dungeon.bindCursorButton("LEFT", "customNema");
-    dungeon.bindCursorButton("MIDDLE", "middleClick");
-    dungeon.bindCursorButton("RIGHT", "rightClick");
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::LEFT, "customNema");
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::MIDDLE, "middleClick");
+    dungeon.bindCursorButton(QDUEngine::Input::CursorButton::RIGHT, "rightClick");
     dungeon.preloadJSON("examples/data/garden.json");
     dungeon.preloadJSON("examples/data/warehouse.json");
     dungeon.setTempDir("examples/tmp");

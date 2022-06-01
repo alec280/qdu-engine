@@ -187,11 +187,11 @@ namespace QDUEngine
     void Input::cursorPressed(int button, int action)
     {
         for (auto& binding : m_cursorBindings) {
-            if (std::strcmp("LEFT", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            if (binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
-            } else if (std::strcmp("MIDDLE", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
+            } else if (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
-            } else if (std::strcmp("RIGHT", binding.first.c_str()) == 0 && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+            } else if (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
                 m_cursorActions.at(binding.second) = 1;
             }
         }

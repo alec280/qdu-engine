@@ -89,9 +89,9 @@ namespace QDUEngine
         return getTexturedCube(texturePath, "");
     }
 
-    void Scene::bindCursorButton(const char* key, const char* action)
+    void Scene::bindCursorButton(Input::CursorButton cursorButton, const char* action)
     {
-        m_input.m_cursorBindings[std::string(key)] = action;
+        m_input.m_cursorBindings[cursorButton] = action;
         m_input.m_cursorActions[std::string(action)] = 0;
     }
 
