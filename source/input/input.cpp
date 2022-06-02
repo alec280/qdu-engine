@@ -1,5 +1,3 @@
-#include <cstring>
-#include <iostream>
 #include "input.hpp"
 
 namespace QDUEngine
@@ -45,17 +43,12 @@ namespace QDUEngine
     {
         if (event == GLFW_CONNECTED)
         {
-            std::cout << "The joystick " << jid << " was connected" << std::endl;
+            std::cout << "[Engine] The joystick " << jid << " was connected" << std::endl;
         }
         else if (event == GLFW_DISCONNECTED)
         {
-            std::cout << "The joystick " << jid << " was disconnected" << std::endl;
+            std::cout << "[Engine] The joystick " << jid << " was disconnected" << std::endl;
         }
-    }
-
-    void Input::start()
-    {
-
     }
 
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)
@@ -121,7 +114,7 @@ namespace QDUEngine
         }
     }
 
-    void Input::update()
+    void Input::update(Scene* scene)
     {
         for (auto& action : m_cursorActions) {
             m_cursorActions.at(action.first) = 0;
@@ -134,27 +127,32 @@ namespace QDUEngine
         for (auto& action : m_cursorActions) {
             float value = m_cursorActions.at(action.first);
             if (std::abs(value) != 0) {
-                std::cout << action.first << " action activated." << std::endl;
-                for (auto& component : m_inputComponents) {
+                for (auto& object : scene->getObjects()) {
+                    auto component = object->getInputComponent();
+                    if (component == nullptr) {
+                        continue;
+                    }
                     component->onCursorAction(action.first.c_str(), m_cursorPos);
                 }
-                m_appInputComponent->onCursorAction(action.first.c_str(), m_cursorPos);
+                if (m_globalInput != nullptr) {
+                    m_globalInput->onCursorAction(action.first.c_str(), m_cursorPos);
+                }
             }
         }
         for (auto& action : m_actions) {
             float value = m_actions.at(action.first);
             if (std::abs(value) != 0) {
-                std::cout << action.first << " action activated." << std::endl;
-                for (auto& component : m_inputComponents) {
+                for (auto& object : scene->getObjects()) {
+                    auto component = object->getInputComponent();
+                    if (component == nullptr) {
+                        continue;
+                    }
                     component->onAction(action.first.c_str(), value);
                 }
-                m_appInputComponent->onAction(action.first.c_str(), value);
+                if (m_globalInput != nullptr) {
+                    m_globalInput->onAction(action.first.c_str(), value);
+                }
             }
-        }
-        while (!m_inputComponentsQueue.empty()) {
-            auto component = m_inputComponentsQueue.front();
-            m_inputComponents.push_back(component);
-            m_inputComponentsQueue.erase(m_inputComponentsQueue.begin());
         }
     }
 
@@ -195,20 +193,6 @@ namespace QDUEngine
                 m_cursorActions.at(binding.second) = 1;
             }
         }
-    }
-
-    void Input::clear()
-    {
-        m_inputComponentsQueue.clear();
-        m_inputComponents.clear();
-    }
-
-    void Input::addInputComponent(const std::shared_ptr<InputComponent>& component)
-    {
-        if (component == nullptr) {
-            return;
-        }
-        m_inputComponentsQueue.push_back(component);
     }
 }
 

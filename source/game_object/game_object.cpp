@@ -29,6 +29,7 @@ namespace QDUEngine
         if (m_visual != nullptr) {
             m_visual->getGraphNodePtr()->clear();
         }
+        m_visual->move(m_visual->getPosition() * -1);
     }
 
     GameObject::GameObject(std::shared_ptr<QDUEngine::VisualComponent> &visual, std::shared_ptr<QDUEngine::InputComponent> &input) :
@@ -36,5 +37,10 @@ namespace QDUEngine
         m_visual(visual),
         m_input(input)
     {}
+
+    std::pair<std::string, std::string> GameObject::getData()
+    {
+        return m_visual->getData();
+    }
 }
 

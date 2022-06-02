@@ -38,22 +38,12 @@ namespace QDUEngine
         m_position = {};
     }
 
-    bool VisualComponent::isMain()
-    {
-        return m_main;
-    }
-
-    void VisualComponent::setMain(bool value)
-    {
-        m_main = value;
-    }
-
     void VisualComponent::setSource(std::string& path)
     {
         m_source = path;
     }
 
-    std::pair<std::string, std::string> VisualComponent::getJSON()
+    std::pair<std::string, std::string> VisualComponent::getData()
     {
         return {m_name, m_source};
     }

@@ -1,12 +1,11 @@
 #include "window.hpp"
-#include "../grafica/root_directory.h"
 
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
 {
-    void Window::start(const char *name, const Vector2D& window_size, Input& input)
+    void Window::start(const char *name, const Vector2D& window_size, Input* input)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -24,10 +23,10 @@ namespace QDUEngine
         }
 
         glfwMakeContextCurrent(window);
-        glfwSetWindowUserPointer(window, &input);
+        glfwSetWindowUserPointer(window, input);
 
         for (int jid = 0; jid <= GLFW_JOYSTICK_LAST; jid++) {
-            glfwSetJoystickUserPointer(jid, &input);
+            glfwSetJoystickUserPointer(jid, input);
         }
 
         auto key_callback = [](GLFWwindow* w, int key, int, int action, int)
@@ -89,13 +88,12 @@ namespace QDUEngine
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
 
-        for (auto& it : m_preloadPaths) {
-            std::shared_ptr<VisualComponent> cube = getTexturedCube(it.second.c_str(), it.first.c_str());
-            m_preloadComponents[it.first] = cube;
+        for (auto& it : m_loadedSources) {
+            m_loadedComponents[it.first] = getCubePtr(it.second.c_str());
         }
     }
 
-    void Window::update()
+    void Window::update(Scene* scene)
     {
         gr::Vector3f const viewPos(0, 10, -12);
         gr::Vector3f const eye(0, 0, 0);
@@ -108,25 +106,79 @@ namespace QDUEngine
         glUniformMatrix4fv(glGetUniformLocation(m_pipeline->shaderProgram, "projection"), 1, GL_FALSE, m_projection->data());
         glUniform3f(glGetUniformLocation(m_pipeline->shaderProgram, "viewPosition"), viewPos[0], viewPos[1], viewPos[2]);
 
-        for (auto& visualComponent : m_visualComponents) {
+        for (auto& object : scene->getObjects()) {
+            auto visualComponent = object->getVisualComponent();
+            if (visualComponent == nullptr) {
+                continue;
+            }
             auto pos = visualComponent->getPosition();
             auto nodePtr = visualComponent->getGraphNodePtr();
             nodePtr->transform = tr::translate(pos.x, pos.y,0);
             drawSceneGraphNode(nodePtr, *m_pipeline, "model");
         }
-
         glfwSwapBuffers(m_window);
     }
 
-    std::shared_ptr<VisualComponent> Window::getCube(float r, float g, float b)
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath, const char* name)
     {
-        auto gpuCubePtr = std::make_shared<gr::GPUShape>(gr::toGPUShape(*m_pipeline, gr::createColorCube(r, g, b)));
-        auto cubePtr = std::make_shared<gr::SceneGraphNode>("cube", tr::uniformScale(0.7), gpuCubePtr);
-        auto component = std::make_shared<VisualComponent>(cubePtr);
-        return component;
+        std::string source = texturePath;
+        std::string stringName = name;
+        for (auto& element : m_loadedComponents) {
+            if (element.first == stringName) {
+                auto cubePtr = element.second;
+                return makeVisualPtr(cubePtr, stringName, source);
+            }
+        }
+        auto cubePtr = getCubePtr(texturePath);
+        m_loadedComponents[stringName] = cubePtr;
+        return makeVisualPtr(cubePtr, stringName, source);
     }
 
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath, const char* name)
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
+    {
+        return getTexturedCube(texturePath, "");
+    }
+
+    Vector2D Window::screenToPos()
+    {
+        return Vector(0, 0);
+    }
+
+    void Window::end()
+    {
+        glfwSetWindowShouldClose(m_window, true);
+        glfwTerminate();
+    }
+
+    bool Window::shouldClose()
+    {
+        return glfwWindowShouldClose(m_window);
+    }
+
+    void Window::preload(std::map<std::string, std::string>& objects)
+    {
+        for (auto& it : objects) {
+            m_loadedSources[it.first] = it.second;
+        }
+    }
+
+    std::shared_ptr<VisualComponent> Window::makeVisualPtr(
+            std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
+            std::string& name,
+            std::string& source
+            )
+    {
+        auto graph = Grafica::SceneGraphNode(name);
+        graph.childs.push_back(grPtr);
+        auto graphPtr = std::make_shared<Grafica::SceneGraphNode>(graph);
+        auto visualComponent = VisualComponent(graphPtr);
+        visualComponent.setSource(source);
+        visualComponent.setName(name);
+        auto visualPtr = std::make_shared<VisualComponent>(visualComponent);
+        return visualPtr;
+    }
+
+    std::shared_ptr<Grafica::SceneGraphNode> Window::getCubePtr(const char* texturePath)
     {
         gr::Shape shape(8);
         shape.vertices = {
@@ -189,75 +241,7 @@ namespace QDUEngine
                 tr::identity(),
                 texturedPtr
         );
-        auto visualComponent = std::make_shared<VisualComponent>(cubePtr);
-        std::string source = texturePath;
-        std::string stringName = name;
-        visualComponent->setSource(source);
-        visualComponent->setName(stringName);
-        return visualComponent;
-    }
-
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
-    {
-        return getTexturedCube(texturePath, "");
-    }
-
-    Vector2D Window::screenToPos()
-    {
-        return Vector(0, 0);
-    }
-
-    void Window::end()
-    {
-        glfwSetWindowShouldClose(m_window, true);
-        glfwTerminate();
-    }
-
-    bool Window::shouldClose()
-    {
-        return glfwWindowShouldClose(m_window);
-    }
-
-    void Window::clear()
-    {
-        for (auto& visualComponent : m_visualComponents) {
-            visualComponent->clear();
-        }
-        m_visualComponents.clear();
-    }
-
-    void Window::preload(std::map<std::string, std::string>& objects)
-    {
-        for (auto& it : objects) {
-            m_preloadPaths[it.first] = it.second;
-        }
-    }
-
-    void Window::fromMap(std::map<std::string, std::string>& map)
-    {
-        for (auto& it : map) {
-            auto graph = Grafica::SceneGraphNode(it.second);
-            graph.childs.push_back(m_preloadComponents[it.second]->getGraphNodePtr());
-            auto tmp = std::make_shared<Grafica::SceneGraphNode>(graph);
-            auto graphComponent = std::make_shared<VisualComponent>(tmp);
-            //auto object = GameObject(nullptr, cube);
-            graphComponent->move(QDUEngine::Vector(it.first));
-            graphComponent->setName(it.second);
-            graphComponent->setSource(m_preloadPaths[it.second]);
-            //addGameObject(object);
-            m_visualComponents.push_back(graphComponent);
-        }
-    }
-
-    void Window::addVisualComponent(const std::shared_ptr<VisualComponent>& component)
-    {
-        if (component == nullptr) {
-            return;
-        }
-        std::shared_ptr<VisualComponent> cube = getTexturedCube(component->getSource().c_str(), component->getName().c_str());
-        m_preloadPaths[component->getName()] = component->getSource();
-        m_preloadComponents[component->getName()] = cube;
-        m_visualComponents.push_back(component);
+        return cubePtr;
     }
 }
 
