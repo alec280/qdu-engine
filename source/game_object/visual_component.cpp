@@ -43,7 +43,7 @@ namespace QDUEngine
         m_source = path;
     }
 
-    std::pair<std::string, std::string> VisualComponent::getJSON()
+    std::pair<std::string, std::string> VisualComponent::getData()
     {
         return {m_name, m_source};
     }

@@ -14,22 +14,22 @@ namespace QDUEngine
     class VisualComponent {
     public:
         VisualComponent();
-        virtual ~VisualComponent() = default;
         explicit VisualComponent(Grafica::SceneGraphNodePtr& graphNodePtr);
-        void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
-        Grafica::SceneGraphNodePtr getGraphNodePtr();
-        Vector2D getPosition();
-        void move(const Vector2D& by);
+        virtual ~VisualComponent() = default;
         void clear();
-        void setName(std::string& name);
+        std::pair<std::string, std::string> getData();
+        Grafica::SceneGraphNodePtr getGraphNodePtr();
         std::string& getName();
+        Vector2D getPosition();
         std::string& getSource();
+        void move(const Vector2D& by);
+        void setName(std::string& name);
+        void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
         void setSource(std::string& path);
-        std::pair<std::string, std::string> getJSON();
     private:
-        Vector2D m_position;
-        std::string m_name;
-        std::string m_source;
         Grafica::SceneGraphNodePtr m_graphNodePtr;
+        std::string m_name;
+        Vector2D m_position;
+        std::string m_source;
     };
 }

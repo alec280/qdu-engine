@@ -38,9 +38,9 @@ namespace QDUEngine
         m_input(input)
     {}
 
-    std::pair<std::basic_string<char>, std::basic_string<char>> GameObject::getData()
+    std::pair<std::string, std::string> GameObject::getData()
     {
-        return m_visual->getJSON();
+        return m_visual->getData();
     }
 }
 
