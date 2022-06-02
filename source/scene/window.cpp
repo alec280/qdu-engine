@@ -88,9 +88,8 @@ namespace QDUEngine
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
 
-        for (auto& it : m_preloadPaths) {
-            std::shared_ptr<VisualComponent> cube = getTexturedCube(it.second.c_str(), it.first.c_str());
-            m_preloadComponents[it.first] = cube;
+        for (auto& it : m_loadedSources) {
+            m_loadedComponents[it.first] = getCubePtr(it.second.c_str());
         }
     }
 
@@ -121,6 +120,65 @@ namespace QDUEngine
     }
 
     std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath, const char* name)
+    {
+        std::string source = texturePath;
+        std::string stringName = name;
+        for (auto& element : m_loadedComponents) {
+            if (element.first == stringName) {
+                auto cubePtr = element.second;
+                return makeVisualPtr(cubePtr, stringName, source);
+            }
+        }
+        auto cubePtr = getCubePtr(texturePath);
+        m_loadedComponents[stringName] = cubePtr;
+        return makeVisualPtr(cubePtr, stringName, source);
+    }
+
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
+    {
+        return getTexturedCube(texturePath, "");
+    }
+
+    Vector2D Window::screenToPos()
+    {
+        return Vector(0, 0);
+    }
+
+    void Window::end()
+    {
+        glfwSetWindowShouldClose(m_window, true);
+        glfwTerminate();
+    }
+
+    bool Window::shouldClose()
+    {
+        return glfwWindowShouldClose(m_window);
+    }
+
+    void Window::preload(std::map<std::string, std::string>& objects)
+    {
+        for (auto& it : objects) {
+            m_loadedSources[it.first] = it.second;
+        }
+    }
+
+    std::shared_ptr<VisualComponent> Window::makeVisualPtr(
+            std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
+            std::string& name,
+            std::string& source
+            )
+    {
+        auto graph = Grafica::SceneGraphNode(name);
+        graph.childs.push_back(grPtr);
+        auto graphPtr = std::make_shared<Grafica::SceneGraphNode>(graph);
+        auto visualComponent = VisualComponent(graphPtr);
+        visualComponent.setSource(source);
+        visualComponent.setName(name);
+        auto visualPtr = std::make_shared<VisualComponent>(visualComponent);
+        return visualPtr;
+    }
+
+    std::shared_ptr<Grafica::SceneGraphNode> Window::getCubePtr(const char* texturePath)
     {
         gr::Shape shape(8);
         shape.vertices = {
@@ -183,42 +241,7 @@ namespace QDUEngine
                 tr::identity(),
                 texturedPtr
         );
-        auto visualComponent = std::make_shared<VisualComponent>(cubePtr);
-        std::string source = texturePath;
-        std::string stringName = name;
-        visualComponent->setSource(source);
-        visualComponent->setName(stringName);
-        m_preloadPaths[visualComponent->getName()] = visualComponent->getSource();
-        m_preloadComponents[visualComponent->getName()] = visualComponent;
-        return visualComponent;
-    }
-
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
-    {
-        return getTexturedCube(texturePath, "");
-    }
-
-    Vector2D Window::screenToPos()
-    {
-        return Vector(0, 0);
-    }
-
-    void Window::end()
-    {
-        glfwSetWindowShouldClose(m_window, true);
-        glfwTerminate();
-    }
-
-    bool Window::shouldClose()
-    {
-        return glfwWindowShouldClose(m_window);
-    }
-
-    void Window::preload(std::map<std::string, std::string>& objects)
-    {
-        for (auto& it : objects) {
-            m_preloadPaths[it.first] = it.second;
-        }
+        return cubePtr;
     }
 }
 

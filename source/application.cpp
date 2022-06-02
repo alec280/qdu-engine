@@ -90,14 +90,9 @@ namespace QDUEngine
         }
         auto map = jf["map"].get<std::map<std::string, std::string>>();
         for (auto& it : map) {
-            auto graph = Grafica::SceneGraphNode(it.second);
-            graph.childs.push_back(m_window.m_preloadComponents[it.second]->getGraphNodePtr());
-            auto tmp = std::make_shared<Grafica::SceneGraphNode>(graph);
-            auto graphComponent = std::make_shared<VisualComponent>(tmp);
-            graphComponent->move(Vector(it.first));
-            graphComponent->setName(it.second);
-            graphComponent->setSource(m_window.m_preloadPaths[it.second]);
-            auto object = GameObject(nullptr, graphComponent);
+            auto cube = m_window.getTexturedCube(path, it.second.c_str());
+            cube->move(Vector(it.first));
+            auto object = GameObject(nullptr, cube);
             m_scene->addGameObject(object);
         }
     }
