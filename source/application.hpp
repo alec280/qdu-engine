@@ -9,7 +9,7 @@ namespace QDUEngine
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
-        void loadScene(const char* path);
+        void loadSceneFrom(const char* path);
         Scene getSceneFrom(const char* path);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath, const char* name);
@@ -17,11 +17,11 @@ namespace QDUEngine
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
-        void setScene(Scene* scene);
+        void setScene(Scene& scene);
         void setTempDir(const char* path);
     protected:
-        explicit Application(Scene* scene);
-        Scene* m_scene{};
+        explicit Application();
+        Scene m_scene{};
     private:
         Input m_input{};
         char* m_tempDir = nullptr;

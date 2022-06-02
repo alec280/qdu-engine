@@ -52,33 +52,29 @@ public:
 
 class Dungeon : public Application {
 public:
-    explicit Dungeon(Scene* scene) : Application(scene) {}
     void addCompanion(Vector2D& pos)
     {
         auto greenCube = getTexturedCube("examples/assets/companion.png", "companion");
         auto enemyInput = std::make_shared<EnemyInput>(greenCube);
         greenCube->move(pos);
         auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
-        m_scene->addGameObject(companion);
+        m_scene.addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
     }
     void userStart() noexcept override
     {
-        auto garden = getSceneFrom("examples/data/garden.json");
-        //setScene(garden);
-        loadScene("examples/data/garden.json");
-        //m_scene->fromJSON("examples/data/garden.json");
+        loadSceneFrom("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png", "player");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
-        m_scene->addMainObject(player);
+        m_scene.addMainObject(player);
 
         auto redCube = getTexturedCube("examples/assets/enemy.png", "enemy");
         auto enemyInput = std::make_shared<EnemyInput>(redCube);
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
-        m_scene->addGameObject(enemy);
+        m_scene.addGameObject(enemy);
     }
 };
 
@@ -157,8 +153,7 @@ public:
 
 int main()
 {
-    auto scene = Scene();
-    auto dungeon = Dungeon(&scene);
+    auto dungeon = Dungeon();
     auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
     dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
 
