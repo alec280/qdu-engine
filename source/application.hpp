@@ -28,6 +28,7 @@ namespace QDUEngine
         bool m_shouldClose = false;
         char* m_tempDir = nullptr;
         Window m_window{};
+        void doTransition();
         static void log(const char* msg);
         void saveScene();
     };

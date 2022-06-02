@@ -23,6 +23,29 @@ namespace QDUEngine
         m_input.m_actions[std::string(action)] = 0;
     }
 
+    void Application::doTransition()
+    {
+        auto main = m_scene->m_mainObject;
+        if (main == nullptr) {
+            return;
+        }
+        std::string go;
+        Vector2D at{0, 0};
+        auto pos = main->getVisualComponent()->getPosition();
+        for (auto& transition : m_scene->m_transitions) {
+            if (pos == transition.second.first) {
+                go = transition.first;
+                at = transition.second.second;
+                break;
+            }
+        }
+        if (!go.empty()) {
+            loadScene(go.c_str());
+            main->getVisualComponent()->move(at);
+            m_scene->addMainObject(main);
+        }
+    }
+
     Scene Application::getSceneFrom(const char* path)
     {
         if (m_tempDir == nullptr) {
@@ -53,7 +76,7 @@ namespace QDUEngine
 
     void Application::loadScene(const char* path)
     {
-        //saveScene();
+        saveScene();
         m_scene->end();
         auto fullPath = Grafica::getPath(path);
         m_scene->m_name = fullPath.filename().string();
@@ -105,6 +128,7 @@ namespace QDUEngine
             m_input.update(m_scene);
             m_window.update(m_scene);
             m_scene->update();
+            doTransition();
         }
         log("PRE-END");
         m_scene->end();

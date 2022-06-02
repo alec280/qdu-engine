@@ -9,11 +9,21 @@ namespace QDUEngine
 
     void Scene::addMainObject(GameObject& gameObject)
     {
-        auto mainInput = gameObject.getInputComponent();
-        auto mainVisual = gameObject.getVisualComponent();
+        auto objectPtr = std::make_shared<GameObject>(gameObject);
+        addMainObject(objectPtr);
+    }
+
+    void Scene::addMainObject(std::shared_ptr<GameObject>& gameObject)
+    {
+        if (m_mainObject != nullptr) {
+            return;
+        }
+        auto mainInput = gameObject->getInputComponent();
+        auto mainVisual = gameObject->getVisualComponent();
         mainInput->setMain(true);
         mainVisual->setMain(true);
-        addGameObject(gameObject);
+        m_mainObject = gameObject;
+        m_gameObjectsQueue.push_back(m_mainObject);
     }
 
     void Scene::addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile)
@@ -54,11 +64,6 @@ namespace QDUEngine
             transitions[transition.second.first.toString()] = temp;
         }
         return {map, objects, transitions};
-    }
-
-    void Scene::start(const char* name, const Vector2D& windowSize)
-    {
-
     }
 
     void Scene::update()

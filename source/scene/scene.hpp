@@ -25,9 +25,9 @@ namespace QDUEngine
         std::string m_name;
         std::string m_source;
         std::map<std::string, std::pair<Vector2D, Vector2D>> m_transitions{};
+        void addMainObject(std::shared_ptr<GameObject>& gameObject);
         void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         void end();
-        void start(const char* name, const Vector2D& windowSize);
         void update();
     };
 }
