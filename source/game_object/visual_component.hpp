@@ -21,8 +21,6 @@ namespace QDUEngine
         Vector2D getPosition();
         void move(const Vector2D& by);
         void clear();
-        bool isMain();
-        void setMain(bool value);
         void setName(std::string& name);
         std::string& getName();
         std::string& getSource();
@@ -30,7 +28,6 @@ namespace QDUEngine
         std::pair<std::string, std::string> getJSON();
     private:
         Vector2D m_position;
-        bool m_main = false;
         std::string m_name;
         std::string m_source;
         Grafica::SceneGraphNodePtr m_graphNodePtr;

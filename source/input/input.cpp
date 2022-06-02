@@ -43,11 +43,11 @@ namespace QDUEngine
     {
         if (event == GLFW_CONNECTED)
         {
-            std::cout << "The joystick " << jid << " was connected" << std::endl;
+            std::cout << "[Engine] The joystick " << jid << " was connected" << std::endl;
         }
         else if (event == GLFW_DISCONNECTED)
         {
-            std::cout << "The joystick " << jid << " was disconnected" << std::endl;
+            std::cout << "[Engine] The joystick " << jid << " was disconnected" << std::endl;
         }
     }
 
@@ -127,7 +127,6 @@ namespace QDUEngine
         for (auto& action : m_cursorActions) {
             float value = m_cursorActions.at(action.first);
             if (std::abs(value) != 0) {
-                std::cout << action.first << " action activated." << std::endl;
                 for (auto& object : scene->getObjects()) {
                     auto component = object->getInputComponent();
                     if (component == nullptr) {
@@ -143,7 +142,6 @@ namespace QDUEngine
         for (auto& action : m_actions) {
             float value = m_actions.at(action.first);
             if (std::abs(value) != 0) {
-                std::cout << action.first << " action activated." << std::endl;
                 for (auto& object : scene->getObjects()) {
                     auto component = object->getInputComponent();
                     if (component == nullptr) {

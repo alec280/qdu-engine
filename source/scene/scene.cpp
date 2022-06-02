@@ -18,10 +18,6 @@ namespace QDUEngine
         if (m_mainObject != nullptr) {
             return;
         }
-        auto mainInput = gameObject->getInputComponent();
-        auto mainVisual = gameObject->getVisualComponent();
-        mainInput->setMain(true);
-        mainVisual->setMain(true);
         m_mainObject = gameObject;
         m_gameObjectsQueue.push_back(m_mainObject);
     }
