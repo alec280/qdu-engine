@@ -12,6 +12,7 @@ namespace QDUEngine
         GameObject(AttributeComponent* attribute, std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input);
         GameObject(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input);
         void end();
+        std::pair<std::basic_string<char>, std::basic_string<char>> getData();
         std::shared_ptr<VisualComponent> getVisualComponent();
         std::shared_ptr<InputComponent> getInputComponent();
     private:

@@ -36,5 +36,10 @@ namespace QDUEngine
         m_visual(visual),
         m_input(input)
     {}
+
+    std::pair<std::basic_string<char>, std::basic_string<char>> GameObject::getData()
+    {
+        return m_visual->getJSON();
+    }
 }
 
