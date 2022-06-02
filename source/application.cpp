@@ -97,17 +97,20 @@ namespace QDUEngine
 
     void Application::run(const char* name, const Vector2D& windowSize)
     {
-        log("START");
+        log("PRE-START");
         m_window.start(name, windowSize, &m_input);
         userStart();
+        log("START");
         while (!m_window.shouldClose()) {
             m_input.update(m_scene);
             m_window.update(m_scene);
             m_scene->update();
         }
+        log("PRE-END");
         m_scene->end();
         if (m_tempDir != nullptr) {
             std::filesystem::remove_all(Grafica::getPath(m_tempDir));
+            log("Temporary directory cleared.");
         }
         log("END");
     }
