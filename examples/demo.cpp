@@ -64,6 +64,7 @@ public:
     }
     void userStart() noexcept override
     {
+        auto s = getSceneFrom("examples/data/garden.json");
         loadSceneFrom("examples/data/garden.json");
         //m_scene->fromJSON("examples/data/garden.json");
         auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");

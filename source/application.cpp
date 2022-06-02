@@ -23,6 +23,37 @@ namespace QDUEngine
         m_scene->m_input.m_actions[std::string(action)] = 0;
     }
 
+    Scene Application::getSceneFrom(const char* path)
+    {
+        if (m_tempDir == nullptr) {
+            log("Temp directory not set. Will get an empty scene.");
+            return {};
+        }
+        log("Loading scene from file.");
+        auto newScene = Scene();
+        auto fullPath = Grafica::getPath(path);
+        auto sceneName = fullPath.filename().string();
+        auto fileName = "/" + sceneName;
+        auto tempPath = Grafica::getPath(m_tempDir + fileName);
+        newScene.m_name = sceneName;
+        newScene.m_source = path;
+        nlohmann::json jf;
+        if (std::filesystem::exists(tempPath)) {
+            jf = nlohmann::json::parse(std::ifstream(tempPath));
+        } else {
+            jf = nlohmann::json::parse(std::ifstream(fullPath));
+        }
+        auto map = jf["map"].get<std::map<std::string, std::string>>();
+        newScene.m_window.preload(map);
+        log("Scene loaded from file.");
+        return newScene;
+    }
+
+    void Application::log(const char* msg)
+    {
+        std::cout << "[Engine] " << msg << std::endl;
+    }
+
     void Application::preloadJSON(const char* path)
     {
         m_scene->preloadJSON(path);
@@ -49,6 +80,14 @@ namespace QDUEngine
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
         m_scene->m_input.m_globalInput = inputComponent;
+    }
+
+    void Application::setScene(Scene& scene)
+    {
+        auto tmpWindow = &m_scene->m_window;
+        auto tmpInput = &m_scene->m_input;
+        scene.m_window = *tmpWindow;
+        scene.m_input = *tmpInput;
     }
 
     void Application::setTempDir(const char* path)
@@ -95,10 +134,5 @@ namespace QDUEngine
         auto map = jf["map"].get<std::map<std::string, std::string>>();
         m_scene->m_window.fromMap(map);
         log("Scene loaded from file.");
-    }
-
-    void Application::log(const char* msg)
-    {
-        std::cout << "[Engine] " << msg << std::endl;
     }
 }

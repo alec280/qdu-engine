@@ -10,10 +10,12 @@ namespace QDUEngine
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
         void loadSceneFrom(const char* path);
+        Scene getSceneFrom(const char* path);
         void preloadJSON(const char* path);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
+        void setScene(Scene& scene);
         void setTempDir(const char* path);
     protected:
         //Application();
