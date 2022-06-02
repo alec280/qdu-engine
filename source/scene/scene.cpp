@@ -18,11 +18,6 @@ namespace QDUEngine
         m_window.addVisualComponent(gameObject.getVisualComponent());
     }
 
-    std::shared_ptr<InputComponent> Scene::getInputComponent()
-    {
-        return std::shared_ptr<InputComponent>(m_inputComponent);
-    }
-
     void Scene::start(const char* name, const Vector2D& windowSize)
     {
         m_window.start(name, windowSize, &m_input);

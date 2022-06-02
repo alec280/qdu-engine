@@ -52,7 +52,7 @@ public:
 
 class Dungeon : public Application {
 public:
-    explicit Dungeon() : Application() {}
+    explicit Dungeon(Scene* scene) : Application(scene) {}
     void addCompanion(Vector2D& pos)
     {
         auto greenCube = m_scene->getTexturedCube("examples/assets/companion.png", "companion");
@@ -155,7 +155,8 @@ public:
 
 int main()
 {
-    auto dungeon = Dungeon();
+    auto scene = Scene();
+    auto dungeon = Dungeon(&scene);
     auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
     dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
 

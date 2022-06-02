@@ -16,14 +16,13 @@ namespace QDUEngine
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setTempDir(const char* path);
     protected:
-        Application();
+        //Application();
         explicit Application(Scene* scene);
+        //Scene* m_nextScene{};
         Scene* m_scene{};
     private:
-        Input* m_input{};
         bool m_shouldClose = false;
         char* m_tempDir = nullptr;
-        Window* m_window{};
         static void log(const char* msg);
     };
 }
