@@ -53,11 +53,6 @@ namespace QDUEngine
         }
     }
 
-    void Input::start()
-    {
-
-    }
-
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)
     {
         for (int joystickId = GLFW_JOYSTICK_1; joystickId < GLFW_JOYSTICK_LAST; ++joystickId)
@@ -138,7 +133,9 @@ namespace QDUEngine
                 for (auto& component : m_inputComponents) {
                     component->onCursorAction(action.first.c_str(), m_cursorPos);
                 }
-                m_globalInput->onCursorAction(action.first.c_str(), m_cursorPos);
+                if (m_globalInput != nullptr) {
+                    m_globalInput->onCursorAction(action.first.c_str(), m_cursorPos);
+                }
             }
         }
         for (auto& action : m_actions) {
@@ -148,7 +145,9 @@ namespace QDUEngine
                 for (auto& component : m_inputComponents) {
                     component->onAction(action.first.c_str(), value);
                 }
-                m_globalInput->onAction(action.first.c_str(), value);
+                if (m_globalInput != nullptr) {
+                    m_globalInput->onAction(action.first.c_str(), value);
+                }
             }
         }
         while (!m_inputComponentsQueue.empty()) {

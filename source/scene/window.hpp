@@ -12,11 +12,12 @@
 namespace QDUEngine
 {
     class Window {
+        friend class Application;
         friend class Scene;
     public:
         bool shouldClose();
     private:
-        void start(const char* name, const Vector2D& window_size, Input& input);
+        void start(const char* name, const Vector2D& window_size, Input* input);
         void update();
         void end();
         void clear();

@@ -6,7 +6,7 @@ namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
 {
-    void Window::start(const char *name, const Vector2D& window_size, Input& input)
+    void Window::start(const char *name, const Vector2D& window_size, Input* input)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -24,10 +24,10 @@ namespace QDUEngine
         }
 
         glfwMakeContextCurrent(window);
-        glfwSetWindowUserPointer(window, &input);
+        glfwSetWindowUserPointer(window, input);
 
         for (int jid = 0; jid <= GLFW_JOYSTICK_LAST; jid++) {
-            glfwSetJoystickUserPointer(jid, &input);
+            glfwSetJoystickUserPointer(jid, input);
         }
 
         auto key_callback = [](GLFWwindow* w, int key, int, int action, int)

@@ -20,8 +20,10 @@ namespace QDUEngine
         explicit Application(Scene* scene);
         Scene* m_scene{};
     private:
+        Input* m_input{};
         bool m_shouldClose = false;
         char* m_tempDir = nullptr;
-        void swapScenes(Scene* from, Scene* to);
+        Window* m_window{};
+        static void log(const char* msg);
     };
 }

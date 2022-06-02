@@ -25,8 +25,7 @@ namespace QDUEngine
 
     void Scene::start(const char* name, const Vector2D& windowSize)
     {
-        m_window.start(name, windowSize, m_input);
-        m_input.start();
+        m_window.start(name, windowSize, &m_input);
     }
 
     void Scene::update(float delta)

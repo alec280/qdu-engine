@@ -64,7 +64,8 @@ public:
     }
     void userStart() noexcept override
     {
-        m_scene->fromJSON("examples/data/garden.json");
+        loadSceneFrom("examples/data/garden.json");
+        //m_scene->fromJSON("examples/data/garden.json");
         auto blueCube = m_scene->getTexturedCube("examples/assets/player.png", "player");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
         blueCube->move(QDUEngine::Vector(-2, -2));

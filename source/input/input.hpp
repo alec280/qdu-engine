@@ -33,12 +33,11 @@ namespace QDUEngine
     private:
         bool keyPressed(int key, int action);
         void cursorMoved(double xPos, double yPos);
-        void start();
         void update();
         void clear();
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
-        std::shared_ptr<InputComponent> m_globalInput;
+        std::shared_ptr<InputComponent> m_globalInput = nullptr;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponents;
         std::vector<std::shared_ptr<InputComponent>> m_inputComponentsQueue;
         std::map<CursorButton, const char*> m_cursorBindings{};
