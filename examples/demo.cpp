@@ -64,7 +64,7 @@ public:
     }
     void userStart() noexcept override
     {
-        //auto garden = getSceneFrom("examples/data/garden.json");
+        auto garden = getSceneFrom("examples/data/garden.json");
         //setScene(garden);
         loadScene("examples/data/garden.json");
         //m_scene->fromJSON("examples/data/garden.json");

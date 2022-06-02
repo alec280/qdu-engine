@@ -2,7 +2,6 @@
 
 namespace QDUEngine
 {
-    //Application::Application() : m_scene(new Scene()) {}
     Application::Application(Scene* scene) : m_scene(scene) {}
 
     void Application::bindCursorButton(Input::CursorButton cursorButton, const char* action)
@@ -60,6 +59,19 @@ namespace QDUEngine
         auto tempPath = Grafica::getPath(m_tempDir + fileName);
         newScene.m_name = sceneName;
         newScene.m_source = path;
+        nlohmann::json jf;
+        if (std::filesystem::exists(tempPath)) {
+            jf = nlohmann::json::parse(std::ifstream(tempPath));
+        } else {
+            jf = nlohmann::json::parse(std::ifstream(fullPath));
+        }
+        auto map = jf["map"].get<std::map<std::string, std::string>>();
+        for (auto& it : map) {
+            auto cube = m_window.getTexturedCube(path, it.second.c_str());
+            cube->move(Vector(it.first));
+            auto object = GameObject(nullptr, cube);
+            newScene.addGameObject(object);
+        }
         log("Scene loaded from file.");
         return newScene;
     }
@@ -167,43 +179,13 @@ namespace QDUEngine
         m_input.m_globalInput = inputComponent;
     }
 
-    void Application::setScene(Scene& scene)
+    void Application::setScene(Scene* scene)
     {
-        /*
         log("Ending previous scene.");
-        m_scene->clear();
-        auto tmpWindow = &m_scene->m_window;
-        auto tmpInput = &m_scene->m_input;
-        scene.m_window = *tmpWindow;
-        scene.m_input = *tmpInput;
-        auto tmpScene = m_scene;
-        m_scene = &scene;
+        saveScene();
+        m_scene->end();
+        m_scene = scene;
         log("Previous scene ended.");
-        if (m_tempDir == nullptr) {
-            log("Temp directory not set. Ignoring scene data.");
-            return;
-        }
-        if (scene.m_source.empty()) {
-            log("Empty source for scene.");
-            return;
-        }
-        nlohmann::json jf;
-        auto fullPath = Grafica::getPath(scene.m_source);
-        if (!scene.m_name.empty()) {
-            auto fileName = "/" + scene.m_name;
-            auto tempPath = Grafica::getPath(m_tempDir + fileName);
-            if (std::filesystem::exists(tempPath)) {
-                log("Updated with saved data.");
-                jf = nlohmann::json::parse(std::ifstream(tempPath));
-                auto map = jf["map"].get<std::map<std::string, std::string>>();
-                scene.m_window.fromMap(map);
-                return;
-            }
-        }
-        jf = nlohmann::json::parse(std::ifstream(fullPath));
-        auto map = jf["map"].get<std::map<std::string, std::string>>();
-        scene.m_window.fromMap(map);
-        */
     }
 
     void Application::setTempDir(const char* path)

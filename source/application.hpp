@@ -17,15 +17,13 @@ namespace QDUEngine
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
-        void setScene(Scene& scene);
+        void setScene(Scene* scene);
         void setTempDir(const char* path);
     protected:
-        //Application();
         explicit Application(Scene* scene);
         Scene* m_scene{};
     private:
         Input m_input{};
-        bool m_shouldClose = false;
         char* m_tempDir = nullptr;
         Window m_window{};
         void doTransition();
