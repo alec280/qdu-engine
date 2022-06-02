@@ -46,12 +46,16 @@ namespace QDUEngine
         }
         m_gameObjectsQueue.clear();
         m_gameObjects.clear();
+        m_mainObject = nullptr;
     }
 
     SceneData Scene::getData() {
         std::map<std::string, std::string> map{};
         std::map<std::string, std::string> objects{};
         for (auto& object : m_gameObjects) {
+            if (object == m_mainObject) {
+                continue;
+            }
             auto jsonData = object->getData();
             map[object->getVisualComponent()->getPosition().toString()] = jsonData.first;
             objects[jsonData.first] = jsonData.second;
