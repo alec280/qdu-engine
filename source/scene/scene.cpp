@@ -28,9 +28,13 @@ namespace QDUEngine
 
     void Scene::end()
     {
+        for (auto& object : m_gameObjectsQueue) {
+            object->end();
+        }
         for (auto& object : m_gameObjects) {
             object->end();
         }
+        m_gameObjectsQueue.clear();
         m_gameObjects.clear();
     }
 

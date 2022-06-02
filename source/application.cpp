@@ -53,7 +53,7 @@ namespace QDUEngine
 
     void Application::loadScene(const char* path)
     {
-        saveScene();
+        //saveScene();
         m_scene->end();
         auto fullPath = Grafica::getPath(path);
         m_scene->m_name = fullPath.filename().string();
@@ -122,10 +122,11 @@ namespace QDUEngine
 
     void Application::saveScene()
     {
-        if (m_tempDir == nullptr) {
+        if (m_scene->m_name.empty()) {
             return;
         }
-        if (m_scene->m_name.empty()) {
+        if (m_tempDir == nullptr) {
+            log("Can't save current scene without temporary directory.");
             return;
         }
         auto data = m_scene->getData();

@@ -130,6 +130,9 @@ namespace QDUEngine
                 std::cout << action.first << " action activated." << std::endl;
                 for (auto& object : scene->getObjects()) {
                     auto component = object->getInputComponent();
+                    if (component == nullptr) {
+                        continue;
+                    }
                     component->onCursorAction(action.first.c_str(), m_cursorPos);
                 }
                 if (m_globalInput != nullptr) {
@@ -143,6 +146,9 @@ namespace QDUEngine
                 std::cout << action.first << " action activated." << std::endl;
                 for (auto& object : scene->getObjects()) {
                     auto component = object->getInputComponent();
+                    if (component == nullptr) {
+                        continue;
+                    }
                     component->onAction(action.first.c_str(), value);
                 }
                 if (m_globalInput != nullptr) {

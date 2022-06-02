@@ -66,7 +66,7 @@ public:
     {
         //auto garden = getSceneFrom("examples/data/garden.json");
         //setScene(garden);
-        //loadScene("examples/data/garden.json");
+        loadScene("examples/data/garden.json");
         //m_scene->fromJSON("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png", "player");
         auto playerInput = std::make_shared<PlayerInput>(blueCube);
