@@ -1,56 +1,356 @@
 {
-  "objects": {
-    "box": "examples/assets/box.png",
-    "wall": "examples/assets/wall.png"
-  },
   "transitions": {
-    "(0,4)": {
-      "target": "examples/data/garden.json",
-      "at": "(0,-7)"
+    "examples/data/garden.json": {
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": -7
     }
   },
-  "map": {
-    "(-4,-8)": "wall",
-    "(-3,-8)": "wall",
-    "(-2,-8)": "wall",
-    "(-1,-8)": "wall",
-    "(0,-8)": "wall",
-    "(4,-8)": "wall",
-    "(3,-8)": "wall",
-    "(2,-8)": "wall",
-    "(1,-8)": "wall",
-    "(-4,4)": "wall",
-    "(-3,4)": "wall",
-    "(-2,4)": "wall",
-    "(-1,4)": "wall",
-    "(4,4)": "wall",
-    "(3,4)": "wall",
-    "(2,4)": "wall",
-    "(1,4)": "wall",
-    "(-4,-7)": "wall",
-    "(-4,-6)": "wall",
-    "(-4,-5)": "wall",
-    "(-4,-4)": "wall",
-    "(-4,-3)": "wall",
-    "(-4,-2)": "wall",
-    "(-4,-1)": "wall",
-    "(-4,0)": "wall",
-    "(-4,3)": "wall",
-    "(-4,2)": "wall",
-    "(-4,1)": "wall",
-    "(4,-7)": "wall",
-    "(4,-6)": "wall",
-    "(4,-5)": "wall",
-    "(4,-4)": "wall",
-    "(4,-3)": "wall",
-    "(4,-2)": "wall",
-    "(4,-1)": "wall",
-    "(4,0)": "wall",
-    "(4,3)": "wall",
-    "(4,2)": "wall",
-    "(4,1)": "wall",
-    "(-3,-7)": "box",
-    "(2,-4)": "box",
-    "(-1,2)": "box"
+  "objects": {
+    "0": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -8
+      }
+    },
+    "1": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -3,
+        "posY": -8
+      }
+    },
+    "2": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -8
+      }
+    },
+    "3": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": -8
+      }
+    },
+    "4": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 1,
+        "posY": -8
+      }
+    },
+    "5": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 2,
+        "posY": -8
+      }
+    },
+    "6": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 3,
+        "posY": -8
+      }
+    },
+    "7": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -8
+      }
+    },
+    "8": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -7
+      }
+    },
+    "9": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -6
+      }
+    },
+    "10": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -5
+      }
+    },
+    "11": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -4
+      }
+    },
+    "12": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -3
+      }
+    },
+    "13": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -2
+      }
+    },
+    "14": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -1
+      }
+    },
+    "15": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 0
+      }
+    },
+    "16": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 1
+      }
+    },
+    "17": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 2
+      }
+    },
+    "18": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 3
+      }
+    },
+    "19": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 4
+      }
+    },
+    "20": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 3,
+        "posY": 4
+      }
+    },
+    "21": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 2,
+        "posY": 4
+      }
+    },
+    "22": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 1,
+        "posY": 4
+      }
+    },
+    "23": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 0,
+        "posY": -8
+      }
+    },
+    "24": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": 4
+      }
+    },
+    "25": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 4
+      }
+    },
+    "26": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -3,
+        "posY": 4
+      }
+    },
+    "27": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": 4
+      }
+    },
+    "28": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 3
+      }
+    },
+    "29": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 2
+      }
+    },
+    "30": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 1
+      }
+    },
+    "31": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 0
+      }
+    },
+    "32": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -1
+      }
+    },
+    "33": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -2
+      }
+    },
+    "34": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -3
+      }
+    },
+    "35": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -4
+      }
+    },
+    "36": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    "37": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    "38": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -6
+      }
+    },
+    "39": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -7
+      }
+    },
+    "40": {
+      "visual": {
+        "name": "Box",
+        "source": "examples/assets/box.png",
+        "posX": -3,
+        "posY": -7
+      }
+    },
+    "41": {
+      "visual": {
+        "name": "Box",
+        "source": "examples/assets/box.png",
+        "posX": 2,
+        "posY": -4
+      }
+    },
+    "42": {
+      "visual": {
+        "name": "Box",
+        "source": "examples/assets/box.png",
+        "posX": -2,
+        "posY": 2
+      }
+    }
   }
 }

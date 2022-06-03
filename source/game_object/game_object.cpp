@@ -9,19 +9,15 @@ namespace QDUEngine
             m_attribute(attribute),
             m_visual(visual),
             m_input(nullptr),
-            m_id(m_hash("GameObject" + std::to_string(m_current_id++)))
-    {
-        std::cout << *this << std::endl;
-    }
+            m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
+    {}
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             m_attribute(attribute),
             m_visual(visual),
             m_input(input),
-            m_id(m_hash("GameObject" + std::to_string(m_current_id++)))
-    {
-        std::cout << *this << std::endl;
-    }
+            m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
+    {}
 
     GameObject::GameObject(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             GameObject(nullptr, visual, input)
@@ -35,11 +31,17 @@ namespace QDUEngine
         m_visual->move(m_visual->getPosition() * -1);
     }
 
-    std::pair<std::string, std::string> GameObject::getData()
+    nlohmann::json GameObject::getData()
     {
-        return m_visual->getData();
+        return {
+            {"visual", m_visual->getData()}
+        };
     }
 
+    const std::string GameObject::getId()
+    {
+        return m_id;
+    }
 
     std::shared_ptr<InputComponent> GameObject::getInputComponent()
     {

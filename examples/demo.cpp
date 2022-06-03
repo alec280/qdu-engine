@@ -140,7 +140,7 @@ public:
             }
             if (pos.x > 400) {
                 m_application->addCompanion(m_spawnPos);
-                m_spawnPos += QDUEngine::Vector(1, 1);
+                m_spawnPos += Vector(1, 1);
             }
             m_combo[0] = false;
             m_combo[1] = false;
@@ -169,8 +169,6 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
     dungeon.bindJoystick("RS_Y", "down");
-    dungeon.preloadJSON("examples/data/garden.json");
-    dungeon.preloadJSON("examples/data/warehouse.json");
     dungeon.setTempDir("examples/tmp");
     dungeon.run("Dungeon game", 600, 600);
 }

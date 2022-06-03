@@ -5,18 +5,12 @@
 
 namespace QDUEngine
 {
-    struct SceneData {
-        std::map<std::string, std::string> map;
-        std::map<std::string, std::string> objects;
-        std::map<std::string, std::map<std::string, std::string>> transitions;
-    };
-
     class Scene {
         friend class Application;
     public:
         void addGameObject(GameObject& gameObject);
         void addMainObject(GameObject& gameObject);
-        SceneData getData();
+        nlohmann::json getData();
         std::vector<std::shared_ptr<GameObject>> getObjects();
     private:
         std::vector<std::shared_ptr<GameObject>> m_gameObjects{};

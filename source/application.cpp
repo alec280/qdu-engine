@@ -28,19 +28,19 @@ namespace QDUEngine
         if (main == nullptr) {
             return;
         }
-        std::string go;
-        Vector2D at{0, 0};
+        std::string toScene;
+        Vector2D toPos{};
         auto pos = main->getVisualComponent()->getPosition();
         for (auto& transition : m_scene.m_transitions) {
             if (pos == transition.second.first) {
-                go = transition.first;
-                at = transition.second.second;
+                toScene = transition.first;
+                toPos = transition.second.second;
                 break;
             }
         }
-        if (!go.empty()) {
-            loadSceneFrom(go.c_str());
-            main->getVisualComponent()->move(at);
+        if (!toScene.empty()) {
+            loadSceneFrom(toScene.c_str());
+            main->getVisualComponent()->move(toPos);
             m_scene.addMainObject(main);
         }
     }
@@ -59,22 +59,28 @@ namespace QDUEngine
         auto tempPath = Grafica::getPath(m_tempDir + fileName);
         newScene.m_name = sceneName;
         newScene.m_source = path;
-        nlohmann::json jf;
+        nlohmann::json data;
         if (std::filesystem::exists(tempPath)) {
-            jf = nlohmann::json::parse(std::ifstream(tempPath));
+            data = nlohmann::json::parse(std::ifstream(tempPath));
         } else {
-            jf = nlohmann::json::parse(std::ifstream(fullPath));
+            data = nlohmann::json::parse(std::ifstream(fullPath));
         }
-        auto map = jf["map"].get<std::map<std::string, std::string>>();
-        for (auto& it : map) {
-            auto cube = m_window.getTexturedCube(path, it.second.c_str());
-            cube->move(Vector(it.first));
+        auto objects = data["objects"];
+        for (auto it = objects.begin(); it != objects.end(); ++it) {
+            auto objectData = it.value();
+            auto visual = objectData["visual"];
+            auto cube = m_window.getTexturedCube(visual["source"].get<std::string>().c_str(), visual["name"].get<std::string>().c_str());
+            cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
             auto object = GameObject(nullptr, cube);
             newScene.addGameObject(object);
         }
-        auto transitions = jf["transitions"].get<std::map<std::string, std::map<std::string, std::string>>>();
-        for (auto& it : transitions) {
-            newScene.addTransition(it.second["target"], Vector(it.first), Vector(it.second["at"]));
+        auto transitions = data["transitions"];
+        for (auto it = transitions.begin(); it != transitions.end(); ++it) {
+            auto toSceneName = it.key();
+            auto transitionData = it.value();
+            auto fromVector = Vector(transitionData["fromX"].get<float>(), transitionData["fromY"].get<float>());
+            auto toVector = Vector(transitionData["toX"].get<float>(), transitionData["toY"].get<float>());
+            newScene.addTransition(toSceneName, fromVector, toVector);
         }
         log("Scene loaded from file.");
         return newScene;
@@ -99,13 +105,6 @@ namespace QDUEngine
     void Application::log(const char* msg)
     {
         std::cout << "[Engine] " << msg << std::endl;
-    }
-
-    void Application::preloadJSON(const char* path)
-    {
-        nlohmann::json jf = nlohmann::json::parse(std::ifstream(Grafica::getPath(path)));
-        auto objects = jf["objects"].get<std::map<std::string, std::string>>();
-        m_window.preload(objects);
     }
 
     void Application::run(const char* name, const Vector2D& windowSize)
@@ -144,16 +143,12 @@ namespace QDUEngine
             return;
         }
         auto data = m_scene.getData();
-        nlohmann::json jf{};
-        jf["objects"] = data.objects;
-        jf["map"] = data.map;
-        jf["transitions"] = data.transitions;
         std::string fileName = "/" + m_scene.m_name;
         std::ofstream file;
         std::filesystem::create_directories(Grafica::getPath(m_tempDir));
         auto path = Grafica::getPath(m_tempDir + fileName);
         file.open(path);
-        file << jf;
+        file << data;
         file.close();
     }
 

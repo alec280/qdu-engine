@@ -1,53 +1,332 @@
 {
-  "objects": {
-    "bush": "examples/assets/bush.png",
-    "wall": "examples/assets/wall.png"
-  },
   "transitions": {
-    "(0,-8)": {
-      "target": "examples/data/warehouse.json",
-      "at": "(0,3)"
+    "examples/data/warehouse.json": {
+      "fromX": 0,
+      "fromY": -8,
+      "toX": 0,
+      "toY": 3
     }
   },
-  "map": {
-    "(-4,-8)": "wall",
-    "(-3,-8)": "wall",
-    "(-2,-8)": "wall",
-    "(-1,-8)": "wall",
-    "(4,-8)": "wall",
-    "(3,-8)": "wall",
-    "(2,-8)": "wall",
-    "(1,-8)": "wall",
-    "(-3,3)": "bush",
-    "(-3,4)": "bush",
-    "(-2,4)": "bush",
-    "(-1,4)": "bush",
-    "(0,4)": "bush",
-    "(3,3)": "bush",
-    "(3,4)": "bush",
-    "(2,4)": "bush",
-    "(1,4)": "bush",
-    "(-4,-7)": "bush",
-    "(-4,-6)": "bush",
-    "(-4,-5)": "bush",
-    "(-4,-4)": "bush",
-    "(-4,-3)": "bush",
-    "(-4,-2)": "bush",
-    "(-4,-1)": "bush",
-    "(-4,0)": "bush",
-    "(-4,3)": "bush",
-    "(-4,2)": "bush",
-    "(-4,1)": "bush",
-    "(4,-7)": "bush",
-    "(4,-6)": "bush",
-    "(4,-5)": "bush",
-    "(4,-4)": "bush",
-    "(4,-3)": "bush",
-    "(4,-2)": "bush",
-    "(4,-1)": "bush",
-    "(4,0)": "bush",
-    "(4,3)": "bush",
-    "(4,2)": "bush",
-    "(4,1)": "bush"
+  "objects": {
+    "0": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -8
+      }
+    },
+    "1": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -3,
+        "posY": -8
+      }
+    },
+    "2": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -8
+      }
+    },
+    "3": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": -8
+      }
+    },
+    "4": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 1,
+        "posY": -8
+      }
+    },
+    "5": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 2,
+        "posY": -8
+      }
+    },
+    "6": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 3,
+        "posY": -8
+      }
+    },
+    "7": {
+      "visual": {
+        "name": "Wall",
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -8
+      }
+    },
+    "8": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -7
+      }
+    },
+    "9": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -6
+      }
+    },
+    "10": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -5
+      }
+    },
+    "11": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -4
+      }
+    },
+    "12": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -3
+      }
+    },
+    "13": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -2
+      }
+    },
+    "14": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -1
+      }
+    },
+    "15": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 0
+      }
+    },
+    "16": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 1
+      }
+    },
+    "17": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 2
+      }
+    },
+    "18": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 3
+      }
+    },
+    "19": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 3,
+        "posY": 3
+      }
+    },
+    "20": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 3,
+        "posY": 4
+      }
+    },
+    "21": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 2,
+        "posY": 4
+      }
+    },
+    "22": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 1,
+        "posY": 4
+      }
+    },
+    "23": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": 0,
+        "posY": 4
+      }
+    },
+    "24": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -1,
+        "posY": 4
+      }
+    },
+    "25": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -3,
+        "posY": 3
+      }
+    },
+    "26": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -3,
+        "posY": 4
+      }
+    },
+    "27": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -2,
+        "posY": 4
+      }
+    },
+    "28": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 3
+      }
+    },
+    "29": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 2
+      }
+    },
+    "30": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 1
+      }
+    },
+    "31": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 0
+      }
+    },
+    "32": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -1
+      }
+    },
+    "33": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -2
+      }
+    },
+    "34": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -3
+      }
+    },
+    "35": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -4
+      }
+    },
+    "36": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    "37": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    "38": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -6
+      }
+    },
+    "39": {
+      "visual": {
+        "name": "Bush",
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -7
+      }
+    }
   }
 }

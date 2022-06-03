@@ -45,25 +45,24 @@ namespace QDUEngine
         m_mainObject = nullptr;
     }
 
-    SceneData Scene::getData() {
-        std::map<std::string, std::string> map{};
-        std::map<std::string, std::string> objects{};
+    nlohmann::json Scene::getData() {
+        nlohmann::json data{{"transitions", {}}, {"objects", {}}};
         for (auto& object : m_gameObjects) {
             if (object == m_mainObject) {
                 continue;
             }
-            auto jsonData = object->getData();
-            map[object->getVisualComponent()->getPosition().toString()] = jsonData.first;
-            objects[jsonData.first] = jsonData.second;
+            data["objects"][object->getId()] = object->getData();
         }
-        std::map<std::string, std::map<std::string, std::string>> transitions{};
         for (auto& transition : m_transitions) {
-            std::map<std::string, std::string> temp{};
-            temp["target"] = transition.first;
-            temp["at"] = transition.second.second.toString();
-            transitions[transition.second.first.toString()] = temp;
+            auto vectors = transition.second;
+            data["transitions"][transition.first] = {
+                    {"fromX", vectors.first.x},
+                    {"fromY", vectors.first.y},
+                    {"toX", vectors.second.x},
+                    {"toY", vectors.second.y}
+            };
         }
-        return {map, objects, transitions};
+        return data;
     }
 
     void Scene::update()

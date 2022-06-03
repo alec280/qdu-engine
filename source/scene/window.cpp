@@ -87,10 +87,6 @@ namespace QDUEngine
 
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
-
-        for (auto& it : m_loadedSources) {
-            m_loadedComponents[it.first] = getCubePtr(it.second.c_str());
-        }
     }
 
     void Window::update(Scene* scene)
@@ -124,13 +120,13 @@ namespace QDUEngine
         std::string source = texturePath;
         std::string stringName = name;
         for (auto& element : m_loadedComponents) {
-            if (element.first == stringName) {
+            if (element.first == texturePath) {
                 auto cubePtr = element.second;
                 return makeVisualPtr(cubePtr, stringName, source);
             }
         }
         auto cubePtr = getCubePtr(texturePath);
-        m_loadedComponents[stringName] = cubePtr;
+        m_loadedComponents[texturePath] = cubePtr;
         return makeVisualPtr(cubePtr, stringName, source);
     }
 
@@ -153,13 +149,6 @@ namespace QDUEngine
     bool Window::shouldClose()
     {
         return glfwWindowShouldClose(m_window);
-    }
-
-    void Window::preload(std::map<std::string, std::string>& objects)
-    {
-        for (auto& it : objects) {
-            m_loadedSources[it.first] = it.second;
-        }
     }
 
     std::shared_ptr<VisualComponent> Window::makeVisualPtr(
