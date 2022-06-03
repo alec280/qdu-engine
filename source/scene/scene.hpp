@@ -22,6 +22,7 @@ namespace QDUEngine
         void addMainObject(std::shared_ptr<GameObject>& gameObject);
         void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         void end();
+        std::shared_ptr<GameObject> getById(std::string& objectId);
         void update();
     };
 }

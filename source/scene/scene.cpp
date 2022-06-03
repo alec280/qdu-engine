@@ -65,6 +65,16 @@ namespace QDUEngine
         return data;
     }
 
+    std::shared_ptr<GameObject> Scene::getById(std::string& objectId)
+    {
+        for (auto& object : m_gameObjects) {
+            if (object->getId() == objectId) {
+                return object;
+            }
+        }
+        return nullptr;
+    }
+
     void Scene::update()
     {
         while (!m_gameObjectsQueue.empty()) {

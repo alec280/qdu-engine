@@ -1,5 +1,7 @@
 #pragma once
 #include "scene/window.hpp"
+#include "scene/scene.hpp"
+
 
 namespace QDUEngine
 {

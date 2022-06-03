@@ -138,6 +138,18 @@ namespace QDUEngine
             return;
         }
         auto data = m_scene.getData();
+        auto objects = data["objects"];
+        for (auto it = objects.begin(); it != objects.end(); ++it) {
+            auto objectData = *it;
+            auto objectId = objectData["id"].get<std::string>();
+            auto object = m_scene.getById(objectId);
+            if (object != nullptr) {
+                auto input = object->getInputComponent();
+                if (input != nullptr) {
+                    m_input.m_loadedComponents[objectId] = input;
+                }
+            }
+        }
         std::string fileName = "/" + m_scene.m_name;
         std::ofstream file;
         std::filesystem::create_directories(Grafica::getPath(m_tempDir));

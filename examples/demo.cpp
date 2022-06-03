@@ -21,8 +21,6 @@ public:
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
-private:
-    std::shared_ptr<VisualComponent> m_visual;
 };
 
 class EnemyInput : public InputComponent {
@@ -42,8 +40,6 @@ public:
             }
         }
     }
-private:
-    std::shared_ptr<VisualComponent> m_visual;
 };
 
 class Static : public GameObject {

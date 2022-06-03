@@ -13,7 +13,7 @@ namespace QDUEngine
         float get(char* key);
         char* getName();
     protected:
-        char* m_name;
+        char* m_name{};
         Dictionary<char*, float> m_attr{};
     };
 }
