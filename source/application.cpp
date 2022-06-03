@@ -123,9 +123,9 @@ namespace QDUEngine
         log("END");
     }
 
-    void Application::run(const char* name, float x, float y)
+    void Application::run(const char* name, float windowSizeX, float windowSizeY)
     {
-        run(name, Vector(x, y));
+        run(name, Vector(windowSizeX, windowSizeY));
     }
 
     void Application::saveScene()

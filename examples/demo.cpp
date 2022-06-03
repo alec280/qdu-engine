@@ -18,6 +18,7 @@ public:
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
+private:
     std::shared_ptr<VisualComponent> m_visual;
 };
 
@@ -35,6 +36,7 @@ public:
             }
         }
     }
+private:
     std::shared_ptr<VisualComponent> m_visual;
 };
 
@@ -81,7 +83,7 @@ public:
 class GlobalInput : public InputComponent {
 public:
     explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
-    void onAction(const char* action, float value) override
+    void onAction(const char* action, float /*value*/) override
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";
@@ -146,6 +148,7 @@ public:
             m_combo[1] = false;
         }
     }
+private:
     bool m_combo[2]{false, false};
     Dungeon* m_application;
     Vector2D m_spawnPos;
