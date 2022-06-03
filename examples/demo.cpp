@@ -18,6 +18,10 @@ public:
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onLoad(GameObject& gameObject) override
+    {
+        m_visual = gameObject.getVisualComponent();
+    }
 private:
     std::shared_ptr<VisualComponent> m_visual;
 };
@@ -35,6 +39,10 @@ public:
                 m_visual->move(Vector(1, 0));
             }
         }
+    }
+    void onLoad(GameObject& gameObject) override
+    {
+        m_visual = gameObject.getVisualComponent();
     }
 private:
     std::shared_ptr<VisualComponent> m_visual;
@@ -148,6 +156,7 @@ public:
             m_combo[1] = false;
         }
     }
+    void onLoad(GameObject& gameObject) override {}
 private:
     bool m_combo[2]{false, false};
     Dungeon* m_application;

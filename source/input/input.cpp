@@ -161,7 +161,7 @@ namespace QDUEngine
         if (std::strcmp(key, string.c_str()) == 0) {
             float value = joystick.axes[ax];
             if (std::abs(value) > 0.2) {
-                m_actions.at(action) = value * 0.01f;
+                m_actions.at(action) = value * 0.01F;
             }
             return true;
         }

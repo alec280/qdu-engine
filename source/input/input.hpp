@@ -10,16 +10,8 @@ namespace QDUEngine
         std::vector<bool> buttons;
         std::vector<float> axes;
         Joystick(std::size_t const numberOfButtons, std::size_t const numberOfAxes):
-                buttons(numberOfButtons, false), axes(numberOfAxes, 0.0f)
+                buttons(numberOfButtons, false), axes(numberOfAxes, 0.0F)
         {}
-    };
-
-    struct cmp_str
-    {
-        bool operator()(char const *a, char const *b) const
-        {
-            return std::strcmp(a, b) < 0;
-        }
     };
 
     class Input {
@@ -41,8 +33,8 @@ namespace QDUEngine
         std::map<std::string, float> m_cursorActions{};
         std::map<std::size_t, Joystick> m_joysticks{};
         void joystickCallback(int jid, int event);
-        void pollJoysticks(std::map<std::size_t, Joystick> &joysticks);
+        void pollJoysticks(std::map<std::size_t, Joystick>& joysticks);
         void cursorPressed(int button, int action);
-        bool checkJoystick(const char *key, std::string &string, const char *action, Joystick &joystick, int ax);
+        bool checkJoystick(const char* key, std::string& string, const char* action, Joystick& joystick, int ax);
     };
 }
