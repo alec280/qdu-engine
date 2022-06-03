@@ -2,17 +2,26 @@
 
 namespace QDUEngine
 {
+    static int m_current_id;
+    static std::hash<std::string> m_hash;
+
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual) :
             m_attribute(attribute),
             m_visual(visual),
-            m_input(nullptr)
-    {}
+            m_input(nullptr),
+            m_id(m_hash("GameObject" + std::to_string(m_current_id++)))
+    {
+        std::cout << *this << std::endl;
+    }
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             m_attribute(attribute),
             m_visual(visual),
-            m_input(input)
-    {}
+            m_input(input),
+            m_id(m_hash("GameObject" + std::to_string(m_current_id++)))
+    {
+        std::cout << *this << std::endl;
+    }
 
     GameObject::GameObject(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             GameObject(nullptr, visual, input)
@@ -40,6 +49,12 @@ namespace QDUEngine
     std::shared_ptr<VisualComponent> GameObject::getVisualComponent()
     {
         return m_visual;
+    }
+
+    std::ostream &operator<<(std::ostream& ostream, const GameObject& gameObject)
+    {
+        ostream << "[GameObject:" << gameObject.m_id << "]";
+        return ostream;
     }
 }
 
