@@ -17,7 +17,10 @@ namespace QDUEngine
             m_visual(visual),
             m_input(input),
             m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
-    {}
+    {
+        auto ptr = std::make_shared<GameObject>(*this);
+        m_input->setGameObject(ptr);
+    }
 
     GameObject::GameObject(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             GameObject(nullptr, visual, input)

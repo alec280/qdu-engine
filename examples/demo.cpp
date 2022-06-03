@@ -4,23 +4,26 @@ using namespace QDUEngine;
 
 class PlayerInput : public InputComponent {
 public:
-    explicit PlayerInput(std::shared_ptr<VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override
     {
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr) {
+            return;
+        }
         if (compare(action, "left")) {
-            m_visual->move(Vector(-value, 0));
+            visual->move(Vector(-value, 0));
         } else if (compare(action, "right")) {
-            m_visual->move(Vector(value, 0));
+            visual->move(Vector(value, 0));
         } else if (compare(action, "down")) {
-            m_visual->move(Vector(0, value));
+            visual->move(Vector(0, value));
         } else if (compare(action, "up")) {
-            m_visual->move(Vector(0, -value));
+            visual->move(Vector(0, -value));
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
-    void onLoad(GameObject& gameObject) override
+    void onLoad(std::shared_ptr<GameObject>& gameObject) override
     {
-        m_visual = gameObject.getVisualComponent();
+        m_visual = gameObject->getVisualComponent();
     }
 private:
     std::shared_ptr<VisualComponent> m_visual;
@@ -28,21 +31,24 @@ private:
 
 class EnemyInput : public InputComponent {
 public:
-    explicit EnemyInput(std::shared_ptr<VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override
     {
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr) {
+            return;
+        }
         if (compare(action, "leftClick")) {
             if (pos.x < 300) {
-                m_visual->move(Vector(-1, 0));
+                visual->move(Vector(-1, 0));
             } else {
-                m_visual->move(Vector(1, 0));
+                visual->move(Vector(1, 0));
             }
         }
     }
-    void onLoad(GameObject& gameObject) override
+    void onLoad(std::shared_ptr<GameObject>& gameObject) override
     {
-        m_visual = gameObject.getVisualComponent();
+        m_visual = gameObject->getVisualComponent();
     }
 private:
     std::shared_ptr<VisualComponent> m_visual;
@@ -65,7 +71,7 @@ public:
     void addCompanion(Vector2D& pos)
     {
         auto greenCube = getTexturedCube("examples/assets/companion.png");
-        auto enemyInput = std::make_shared<EnemyInput>(greenCube);
+        auto enemyInput = std::make_shared<EnemyInput>();
         greenCube->move(pos);
         auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(companion);
@@ -75,13 +81,13 @@ public:
     {
         loadSceneFrom("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png");
-        auto playerInput = std::make_shared<PlayerInput>(blueCube);
+        auto playerInput = std::make_shared<PlayerInput>();
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
         m_scene.addMainObject(player);
 
         auto redCube = getTexturedCube("examples/assets/enemy.png");
-        auto enemyInput = std::make_shared<EnemyInput>(redCube);
+        auto enemyInput = std::make_shared<EnemyInput>();
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(enemy);
@@ -156,7 +162,7 @@ public:
             m_combo[1] = false;
         }
     }
-    void onLoad(GameObject& gameObject) override {}
+    void onLoad(std::shared_ptr<GameObject>& gameObject) override {}
 private:
     bool m_combo[2]{false, false};
     Dungeon* m_application;
