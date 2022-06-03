@@ -18,6 +18,7 @@ namespace QDUEngine
         const std::string getId();
         std::shared_ptr<InputComponent> getInputComponent();
         std::shared_ptr<VisualComponent> getVisualComponent();
+        void setInputComponent(std::shared_ptr<InputComponent>& inputComponent);
         friend std::ostream& operator<<(std::ostream& ostream, const GameObject& gameObject);
     private:
         AttributeComponent* m_attribute;

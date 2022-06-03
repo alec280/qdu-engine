@@ -62,5 +62,10 @@ namespace QDUEngine
         ostream << "[GameObject:" << gameObject.m_id << "]";
         return ostream;
     }
+
+    void GameObject::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)
+    {
+        m_input = inputComponent;
+    }
 }
 

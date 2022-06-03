@@ -79,11 +79,12 @@ namespace QDUEngine
                 }
             }
             auto object = GameObject(nullptr, cube);
+            auto objectPtr = std::make_shared<GameObject>(object);
             if (input != nullptr) {
-                auto objectPtr = std::make_shared<GameObject>(object);
                 input->setGameObject(objectPtr);
             }
-            newScene.addGameObject(object);
+            objectPtr->setInputComponent(input);
+            newScene.m_gameObjectsQueue.push_back(objectPtr);
         }
         auto transitions = data["transitions"];
         for (auto it = transitions.begin(); it != transitions.end(); ++it) {
