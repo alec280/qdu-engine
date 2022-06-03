@@ -5,7 +5,6 @@
 
 namespace QDUEngine
 {
-    class GameObject;
     class InputComponent {
     public:
         virtual void onAction(const char* action, float value) = 0;

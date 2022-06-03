@@ -10,7 +10,6 @@
 namespace QDUEngine
 {
     class Map;
-    class GameObject;
     class VisualComponent {
     public:
         VisualComponent();

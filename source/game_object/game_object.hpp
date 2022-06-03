@@ -17,7 +17,7 @@ namespace QDUEngine
         std::shared_ptr<VisualComponent> getVisualComponent();
     private:
         AttributeComponent* m_attribute;
-        size_t m_id;
+        std::hash<std::string> m_id;
         std::shared_ptr<InputComponent> m_input;
         std::shared_ptr<VisualComponent> m_visual;
     };
