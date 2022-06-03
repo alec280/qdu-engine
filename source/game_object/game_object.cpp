@@ -34,6 +34,7 @@ namespace QDUEngine
     nlohmann::json GameObject::getData()
     {
         return {
+            {"id", getId()},
             {"visual", m_visual->getData()}
         };
     }

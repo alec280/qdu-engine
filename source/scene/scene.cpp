@@ -46,12 +46,12 @@ namespace QDUEngine
     }
 
     nlohmann::json Scene::getData() {
-        nlohmann::json data{{"transitions", {}}, {"objects", {}}};
+        nlohmann::json data{{"transitions", {}}, {"objects", nlohmann::json::array()}};
         for (auto& object : m_gameObjects) {
             if (object == m_mainObject) {
                 continue;
             }
-            data["objects"][object->getId()] = object->getData();
+            data["objects"].push_back(object->getData());
         }
         for (auto& transition : m_transitions) {
             auto vectors = transition.second;
