@@ -9,6 +9,7 @@ namespace QDUEngine
 {
     class Map;
     class GameObject {
+        friend class Application;
     public:
         GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual);
         GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input);

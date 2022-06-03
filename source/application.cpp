@@ -72,13 +72,17 @@ namespace QDUEngine
             auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
             cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
             std::shared_ptr<InputComponent> input = nullptr;
+            auto objectId = objectData.value("id", "");
             for (auto& element : m_input.m_loadedComponents) {
-                if (element.first == objectData.value("id", "") && !element.first.empty()) {
+                if (element.first == objectId && !element.first.empty()) {
                     input = element.second;
                     break;
                 }
             }
             auto object = GameObject(nullptr, cube);
+            if (!objectId.empty()) {
+                object.m_id = objectId;
+            }
             auto objectPtr = std::make_shared<GameObject>(object);
             if (input != nullptr) {
                 input->setGameObject(objectPtr);
