@@ -11,7 +11,6 @@ namespace QDUEngine
         InputComponent();
         virtual void onAction(const char* action, float value) = 0;
         virtual void onCursorAction(const char* action, Vector2D& pos) = 0;
-        virtual void onLoad(std::shared_ptr<GameObject>& gameObject) = 0;
         static bool compare(const char* lhs, const char* rhs);
         void setGameObject(std::shared_ptr<GameObject>& gameObject);
     protected:
