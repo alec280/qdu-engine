@@ -12,7 +12,6 @@ namespace QDUEngine
         void loadSceneFrom(const char* path);
         Scene getSceneFrom(const char* path);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
-        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath, const char* name);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float x, float y);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);

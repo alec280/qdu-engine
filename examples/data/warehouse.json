@@ -10,7 +10,6 @@
   "objects": [
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -8
@@ -18,7 +17,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -3,
         "posY": -8
@@ -26,7 +24,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -2,
         "posY": -8
@@ -34,7 +31,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -1,
         "posY": -8
@@ -42,7 +38,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 1,
         "posY": -8
@@ -50,7 +45,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 2,
         "posY": -8
@@ -58,7 +52,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 3,
         "posY": -8
@@ -66,7 +59,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -8
@@ -74,7 +66,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -7
@@ -82,7 +73,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -6
@@ -90,7 +80,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -5
@@ -98,7 +87,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -4
@@ -106,7 +94,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -3
@@ -114,7 +101,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -2
@@ -122,7 +108,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": -1
@@ -130,7 +115,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": 0
@@ -138,7 +122,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": 1
@@ -146,7 +129,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": 2
@@ -154,7 +136,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": 3
@@ -162,7 +143,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 4,
         "posY": 4
@@ -170,7 +150,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 3,
         "posY": 4
@@ -178,7 +157,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 2,
         "posY": 4
@@ -186,7 +164,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 1,
         "posY": 4
@@ -194,7 +171,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": 0,
         "posY": -8
@@ -202,7 +178,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -1,
         "posY": 4
@@ -210,7 +185,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": 4
@@ -218,7 +192,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -3,
         "posY": 4
@@ -226,7 +199,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -2,
         "posY": 4
@@ -234,7 +206,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": 3
@@ -242,7 +213,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": 2
@@ -250,7 +220,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": 1
@@ -258,7 +227,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": 0
@@ -266,7 +234,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -1
@@ -274,7 +241,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -2
@@ -282,7 +248,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -3
@@ -290,7 +255,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -4
@@ -298,7 +262,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -5
@@ -306,7 +269,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -5
@@ -314,7 +276,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -6
@@ -322,7 +283,6 @@
     },
     {
       "visual": {
-        "name": "Wall",
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -7
@@ -330,7 +290,6 @@
     },
     {
       "visual": {
-        "name": "Box",
         "source": "examples/assets/box.png",
         "posX": -3,
         "posY": -7
@@ -338,7 +297,6 @@
     },
     {
       "visual": {
-        "name": "Box",
         "source": "examples/assets/box.png",
         "posX": 2,
         "posY": -4
@@ -346,7 +304,6 @@
     },
     {
       "visual": {
-        "name": "Box",
         "source": "examples/assets/box.png",
         "posX": -2,
         "posY": 2

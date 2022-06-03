@@ -69,7 +69,7 @@ namespace QDUEngine
         for (auto it = objects.begin(); it != objects.end(); ++it) {
             auto objectData = *it;
             auto visual = objectData["visual"];
-            auto cube = m_window.getTexturedCube(visual["source"].get<std::string>().c_str(), visual["name"].get<std::string>().c_str());
+            auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
             cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
             auto object = GameObject(nullptr, cube);
             newScene.addGameObject(object);
@@ -88,12 +88,7 @@ namespace QDUEngine
 
     std::shared_ptr<VisualComponent> Application::getTexturedCube(const char* texturePath)
     {
-        return m_window.getTexturedCube(texturePath, "");
-    }
-
-    std::shared_ptr<VisualComponent> Application::getTexturedCube(const char* texturePath, const char* name)
-    {
-        return m_window.getTexturedCube(texturePath, name);
+        return m_window.getTexturedCube(texturePath);
     }
 
     void Application::loadSceneFrom(const char* path)

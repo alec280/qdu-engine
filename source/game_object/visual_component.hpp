@@ -25,16 +25,13 @@ namespace QDUEngine
         void clear();
         nlohmann::json getData();
         Grafica::SceneGraphNodePtr getGraphNodePtr();
-        std::string& getName();
         Vector2D getPosition();
         std::string& getSource();
         void move(const Vector2D& by);
-        void setName(std::string& name);
         void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
         void setSource(std::string& path);
     private:
         Grafica::SceneGraphNodePtr m_graphNodePtr;
-        std::string m_name;
         Vector2D m_position;
         std::string m_source;
     };

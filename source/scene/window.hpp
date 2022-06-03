@@ -16,7 +16,6 @@ namespace QDUEngine
         std::shared_ptr<Grafica::SceneGraphNode> getCubePtr(const char* texturePath);
         static std::shared_ptr<VisualComponent> makeVisualPtr(
                 std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
-                std::string& name,
                 std::string& source
         );
         void start(const char* name, const Vector2D& window_size, Input* input);
@@ -26,7 +25,6 @@ namespace QDUEngine
         std::map<std::string, std::shared_ptr<Grafica::SceneGraphNode>> m_loadedComponents;
         Grafica::Matrix4f* m_projection{};
         GLFWwindow* m_window{};
-        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath, const char* name);
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
     };
 }

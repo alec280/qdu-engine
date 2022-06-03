@@ -45,21 +45,10 @@ namespace QDUEngine
     nlohmann::json VisualComponent::getData()
     {
         return {
-            {"name", m_name},
             {"source", m_source},
             {"posX", m_position.x},
             {"posY", m_position.y}
         };
-    }
-
-    void VisualComponent::setName(std::string& name)
-    {
-        m_name = name;
-    }
-
-    std::string& VisualComponent::getName()
-    {
-        return m_name;
     }
 
     std::string& VisualComponent::getSource()

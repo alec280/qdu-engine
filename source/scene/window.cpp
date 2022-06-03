@@ -115,24 +115,18 @@ namespace QDUEngine
         glfwSwapBuffers(m_window);
     }
 
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath, const char* name)
+    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
     {
         std::string source = texturePath;
-        std::string stringName = name;
         for (auto& element : m_loadedComponents) {
             if (element.first == texturePath) {
                 auto cubePtr = element.second;
-                return makeVisualPtr(cubePtr, stringName, source);
+                return makeVisualPtr(cubePtr, source);
             }
         }
         auto cubePtr = getCubePtr(texturePath);
         m_loadedComponents[texturePath] = cubePtr;
-        return makeVisualPtr(cubePtr, stringName, source);
-    }
-
-    std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
-    {
-        return getTexturedCube(texturePath, "");
+        return makeVisualPtr(cubePtr, source);
     }
 
     Vector2D Window::screenToPos()
@@ -142,27 +136,25 @@ namespace QDUEngine
 
     void Window::end()
     {
-        glfwSetWindowShouldClose(m_window, true);
+        glfwSetWindowShouldClose(m_window, 1);
         glfwTerminate();
     }
 
     bool Window::shouldClose()
     {
-        return glfwWindowShouldClose(m_window);
+        return glfwWindowShouldClose(m_window) != 0;
     }
 
     std::shared_ptr<VisualComponent> Window::makeVisualPtr(
             std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
-            std::string& name,
             std::string& source
             )
     {
-        auto graph = Grafica::SceneGraphNode(name);
+        auto graph = Grafica::SceneGraphNode("");
         graph.childs.push_back(grPtr);
         auto graphPtr = std::make_shared<Grafica::SceneGraphNode>(graph);
         auto visualComponent = VisualComponent(graphPtr);
         visualComponent.setSource(source);
-        visualComponent.setName(name);
         auto visualPtr = std::make_shared<VisualComponent>(visualComponent);
         return visualPtr;
     }
