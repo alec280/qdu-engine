@@ -45,7 +45,19 @@ namespace QDUEngine
         }
     }
 
-    GameObject Application::getGameObjectFrom(const char *path, std::shared_ptr<InputComponent>& input)
+    GameObject Application::getGameObjectFrom(const char* path)
+    {
+        log("Loading new game object from file.");
+        auto fullPath = Grafica::getPath(path);
+        log("New game object loaded from file.");
+        auto data = nlohmann::json::parse(std::ifstream(fullPath));
+        auto visual = data["visual"];
+        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        return {nullptr, cube};
+    }
+
+    GameObject Application::getGameObjectFrom(const char* path, std::shared_ptr<InputComponent>& input)
     {
         log("Loading new game object from file.");
         auto fullPath = Grafica::getPath(path);

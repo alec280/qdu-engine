@@ -58,14 +58,12 @@ class Dungeon : public Application {
 public:
     void addCompanion(Vector2D& pos)
     {
-        //auto greenCube = getTexturedCube("examples/assets/companion.png");
         auto enemyInput = std::make_shared<EnemyInput>();
-        //greenCube->move(pos);
-        auto companion = getGameObjectFrom("examples/data/companion.json", (std::shared_ptr<InputComponent>&)enemyInput);
+        auto companion = getGameObjectFrom("examples/data/companion.json");
         companion.getVisualComponent()->move(pos);
-        //companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
-        //enemyInput->setGameObject((std::shared_ptr<GameObject>&)companion);
-        //auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        auto companionPtr = std::make_shared<GameObject>(companion);
+        enemyInput->setGameObject(companionPtr);
+        companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
     }
