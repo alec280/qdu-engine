@@ -45,6 +45,19 @@ namespace QDUEngine
         }
     }
 
+    GameObject Application::getGameObjectFrom(const char *path)
+    {
+        log("Loading new game object from file.");
+        auto fullPath = Grafica::getPath(path);
+        log("New game object loaded from file.");
+        auto data = nlohmann::json::parse(std::ifstream(fullPath));
+        auto visual = data["visual"];
+        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        std::shared_ptr<InputComponent> input = nullptr;
+        return {nullptr, cube};
+    }
+
     Scene Application::getSceneFrom(const char* path)
     {
         if (m_tempDir == nullptr) {
@@ -66,8 +79,7 @@ namespace QDUEngine
             data = nlohmann::json::parse(std::ifstream(fullPath));
         }
         auto objects = data["objects"];
-        for (auto it = objects.begin(); it != objects.end(); ++it) {
-            auto objectData = *it;
+        for (auto objectData : objects) {
             auto visual = objectData["visual"];
             auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
             cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
