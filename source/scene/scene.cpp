@@ -4,94 +4,83 @@ namespace QDUEngine
 {
     void Scene::addGameObject(GameObject& gameObject)
     {
-        m_input.m_inputComponents.push_back(gameObject.getInputComponent());
-        m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
+        m_gameObjectsQueue.push_back(std::make_shared<GameObject>(gameObject));
     }
 
-    void Scene::addVisualComponent(GameObject& gameObject)
+    void Scene::addMainObject(GameObject& gameObject)
     {
-        m_window.m_visualComponents.push_back(gameObject.getVisualComponent());
+        auto objectPtr = std::make_shared<GameObject>(gameObject);
+        addMainObject(objectPtr);
     }
 
-    std::shared_ptr<GameObject> Scene::getGameObject(int idx)
+    void Scene::addMainObject(std::shared_ptr<GameObject>& gameObject)
     {
-
-        return std::make_shared<GameObject>(
-                GameObject(nullptr,
-                           m_window.m_visualComponents[idx],
-                           m_input.m_inputComponents[idx]
-                ));
-    }
-
-    std::shared_ptr<InputComponent> Scene::getInputComponent()
-    {
-        return std::shared_ptr<InputComponent>(m_inputComponent);
-    }
-
-    void Scene::setInputComponent(InputComponent* inputComponent)
-    {
-        m_inputComponent = inputComponent;
-        m_input.m_inputComponents.push_back(getInputComponent());
-    }
-
-    void Scene::start(const char* name, const Vector2D& windowSize)
-    {
-        m_window.start(name, windowSize, m_input);
-        m_input.start();
-        userStart();
-        while (!m_window.shouldClose()) {
-            update(0);
+        if (m_mainObject != nullptr) {
+            return;
         }
-        end();
+        m_mainObject = gameObject;
+        m_gameObjectsQueue.push_back(m_mainObject);
     }
 
-    void Scene::update(float delta)
+    void Scene::addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile)
     {
-        m_input.update();
-        m_window.update();
+        m_transitions[toScene] = std::pair<Vector2D, Vector2D>(fromTile, toTile);
+    }
+
+    std::vector<std::shared_ptr<GameObject>> Scene::getObjects()
+    {
+        return m_gameObjects;
     }
 
     void Scene::end()
     {
-        for (auto& visualComponent : m_window.m_visualComponents) {
-            visualComponent->getGraphNodePtr()->clear();
+        for (auto& object : m_gameObjectsQueue) {
+            object->end();
         }
-        m_window.end();
+        for (auto& object : m_gameObjects) {
+            object->end();
+        }
+        m_gameObjectsQueue.clear();
+        m_gameObjects.clear();
+        m_mainObject = nullptr;
     }
 
-    std::shared_ptr<VisualComponent> Scene::getCube()
-    {
-        auto component = m_window.getCube(1, 1, 1);
-        return component;
+    nlohmann::json Scene::getData() {
+        nlohmann::json data{{"transitions", {}}, {"objects", nlohmann::json::array()}};
+        for (auto& object : m_gameObjects) {
+            if (object == m_mainObject) {
+                continue;
+            }
+            data["objects"].push_back(object->getData());
+        }
+        for (auto& transition : m_transitions) {
+            auto vectors = transition.second;
+            data["transitions"][transition.first] = {
+                    {"fromX", vectors.first.x},
+                    {"fromY", vectors.first.y},
+                    {"toX", vectors.second.x},
+                    {"toY", vectors.second.y}
+            };
+        }
+        return data;
     }
 
-    std::shared_ptr<VisualComponent> Scene::getCube(float r, float g, float b)
+    std::shared_ptr<GameObject> Scene::getById(std::string& objectId)
     {
-        auto component = m_window.getCube(r, g, b);
-        return component;
+        for (auto& object : m_gameObjects) {
+            if (object->getId() == objectId) {
+                return object;
+            }
+        }
+        return nullptr;
     }
 
-    std::shared_ptr<VisualComponent> Scene::getTexturedCube(const char* texturePath)
+    void Scene::update()
     {
-        auto component = m_window.getTexturedCube(texturePath);
-        return component;
-    }
-
-    void Scene::bindCursorButton(const char* key, const char* action)
-    {
-        m_input.m_cursorBindings[std::string(key)] = action;
-        m_input.m_cursorActions[std::string(action)] = 0;
-    }
-
-    void Scene::bindKey(const char* key, const char* action)
-    {
-        m_input.m_keyBindings[std::string(key)] = action;
-        m_input.m_actions[std::string(action)] = 0;
-    }
-
-    void Scene::bindJoystick(const char* key, const char* action)
-    {
-        m_input.m_joystickBindings[std::string(key)] = action;
-        m_input.m_actions[std::string(action)] = 0;
+        while (!m_gameObjectsQueue.empty()) {
+            auto component = m_gameObjectsQueue.front();
+            m_gameObjects.push_back(component);
+            m_gameObjectsQueue.erase(m_gameObjectsQueue.begin());
+        }
     }
 }

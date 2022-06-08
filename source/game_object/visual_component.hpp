@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <nlohmann/json.hpp>
 #include "../core/vector_2d.hpp"
 #include "../grafica/shape.h"
 #include "../grafica/basic_shapes.h"
@@ -9,20 +10,29 @@
 
 namespace QDUEngine
 {
+    struct VisualData {
+        std::string name;
+        Vector2D pos;
+
+    };
+
     class Map;
-    class GameObject;
     class VisualComponent {
     public:
         VisualComponent();
-        virtual ~VisualComponent() = default;
-        //virtual void update(GameObject& obj, Map& map) = 0;
         explicit VisualComponent(Grafica::SceneGraphNodePtr& graphNodePtr);
-        void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
+        virtual ~VisualComponent() = default;
+        void clear();
+        nlohmann::json getData();
         Grafica::SceneGraphNodePtr getGraphNodePtr();
         Vector2D getPosition();
+        std::string& getSource();
         void move(const Vector2D& by);
+        void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
+        void setSource(std::string& path);
     private:
-        Vector2D m_position;
         Grafica::SceneGraphNodePtr m_graphNodePtr;
+        Vector2D m_position;
+        std::string m_source;
     };
 }

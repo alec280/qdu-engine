@@ -1,85 +1,91 @@
 #include <QDUEngine.hpp>
 
-class PlayerInput : public QDUEngine::InputComponent {
+using namespace QDUEngine;
+
+class PlayerInput : public InputComponent {
 public:
-    explicit PlayerInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override
     {
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr) {
+            return;
+        }
         if (compare(action, "left")) {
-            m_visual->move(QDUEngine::Vector(-value, 0));
+            visual->move(Vector(-value, 0));
         } else if (compare(action, "right")) {
-            m_visual->move(QDUEngine::Vector(value, 0));
+            visual->move(Vector(value, 0));
         } else if (compare(action, "down")) {
-            m_visual->move(QDUEngine::Vector(0, value));
+            visual->move(Vector(0, value));
         } else if (compare(action, "up")) {
-            m_visual->move(QDUEngine::Vector(0, -value));
+            visual->move(Vector(0, -value));
         }
     }
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override {}
-    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
+    void onCursorAction(const char* action, Vector2D& pos) override {}
 };
 
-class EnemyInput : public QDUEngine::InputComponent {
+class EnemyInput : public InputComponent {
 public:
-    explicit EnemyInput(std::shared_ptr<QDUEngine::VisualComponent>& visual) : m_visual(visual) {}
     void onAction(const char* action, float value) override {}
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    void onCursorAction(const char* action, Vector2D& pos) override
     {
-        if (compare(action, "customNema")) {
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr) {
+            return;
+        }
+        if (compare(action, "leftClick")) {
             if (pos.x < 300) {
-                m_visual->move(QDUEngine::Vector(-1, 0));
+                visual->move(Vector(-1, 0));
             } else {
-                m_visual->move(QDUEngine::Vector(1, 0));
+                visual->move(Vector(1, 0));
             }
         }
     }
-    std::shared_ptr<QDUEngine::VisualComponent> m_visual;
 };
 
-class Static : public QDUEngine::GameObject {
+class Static : public GameObject {
 public:
-    explicit Static(std::shared_ptr<QDUEngine::VisualComponent>& visual) :
-            QDUEngine::GameObject(nullptr, visual)
+    explicit Static(std::shared_ptr<VisualComponent>& visual) : GameObject(nullptr, visual) {}
+};
+
+class Character : public GameObject {
+public:
+    explicit Character(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
+        GameObject(visual, input)
     {}
 };
 
-class Character : public QDUEngine::GameObject {
+class Dungeon : public Application {
 public:
-    explicit Character(std::shared_ptr<QDUEngine::VisualComponent>& visual, std::shared_ptr<QDUEngine::InputComponent>& input) :
-        QDUEngine::GameObject(nullptr, visual, input)
-    {}
-};
-
-class Floor : public QDUEngine::Scene {
-public:
-    void userStart() noexcept override
+    void addCompanion(Vector2D& pos)
     {
-        auto blueCube = this->getTexturedCube("examples/assets/player.png");
-        auto playerInput = std::make_shared<PlayerInput>(blueCube);
-        blueCube->move(QDUEngine::Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<QDUEngine::InputComponent>&)playerInput);
-        this->addGameObject(player);
-
-        auto redCube = this->getTexturedCube("examples/assets/enemy.png");
-        auto enemyInput = std::make_shared<EnemyInput>(redCube);
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<QDUEngine::InputComponent>&)enemyInput);
-        this->addGameObject(enemy);
-    }
-    void addCompanion()
-    {
-        auto greenCube = this->getTexturedCube("examples/assets/companion.png");
-        greenCube->move(this->getGameObject(0)->getVisualComponent()->getPosition());
-        auto companion = Static(greenCube);
-        this->addVisualComponent(companion);
+        auto greenCube = getTexturedCube("examples/assets/companion.png");
+        auto enemyInput = std::make_shared<EnemyInput>();
+        greenCube->move(pos);
+        auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        m_scene.addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
     }
+    void userStart() noexcept override
+    {
+        loadSceneFrom("examples/data/garden.json");
+        auto blueCube = getTexturedCube("examples/assets/player.png");
+        auto playerInput = std::make_shared<PlayerInput>();
+        blueCube->move(QDUEngine::Vector(-2, -2));
+        auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
+        m_scene.addMainObject(player);
+
+        auto redCube = getTexturedCube("examples/assets/enemy.png");
+        auto enemyInput = std::make_shared<EnemyInput>();
+        redCube->move(QDUEngine::Vector(2, 2));
+        auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        m_scene.addGameObject(enemy);
+    }
 };
 
-class FloorInput : public QDUEngine::InputComponent {
+class GlobalInput : public InputComponent {
 public:
-    explicit FloorInput(Floor* floor) : m_floor(floor) {m_floor->setInputComponent(this);}
-    void onAction(const char* action, float value) override
+    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
+    void onAction(const char* action, float /*value*/) override
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";
@@ -89,7 +95,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "left");
+            m_application->bindKey(&tmp, "left");
 
             std::cout << "Rebind up: ";
             tmp = (char)std::cin.get();
@@ -98,7 +104,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "up");
+            m_application->bindKey(&tmp, "up");
 
             std::cout << "Rebind down: ";
             tmp = (char)std::cin.get();
@@ -107,7 +113,7 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "down");
+            m_application->bindKey(&tmp, "down");
 
             std::cout << "Rebind right: ";
             tmp = (char)std::cin.get();
@@ -116,12 +122,12 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_floor->bindKey(&tmp, "right");
+            m_application->bindKey(&tmp, "right");
         }
     }
-    void onCursorAction(const char* action, QDUEngine::Vector2D& pos) override
+    void onCursorAction(const char* action, Vector2D& pos) override
     {
-        if (compare(action, "customNema")) {
+        if (compare(action, "leftClick")) {
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
         } else if (compare(action, "middleClick")) {
@@ -137,22 +143,28 @@ public:
                 return;
             }
             if (pos.x > 400) {
-                m_floor->addCompanion();
+                m_application->addCompanion(m_spawnPos);
+                m_spawnPos += Vector(1, 1);
             }
             m_combo[0] = false;
             m_combo[1] = false;
         }
     }
+private:
     bool m_combo[2]{false, false};
-    Floor* m_floor;
+    Dungeon* m_application;
+    Vector2D m_spawnPos;
 };
-
 
 int main()
 {
-    Floor floor1;
-    FloorInput floorInput(&floor1);
-    QDUEngine::Application dungeon(&floor1);
+    auto dungeon = Dungeon();
+    auto input = std::make_shared<GlobalInput>(GlobalInput(&dungeon));
+    dungeon.setGlobalInput((std::shared_ptr<InputComponent>&)input);
+
+    dungeon.bindCursorButton(Input::CursorButton::LEFT, "leftClick");
+    dungeon.bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
+    dungeon.bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
     dungeon.bindKey("A", "left");
     dungeon.bindKey("W", "up");
     dungeon.bindKey("S", "down");
@@ -162,8 +174,6 @@ int main()
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
     dungeon.bindJoystick("RS_Y", "down");
-    dungeon.bindCursorButton("LEFT", "customNema");
-    dungeon.bindCursorButton("MIDDLE", "middleClick");
-    dungeon.bindCursorButton("RIGHT", "rightClick");
-    dungeon.run("Dungeon game", QDUEngine::Vector(600, 600));
+    dungeon.setTempDir("examples/tmp");
+    dungeon.run("Dungeon game", 600, 600);
 }

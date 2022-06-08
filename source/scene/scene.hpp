@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
+#include <filesystem>
 #include "../game_object/game_object.hpp"
-#include "window.hpp"
+#include "../grafica/root_directory.h"
 
 namespace QDUEngine
 {
@@ -9,23 +9,20 @@ namespace QDUEngine
         friend class Application;
     public:
         void addGameObject(GameObject& gameObject);
-        std::shared_ptr<VisualComponent> getCube();
-        std::shared_ptr<VisualComponent> getCube(float r, float g, float b);
-        std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
-        virtual void userStart() = 0;
-        std::shared_ptr<InputComponent> getInputComponent();
-        void addVisualComponent(GameObject &gameObject);
-        void setInputComponent(InputComponent* inputComponent);
-        std::shared_ptr<GameObject> getGameObject(int idx);
-        void bindCursorButton(const char* key, const char* action);
-        void bindKey(const char* key, const char* action);
-        void bindJoystick(const char* key, const char* action);
+        void addMainObject(GameObject& gameObject);
+        nlohmann::json getData();
+        std::vector<std::shared_ptr<GameObject>> getObjects();
     private:
-        void start(const char* name, const Vector2D& windowSize);
-        void update(float delta);
+        std::vector<std::shared_ptr<GameObject>> m_gameObjects{};
+        std::vector<std::shared_ptr<GameObject>> m_gameObjectsQueue{};
+        std::shared_ptr<GameObject> m_mainObject = nullptr;
+        std::string m_name;
+        std::string m_source;
+        std::map<std::string, std::pair<Vector2D, Vector2D>> m_transitions{};
+        void addMainObject(std::shared_ptr<GameObject>& gameObject);
+        void addTransition(std::string& toScene, const Vector2D& fromTile, const Vector2D& toTile);
         void end();
-        InputComponent* m_inputComponent;
-        Window m_window{};
-        Input m_input{};
+        std::shared_ptr<GameObject> getById(std::string& objectId);
+        void update();
     };
 }

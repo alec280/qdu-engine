@@ -2,6 +2,7 @@
 #include <map>
 #include "../game_object/game_object.hpp"
 #include "../core/dictionary.hpp"
+#include "../grafica/root_directory.h"
 
 namespace QDUEngine
 {
@@ -12,6 +13,7 @@ namespace QDUEngine
         Map(const Map& map) = delete;
         Map& operator=(const Map& map) = delete;
         const Vector2D& getSize();
+        void load(const char* path);
         void add(const GameObject& gameObject, const Vector2D& position);
         bool contains(const Vector2D& position) const;
         GameObject* getGameObjects();

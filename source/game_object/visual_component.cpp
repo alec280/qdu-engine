@@ -1,7 +1,6 @@
 #include "visual_component.hpp"
 
 namespace gr = Grafica;
-namespace tr = Grafica::Transformations;
 
 namespace QDUEngine
 {
@@ -11,11 +10,11 @@ namespace QDUEngine
     }
 
     VisualComponent::VisualComponent(gr::SceneGraphNodePtr& graphNodePtr) :
-    m_graphNodePtr(graphNodePtr),
-    m_position{0,0}
+        m_graphNodePtr(graphNodePtr),
+        m_position{0,0}
     {}
 
-    VisualComponent::VisualComponent() : m_graphNodePtr(), m_position() {}
+    VisualComponent::VisualComponent() : m_position() {}
 
     gr::SceneGraphNodePtr VisualComponent::getGraphNodePtr()
     {
@@ -30,5 +29,30 @@ namespace QDUEngine
     void VisualComponent::move(const Vector2D& by)
     {
         m_position += by;
+    }
+
+    void VisualComponent::clear()
+    {
+        m_graphNodePtr->clear();
+        m_position = {};
+    }
+
+    void VisualComponent::setSource(std::string& path)
+    {
+        m_source = path;
+    }
+
+    nlohmann::json VisualComponent::getData()
+    {
+        return {
+            {"source", m_source},
+            {"posX", m_position.x},
+            {"posY", m_position.y}
+        };
+    }
+
+    std::string& VisualComponent::getSource()
+    {
+        return m_source;
     }
 }

@@ -27,14 +27,16 @@ namespace QDUEngine
 
     void Map::update(float delta)
     {
-        auto gameObjects = getGameObjects();
-        for (int i = 0; i < m_gameObjects.getSize(); i++) {
-            gameObjects[i].update(*this);
-        }
+
     }
 
     GameObject* Map::getGameObjects()
     {
         return m_gameObjects.getValues();
+    }
+
+    void Map::load(const char *path)
+    {
+        Grafica::getPath(path);
     }
 }
