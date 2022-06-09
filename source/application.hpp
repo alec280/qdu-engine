@@ -20,7 +20,7 @@ namespace QDUEngine
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);
-        static void saveGameObject(std::shared_ptr<GameObject>& object, const char *path);
+        static void saveGameObject(GameObject* object, const char *path);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setScene(Scene& scene);
         void setTempDir(const char* path);

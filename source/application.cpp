@@ -177,7 +177,7 @@ namespace QDUEngine
         run(name, Vector(windowSizeX, windowSizeY));
     }
 
-    void Application::saveGameObject(std::shared_ptr<GameObject>& object, const char* path)
+    void Application::saveGameObject(GameObject* object, const char* path)
     {
         if (object == nullptr) {
             log("Can't save null game object.");

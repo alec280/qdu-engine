@@ -83,8 +83,7 @@ public:
         m_scene.addGameObject(enemy);
 
         auto saveTo = getAbsolutePath("/examples/out/enemy.json");
-        auto enemyPtr = std::make_shared<Character>(enemy);
-        saveGameObject((std::shared_ptr<GameObject>&)enemyPtr, saveTo.c_str());
+        saveGameObject(&enemy, saveTo.c_str());
     }
 };
 
