@@ -81,6 +81,10 @@ public:
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(enemy);
+
+        auto saveTo = getAbsolutePath("/examples/out/enemy.json");
+        auto enemyPtr = std::make_shared<Character>(enemy);
+        saveGameObject((std::shared_ptr<GameObject>&)enemyPtr, saveTo.c_str());
     }
 };
 
