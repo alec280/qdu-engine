@@ -44,9 +44,14 @@ namespace QDUEngine
         };
     }
 
-    const std::string GameObject::getId()
+    std::string GameObject::getId()
     {
         return m_id;
+    }
+
+    std::shared_ptr<AudioComponent> GameObject::getAudioComponent()
+    {
+        return m_audio;
     }
 
     std::shared_ptr<InputComponent> GameObject::getInputComponent()
@@ -63,6 +68,11 @@ namespace QDUEngine
     {
         ostream << "[GameObject:" << gameObject.m_id << "]";
         return ostream;
+    }
+
+    void GameObject::setAudioComponent(std::shared_ptr<AudioComponent>& audioComponent)
+    {
+        m_audio = audioComponent;
     }
 
     void GameObject::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)

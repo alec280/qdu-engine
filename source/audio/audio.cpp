@@ -57,21 +57,59 @@ bool load_wav_file(const char* audiofile, ALuint bufferId)
 
 namespace QDUEngine
 {
-    void Audio::end() noexcept {
+    void Audio::end() noexcept
+    {
         alcMakeContextCurrent(nullptr);
         alcDestroyContext(m_audioContext);
         alcCloseDevice(m_audioDevice);
     }
 
-    void Audio::play2D(const char* file, ALuint& source, ALuint& buffer) {
-        if (!load_wav_file(file, buffer)) {
-            std::cout << "Audio: wav file error" << std::endl;
+    void Audio::play2D(const char* file) {
+        /* Setting up a source */
+        ALuint source;
+        OPENALCALL(alGenSources((ALuint)1, &source));
+        OPENALCALL(alSourcef(source, AL_PITCH, 1));
+        OPENALCALL(alSourcef(source, AL_GAIN, 1));
+        OPENALCALL(alSource3f(source, AL_POSITION, 0, 0, 0));
+        OPENALCALL(alSource3f(source, AL_VELOCITY, 0, 0, 0));
+        OPENALCALL(alSourcei(source, AL_LOOPING, AL_FALSE));
+
+        /* Generating a buffer */
+        ALuint buffer;
+        OPENALCALL(alGenBuffers((ALuint)1, &buffer));
+
+        bool success = load_wav_file(file, buffer);
+        if (!success) {
+            std::cout << "wav file error" << std::endl;
             return;
         }
 
-        std::cout << "Audio: wav file loaded correctly" << std::endl;
-        alSourcei(source, AL_BUFFER, (int)buffer);
-        alSourcePlay(source);
+        std::cout << "wav file loaded correctly" << std::endl;
+
+        /* Binding the buffer with the data to source */
+        OPENALCALL(alSourcei(source, AL_BUFFER, buffer));
+
+        auto t0 = std::chrono::steady_clock::now();
+
+        /* Playing the source */
+        OPENALCALL(alSourcePlay(source));
+
+        /* Wait while playing the song */
+        ALint source_state;
+        OPENALCALL(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+        while (source_state == AL_PLAYING) {
+            OPENALCALL(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+        }
+
+        auto dt = std::chrono::steady_clock::now() - t0;
+
+        // cleanup context
+        OPENALCALL(alDeleteSources(1, &source));
+        OPENALCALL(alDeleteBuffers(1, &buffer));
+
+        const auto duration = std::chrono::duration_cast<std::chrono::seconds>(dt).count();
+
+        std::cout << "The wav file lasted " << duration << " seconds." << std::endl;
     }
 
     void Audio::start()
@@ -101,5 +139,20 @@ namespace QDUEngine
             m_openALSources.emplace_back(source, i + 1);
         }
         m_firstFreeOpenALSourceIndex = 0;
+    }
+
+    void Audio::update(Scene* scene)
+    {
+        for (auto& object : scene->getObjects()) {
+            auto component = object->getAudioComponent();
+            if (component == nullptr) {
+                continue;
+            }
+            if (component->m_to_play) {
+                component->m_to_play = false;
+                component->m_playing = true;
+                play2D(component->m_source.c_str());
+            }
+        }
     }
 }

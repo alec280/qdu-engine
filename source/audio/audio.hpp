@@ -7,13 +7,14 @@
 #include <dr_wav.h>
 #include <chrono>
 #include "../game_object/audio_component.hpp"
+#include "../scene/scene.hpp"
 
 namespace QDUEngine
 {
     class Audio {
         friend class Application;
     public:
-        void play2D(const char* file, ALuint& source, ALuint& buffer);
+        void play2D(const char* file);
     private:
         struct OpenALSourceArrayEntry {
             ALuint m_sourceID;
@@ -30,5 +31,6 @@ namespace QDUEngine
         float m_masterVolume;
         void end() noexcept;
         void start();
+        void update(Scene* scene);
     };
 }
