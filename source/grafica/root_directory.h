@@ -8,7 +8,7 @@
 namespace Grafica
 {
 	
-static const char * const source_directory = "C:/Users/autofact/Documents/qdu-engine/";
+static const char * const source_directory = "F:/Desktop/Universidad/Motores/qdu-engine/";
 
 static std::filesystem::path getPath(const std::string &relative_path){
 	return source_directory + relative_path;

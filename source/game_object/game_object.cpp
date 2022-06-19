@@ -5,6 +5,8 @@ namespace QDUEngine
     static int m_current_id;
     static std::hash<std::string> m_hash;
 
+    GameObject::GameObject() = default;
+
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual) :
             m_attribute(attribute),
             m_visual(visual),

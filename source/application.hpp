@@ -12,10 +12,15 @@ namespace QDUEngine
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
         void loadSceneFrom(const char* path);
+        GameObject getGameObjectFrom(const char* path);
+        GameObject getGameObjectFrom(const char* path, std::shared_ptr<InputComponent>& input);
         Scene getSceneFrom(const char* path);
+        static std::string getAbsolutePath(const char* path);
+        std::string getTempDir();
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);
+        static void saveGameObject(GameObject* object, const char *path);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setScene(Scene& scene);
         void setTempDir(const char* path);
