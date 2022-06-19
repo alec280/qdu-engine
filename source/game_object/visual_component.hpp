@@ -10,12 +10,6 @@
 
 namespace QDUEngine
 {
-    struct VisualData {
-        std::string name;
-        Vector2D pos;
-
-    };
-
     class Map;
     class VisualComponent {
     public:

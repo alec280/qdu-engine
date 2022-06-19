@@ -154,6 +154,7 @@ namespace QDUEngine
     void Application::run(const char* name, const Vector2D& windowSize)
     {
         log("PRE-START");
+        m_audio.start();
         m_window.start(name, windowSize, &m_input);
         userStart();
         log("START");
@@ -169,6 +170,7 @@ namespace QDUEngine
             std::filesystem::remove_all(Grafica::getPath(m_tempDir));
             log("Temporary directory cleared.");
         }
+        m_audio.end();
         log("END");
     }
 

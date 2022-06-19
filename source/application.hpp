@@ -1,6 +1,7 @@
 #pragma once
 #include "scene/window.hpp"
 #include "scene/scene.hpp"
+#include "audio/audio.hpp"
 
 
 namespace QDUEngine
@@ -28,6 +29,7 @@ namespace QDUEngine
         explicit Application();
         Scene m_scene{};
     private:
+        Audio m_audio{};
         Input m_input{};
         char* m_tempDir = nullptr;
         Window m_window{};
