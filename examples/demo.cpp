@@ -58,10 +58,12 @@ class Dungeon : public Application {
 public:
     void addCompanion(Vector2D& pos)
     {
-        auto greenCube = getTexturedCube("examples/assets/companion.png");
         auto enemyInput = std::make_shared<EnemyInput>();
-        greenCube->move(pos);
-        auto companion = Character(greenCube, (std::shared_ptr<InputComponent>&)enemyInput);
+        auto companion = getGameObjectFrom("examples/data/companion.json");
+        companion.getVisualComponent()->move(pos);
+        auto companionPtr = std::make_shared<GameObject>(companion);
+        enemyInput->setGameObject(companionPtr);
+        companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(companion);
         std::cout << "Companion added!" << std::endl;
     }
@@ -79,6 +81,9 @@ public:
         redCube->move(QDUEngine::Vector(2, 2));
         auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
         m_scene.addGameObject(enemy);
+
+        auto saveTo = getAbsolutePath("/examples/out/enemy.json");
+        saveGameObject(&enemy, saveTo.c_str());
     }
 };
 

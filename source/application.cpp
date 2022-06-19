@@ -45,6 +45,35 @@ namespace QDUEngine
         }
     }
 
+    std::string Application::getAbsolutePath(const char *path)
+    {
+        return Grafica::getPath(path).string();
+    }
+
+    GameObject Application::getGameObjectFrom(const char* path)
+    {
+        log("Loading new game object from file.");
+        auto fullPath = Grafica::getPath(path);
+        log("New game object loaded from file.");
+        auto data = nlohmann::json::parse(std::ifstream(fullPath));
+        auto visual = data["visual"];
+        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        return {nullptr, cube};
+    }
+
+    GameObject Application::getGameObjectFrom(const char* path, std::shared_ptr<InputComponent>& input)
+    {
+        log("Loading new game object from file.");
+        auto fullPath = Grafica::getPath(path);
+        log("New game object loaded from file.");
+        auto data = nlohmann::json::parse(std::ifstream(fullPath));
+        auto visual = data["visual"];
+        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        return {nullptr, cube, input};
+    }
+
     Scene Application::getSceneFrom(const char* path)
     {
         if (m_tempDir == nullptr) {
@@ -66,8 +95,7 @@ namespace QDUEngine
             data = nlohmann::json::parse(std::ifstream(fullPath));
         }
         auto objects = data["objects"];
-        for (auto it = objects.begin(); it != objects.end(); ++it) {
-            auto objectData = *it;
+        for (auto objectData : objects) {
             auto visual = objectData["visual"];
             auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
             cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
@@ -100,6 +128,11 @@ namespace QDUEngine
         }
         log("Scene loaded from file.");
         return newScene;
+    }
+
+    std::string Application::getTempDir()
+    {
+        return m_tempDir;
     }
 
     std::shared_ptr<VisualComponent> Application::getTexturedCube(const char* texturePath)
@@ -144,6 +177,18 @@ namespace QDUEngine
         run(name, Vector(windowSizeX, windowSizeY));
     }
 
+    void Application::saveGameObject(GameObject* object, const char* path)
+    {
+        if (object == nullptr) {
+            log("Can't save null game object.");
+            return;
+        }
+        std::ofstream file;
+        file.open(path);
+        file << object->getData();
+        file.close();
+    }
+
     void Application::saveScene()
     {
         if (m_scene.m_name.empty()) {
@@ -155,8 +200,7 @@ namespace QDUEngine
         }
         auto data = m_scene.getData();
         auto objects = data["objects"];
-        for (auto it = objects.begin(); it != objects.end(); ++it) {
-            auto objectData = *it;
+        for (auto objectData : objects) {
             auto objectId = objectData["id"].get<std::string>();
             auto object = m_scene.getById(objectId);
             if (object != nullptr) {

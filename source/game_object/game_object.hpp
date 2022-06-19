@@ -11,6 +11,7 @@ namespace QDUEngine
     class GameObject {
         friend class Application;
     public:
+        GameObject();
         GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual);
         GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input);
         GameObject(std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input);
