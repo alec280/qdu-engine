@@ -16,7 +16,9 @@ namespace QDUEngine
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_TRUE));
                 OPENALCALL(alSource3f(unusedSource.m_sourceID, AL_POSITION, 0.0f, 0.0f, 0.0f));
             } else {
+                auto pos = component->m_position;
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE));
+                OPENALCALL(alSource3f(unusedSource.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
             }
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_loop));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_PITCH, component->m_pitch));
@@ -28,10 +30,6 @@ namespace QDUEngine
             if (component->m_isPlaying) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
-        }
-        if (component->m_is3D) {
-            auto pos = component->m_position;
-            OPENALCALL(alSource3f(component->m_audioSource.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
         }
     }
 
@@ -206,7 +204,7 @@ namespace QDUEngine
             }
             audioComponents.push_back(component);
         }
-        updateListener(listenerPosition, Vector3D{}, Vector3D{});
+        updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 0, 1});
         updateAudioComponents(timeStep, audioComponents);
 
         if (audioComponents.size() <= m_channels.size()) {
