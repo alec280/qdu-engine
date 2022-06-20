@@ -9,6 +9,15 @@
 #include "../game_object/audio_component.hpp"
 #include "../scene/scene.hpp"
 
+#define OPENALCALL(function)\
+	function;\
+	{\
+		ALenum error = alGetError(); \
+		if (error != AL_NO_ERROR) {  \
+            std::cout << "OpenAL Error" << std::endl; \
+        }}
+
+
 namespace QDUEngine
 {
     class Audio {
@@ -30,6 +39,7 @@ namespace QDUEngine
         //std::vector<FreeAudioSource> m_freeAudioSources;
         float m_masterVolume;
         void end() noexcept;
+        bool load_wav_file(const char* filename, ALuint bufferId) const;
         void start();
         void update(Scene* scene);
     };

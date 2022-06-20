@@ -1,60 +1,5 @@
 #include "audio.hpp"
 
-#define OPENALCALL(function)\
-	function;\
-	{\
-		ALenum error = alGetError(); \
-		if (error != AL_NO_ERROR) {  \
-            std::cout << "OpenAL Error" << std::endl; \
-        }}
-
-bool load_wav_file(const char* audiofile, ALuint bufferId)
-{
-    struct WavData {
-        unsigned int channels = 0;
-        unsigned int sampleRate = 0;
-        drwav_uint64 totalPCMFrameCount = 0;
-        std::vector<uint16_t> pcmData;
-        drwav_uint64 GetTotalSamples() const { return totalPCMFrameCount * channels; }
-    };
-
-    WavData audioData;
-    drwav_int16* sampleData = drwav_open_file_and_read_pcm_frames_s16(
-            audiofile,
-            &audioData.channels,
-            &audioData.sampleRate,
-            &audioData.totalPCMFrameCount,
-            nullptr);
-
-    if (!sampleData)
-    {
-        std::cerr << "Audio Clip Error: Failed to load file " << audiofile << std::endl;
-        drwav_free(sampleData, nullptr);
-        return false;
-    }
-    else if (audioData.GetTotalSamples() > drwav_uint64(std::numeric_limits<size_t>::max()))
-    {
-        std::cerr << "Audio Clip Error: File " << audiofile << " is to big to be loaded." << std::endl;
-        drwav_free(sampleData, nullptr);
-        return false;
-    }
-
-    audioData.pcmData.resize(size_t(audioData.GetTotalSamples()));
-    std::memcpy(audioData.pcmData.data(), sampleData, audioData.pcmData.size() * 2);
-    drwav_free(sampleData, nullptr);
-
-    assert(bufferId != 0);
-
-    alBufferData(
-            bufferId,
-            audioData.channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,
-            audioData.pcmData.data(),
-            (int)audioData.pcmData.size() * 2,
-            (int)audioData.sampleRate);
-
-    return true;
-}
-
 namespace QDUEngine
 {
     void Audio::end() noexcept
@@ -62,6 +7,53 @@ namespace QDUEngine
         alcMakeContextCurrent(nullptr);
         alcDestroyContext(m_audioContext);
         alcCloseDevice(m_audioDevice);
+    }
+
+    bool Audio::load_wav_file(const char* filename, ALuint bufferId) const
+    {
+        struct WavData {
+            unsigned int channels = 0;
+            unsigned int sampleRate = 0;
+            drwav_uint64 totalPCMFrameCount = 0;
+            std::vector<uint16_t> pcmData;
+            drwav_uint64 GetTotalSamples() const { return totalPCMFrameCount * channels; }
+        };
+
+        WavData audioData;
+        drwav_int16* sampleData = drwav_open_file_and_read_pcm_frames_s16(
+                filename,
+                &audioData.channels,
+                &audioData.sampleRate,
+                &audioData.totalPCMFrameCount,
+                nullptr);
+
+        if (!sampleData)
+        {
+            std::cerr << "Audio Clip Error: Failed to load file " << filename << std::endl;
+            drwav_free(sampleData, nullptr);
+            return false;
+        }
+        else if (audioData.GetTotalSamples() > drwav_uint64(std::numeric_limits<size_t>::max()))
+        {
+            std::cerr << "Audio Clip Error: File " << filename << " is to big to be loaded." << std::endl;
+            drwav_free(sampleData, nullptr);
+            return false;
+        }
+
+        audioData.pcmData.resize(size_t(audioData.GetTotalSamples()));
+        std::memcpy(audioData.pcmData.data(), sampleData, audioData.pcmData.size() * 2);
+        drwav_free(sampleData, nullptr);
+
+        assert(bufferId != 0);
+
+        alBufferData(
+                bufferId,
+                audioData.channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,
+                audioData.pcmData.data(),
+                (int)audioData.pcmData.size() * 2,
+                (int)audioData.sampleRate);
+
+        return true;
     }
 
     void Audio::play2D(const char* file) {
