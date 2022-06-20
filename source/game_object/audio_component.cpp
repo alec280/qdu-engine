@@ -4,6 +4,11 @@ namespace QDUEngine
 {
     AudioComponent::AudioComponent(const char* source) : m_source(source) {}
 
+    void AudioComponent::move(const Vector3D& by)
+    {
+        m_position += by;
+    }
+
     void AudioComponent::play()
     {
         if (m_playing || m_source.empty()) {

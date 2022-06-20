@@ -17,7 +17,6 @@
             std::cout << "OpenAL Error" << std::endl; \
         }}
 
-
 namespace QDUEngine
 {
     class Audio {

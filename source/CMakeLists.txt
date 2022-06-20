@@ -17,6 +17,7 @@ set(QDU_HEADERS
         game_object/audio_component.hpp
         map/map.hpp
         core/vector_2d.hpp
+        core/vector_3d.hpp
         core/dictionary.hpp
         scene/scene.hpp
         scene/window.hpp
@@ -40,6 +41,7 @@ set(QDU_SOURCES
         game_object/audio_component.cpp
         map/map.cpp
         core/vector_2d.cpp
+        core/vector_3d.cpp
         core/dictionary.cpp
         scene/scene.cpp
         scene/window.cpp

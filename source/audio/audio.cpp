@@ -29,13 +29,13 @@ namespace QDUEngine
 
         if (!sampleData)
         {
-            std::cerr << "Audio Clip Error: Failed to load file " << filename << std::endl;
+            std::cerr << "[Engine] Failed to load file: " << filename << std::endl;
             drwav_free(sampleData, nullptr);
             return false;
         }
         else if (audioData.GetTotalSamples() > drwav_uint64(std::numeric_limits<size_t>::max()))
         {
-            std::cerr << "Audio Clip Error: File " << filename << " is to big to be loaded." << std::endl;
+            std::cerr << "[Engine] File " << filename << " is to big to be loaded." << std::endl;
             drwav_free(sampleData, nullptr);
             return false;
         }
@@ -57,7 +57,6 @@ namespace QDUEngine
     }
 
     void Audio::play2D(const char* file) {
-        /* Setting up a source */
         ALuint source;
         OPENALCALL(alGenSources((ALuint)1, &source));
         OPENALCALL(alSourcef(source, AL_PITCH, 1));
@@ -66,17 +65,15 @@ namespace QDUEngine
         OPENALCALL(alSource3f(source, AL_VELOCITY, 0, 0, 0));
         OPENALCALL(alSourcei(source, AL_LOOPING, AL_FALSE));
 
-        /* Generating a buffer */
         ALuint buffer;
         OPENALCALL(alGenBuffers((ALuint)1, &buffer));
 
-        bool success = load_wav_file(file, buffer);
-        if (!success) {
-            std::cout << "wav file error" << std::endl;
+        if (!load_wav_file(file, buffer)) {
+            std::cout << "[Engine] WAV could not be loaded." << std::endl;
             return;
         }
 
-        std::cout << "wav file loaded correctly" << std::endl;
+        std::cout << "[Engine] WAV file loaded correctly." << std::endl;
 
         /* Binding the buffer with the data to source */
         OPENALCALL(alSourcei(source, AL_BUFFER, buffer));
@@ -101,7 +98,7 @@ namespace QDUEngine
 
         const auto duration = std::chrono::duration_cast<std::chrono::seconds>(dt).count();
 
-        std::cout << "The wav file lasted " << duration << " seconds." << std::endl;
+        std::cout << "[Engine] The wav file lasted " << duration << " seconds." << std::endl;
     }
 
     void Audio::start()
@@ -110,12 +107,12 @@ namespace QDUEngine
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {
-            std::cout << "Audio Error: Failed to open audio device." << std::endl;
+            std::cout << "[Engine] Failed to open audio device." << std::endl;
             return;
         }
         m_audioContext = alcCreateContext(m_audioDevice, nullptr);
         if (!alcMakeContextCurrent(m_audioContext)) {
-            std::cout << "Audio Error: Failed to make audio context current." << std::endl;
+            std::cout << "[Engine] Failed to make audio context current." << std::endl;
             return;
         }
 
