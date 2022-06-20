@@ -152,6 +152,7 @@ namespace QDUEngine
                 component->m_to_play = false;
                 component->m_playing = true;
                 play2D(component->m_source.c_str());
+                component->m_playing = false;
             }
         }
     }

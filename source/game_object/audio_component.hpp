@@ -7,6 +7,7 @@ namespace QDUEngine
     class AudioComponent {
         friend class Audio;
     public:
+        explicit AudioComponent(const char* source);
         void play();
         void setSource(const char* audioPath);
     private:

@@ -64,7 +64,11 @@ public:
         auto companionPtr = std::make_shared<GameObject>(companion);
         enemyInput->setGameObject(companionPtr);
         companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
+        auto audio = std::make_shared<AudioComponent>(AudioComponent(getAbsolutePath("examples/assets/double_bell.wav").c_str()));
+        companion.setAudioComponent(audio);
+
         m_scene.addGameObject(companion);
+        audio->play();
         std::cout << "Companion added!" << std::endl;
     }
     void userStart() noexcept override

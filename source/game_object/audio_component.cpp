@@ -2,6 +2,8 @@
 
 namespace QDUEngine
 {
+    AudioComponent::AudioComponent(const char* source) : m_source(source) {}
+
     void AudioComponent::play()
     {
         if (m_playing || m_source.empty()) {

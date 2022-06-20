@@ -161,6 +161,7 @@ namespace QDUEngine
         while (!m_window.shouldClose()) {
             m_input.update(&m_scene);
             m_window.update(&m_scene);
+            m_audio.update(&m_scene);
             m_scene.update();
             doTransition();
         }
