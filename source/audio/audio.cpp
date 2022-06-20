@@ -74,7 +74,7 @@ namespace QDUEngine
                 return makeAudioPtr(streamPtr, source);
             }
         }
-        auto streamPtr = std::make_shared<AudioStream>(AudioStream(Grafica::getPath(audioPath)));
+        auto streamPtr = std::make_shared<AudioStream>(AudioStream(audioPath));
         m_loadedComponents[audioPath] = streamPtr;
         return makeAudioPtr(streamPtr, source);
     }

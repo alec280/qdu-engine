@@ -10,10 +10,11 @@ namespace QDUEngine
 
     AudioStream::AudioStream(const char* filename) : AudioStream(std::string(filename)) {}
 
-    AudioStream::AudioStream(const std::string& filename) : m_source(filename)
+    AudioStream::AudioStream(const std::string& source) : m_source(source)
     {
         WavData audioData;
-        auto sampleData = drwav_open_file_and_read_pcm_frames_s16(filename.c_str(),
+        auto filename = Grafica::getPath(source);
+        auto sampleData = drwav_open_file_and_read_pcm_frames_s16(filename.string().c_str(),
                                                                           &audioData.channels,
                                                                           &audioData.sampleRate,
                                                                           &audioData.totalPCMFrameCount,

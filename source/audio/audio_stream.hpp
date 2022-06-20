@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include "../grafica/root_directory.h"
 
 #define OPENALCALL(function)\
 	function;\
@@ -21,7 +22,7 @@ namespace QDUEngine
     public:
         AudioStream() = default;
         explicit AudioStream(const char* filename);
-        explicit AudioStream(const std::string& filename);
+        explicit AudioStream(const std::string& source);
         explicit AudioStream(const std::filesystem::path& filename);
         ~AudioStream();
         void clear();

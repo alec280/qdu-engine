@@ -100,10 +100,17 @@ namespace QDUEngine
             data = nlohmann::json::parse(std::ifstream(fullPath));
         }
         auto objects = data["objects"];
-        for (auto objectData : objects) {
-            auto visual = objectData["visual"];
-            auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
-            cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        for (const auto& objectData : objects) {
+            auto visual = objectData.value("visual", nlohmann::json::object());
+            std::shared_ptr<VisualComponent> cube = nullptr;
+            if (!visual.empty()) {
+                cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+                cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+            }
+            auto audio = objectData.value("audio", nlohmann::json::object());
+            if (!audio.empty()) {
+                std::cout << audio["source"] << std::endl;
+            }
             std::shared_ptr<InputComponent> input = nullptr;
             auto objectId = objectData.value("id", "");
             for (auto& element : m_input.m_loadedComponents) {
@@ -229,7 +236,7 @@ namespace QDUEngine
         std::filesystem::create_directories(Grafica::getPath(m_tempDir));
         auto path = Grafica::getPath(m_tempDir + fileName);
         file.open(path);
-        file << data;
+        file << std::setw(4) << data;
         file.close();
     }
 

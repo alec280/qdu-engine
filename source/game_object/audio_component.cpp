@@ -19,6 +19,7 @@ namespace QDUEngine
         return {
                 {"is3D", m_is3D},
                 {"isListener", m_isListener},
+                {"isLooping", m_isLooping},
                 {"posX", m_position.x},
                 {"posY", m_position.y},
                 {"source", m_stream ? m_stream->getSource() : ""}
