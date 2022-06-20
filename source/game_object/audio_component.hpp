@@ -20,15 +20,18 @@ namespace QDUEngine
         void move(const Vector2D& by);
         void move(const Vector3D& by);
         void play();
+        void setAutoPlay(bool value);
         void setAsListener(bool value);
+        void setAsLooping(bool value);
         void setSource(const char* filename);
     private:
         AudioSource m_audioSource{};
+        bool m_autoPlay = false;
         bool m_is3D = false;
         bool m_isAssigned = false;
         bool m_isListener = false;
-        bool m_isLooping = false;
         bool m_isPlaying = false;
+        bool m_loop = false;
         float m_pitch = 1.f;
         Vector3D m_position = Vector3(0, 0, 0);
         float m_radius = 0.f;

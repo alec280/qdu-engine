@@ -84,7 +84,9 @@ namespace QDUEngine
     {
         m_audio = audioComponent;
         auto ptr = std::make_shared<GameObject>(*this);
-        m_input->setGameObject(ptr);
+        if (m_input) {
+            m_input->setGameObject(ptr);
+        }
     }
 
     void GameObject::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)

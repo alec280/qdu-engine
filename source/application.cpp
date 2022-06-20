@@ -115,11 +115,16 @@ namespace QDUEngine
                 cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
             }
             auto audio = objectData.value("audio", nlohmann::json::object());
+            std::shared_ptr<AudioComponent> audioPtr = nullptr;
             if (!audio.empty()) {
-                std::cout << audio["source"] << std::endl;
-                auto audioPtr = getAudio(audio["source"].get<std::string>().c_str());
+                audioPtr = getAudio(audio["source"].get<std::string>().c_str());
                 audioPtr->move(Vector3(audio["posX"].get<float>(), audio["posY"].get<float>(), audio["posZ"].get<float>()));
                 audioPtr->setAsListener(audio["isListener"]);
+                audioPtr->setAsLooping(audio["loop"]);
+                if (audio["autoPlay"].get<bool>()) {
+                    audioPtr->setAutoPlay(audio["autoPlay"]);
+                    audioPtr->play();
+                }
             }
             std::shared_ptr<InputComponent> input = nullptr;
             auto objectId = objectData.value("id", "");
@@ -134,6 +139,9 @@ namespace QDUEngine
                 object.m_id = objectId;
             }
             auto objectPtr = std::make_shared<GameObject>(object);
+            if (audio != nullptr) {
+                objectPtr->setAudioComponent(audioPtr);
+            }
             if (input != nullptr) {
                 input->setGameObject(objectPtr);
             }

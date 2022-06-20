@@ -13,6 +13,16 @@
         "source": "examples/assets/wall.png",
         "posX": -4,
         "posY": -8
+      },
+      "audio": {
+        "source": "examples/assets/upbeat_loop.wav",
+        "posX": -4,
+        "posY": -8,
+        "posZ": 0,
+        "isListener": false,
+        "loop": true,
+        "is3D": false,
+        "autoPlay": true
       }
     },
     {

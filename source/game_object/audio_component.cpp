@@ -9,9 +9,6 @@ namespace QDUEngine
 
     void AudioComponent::clear()
     {
-        //if (m_stream) {
-        //    m_stream->clear();
-        //}
         m_isPlaying = false;
         m_position = {};
     }
@@ -19,16 +16,16 @@ namespace QDUEngine
     nlohmann::json AudioComponent::getData()
     {
         return {
-                {"is3D", m_is3D},
+                {"autoPlay", m_autoPlay},
+                {"is3D",       m_is3D},
                 {"isListener", m_isListener},
-                {"isLooping", m_isLooping},
-                {"posX", m_position.x},
-                {"posY", m_position.y},
-                {"posZ", m_position.z},
+                {"loop",  m_loop},
+                {"posX",       m_position.x},
+                {"posY",       m_position.y},
+                {"posZ",       m_position.z},
                 {"source", m_stream ? m_stream->getSource() : ""}
         };
     }
-
 
     Vector3D AudioComponent::getPosition()
     {
@@ -66,9 +63,19 @@ namespace QDUEngine
         m_isPlaying = true;
     }
 
+    void AudioComponent::setAutoPlay(bool value)
+    {
+        m_autoPlay = value;
+    }
+
     void AudioComponent::setAsListener(bool value)
     {
         m_isListener = value;
+    }
+
+    void AudioComponent::setAsLooping(bool value)
+    {
+        m_loop = value;
     }
 
     void AudioComponent::setSource(const char* filename)

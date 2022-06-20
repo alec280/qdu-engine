@@ -18,7 +18,7 @@ namespace QDUEngine
             } else {
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE));
             }
-            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_isLooping));
+            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_loop));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_PITCH, component->m_pitch));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_GAIN, component->m_volume));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_MAX_DISTANCE, component->m_radius));
@@ -223,7 +223,7 @@ namespace QDUEngine
                 audioComponent->m_isPlaying = false;
             }
             audioComponent->m_timeLeft -= timeStep * audioComponent->m_pitch;
-            if (audioComponent->m_isLooping) {
+            if (audioComponent->m_loop) {
                 while (audioComponent->m_timeLeft < 0) {
                     audioComponent->m_timeLeft += audioComponent->m_stream->getTotalTime();
                 }
