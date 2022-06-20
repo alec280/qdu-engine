@@ -62,7 +62,6 @@ namespace QDUEngine
             sourceEntry.m_nextFreeIdx = m_firstFreeChannelIdx;
             m_firstFreeChannelIdx = channelIdx;
         }
-
     }
 
     AudioSource Audio::getNextFreeChannel()
@@ -79,98 +78,6 @@ namespace QDUEngine
     float Audio::getMasterVolume() const
     {
         return m_masterVolume;
-    }
-
-    bool Audio::loadWavFile(const char* filename, ALuint bufferId) const
-    {
-        struct WavData {
-            unsigned int channels = 0;
-            unsigned int sampleRate = 0;
-            drwav_uint64 totalPCMFrameCount = 0;
-            std::vector<uint16_t> pcmData;
-            drwav_uint64 GetTotalSamples() const { return totalPCMFrameCount * channels; }
-        };
-
-        WavData audioData;
-        drwav_int16* sampleData = drwav_open_file_and_read_pcm_frames_s16(
-                filename,
-                &audioData.channels,
-                &audioData.sampleRate,
-                &audioData.totalPCMFrameCount,
-                nullptr);
-
-        if (!sampleData)
-        {
-            std::cerr << "[Engine] Failed to load file: " << filename << std::endl;
-            drwav_free(sampleData, nullptr);
-            return false;
-        }
-        else if (audioData.GetTotalSamples() > drwav_uint64(std::numeric_limits<size_t>::max()))
-        {
-            std::cerr << "[Engine] File " << filename << " is to big to be loaded." << std::endl;
-            drwav_free(sampleData, nullptr);
-            return false;
-        }
-
-        audioData.pcmData.resize(size_t(audioData.GetTotalSamples()));
-        std::memcpy(audioData.pcmData.data(), sampleData, audioData.pcmData.size() * 2);
-        drwav_free(sampleData, nullptr);
-
-        assert(bufferId != 0);
-
-        alBufferData(
-                bufferId,
-                audioData.channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16,
-                audioData.pcmData.data(),
-                (int)audioData.pcmData.size() * 2,
-                (int)audioData.sampleRate);
-
-        return true;
-    }
-
-    void Audio::play2D(const char* file) {
-        ALuint source;
-        OPENALCALL(alGenSources((ALuint)1, &source));
-        OPENALCALL(alSourcef(source, AL_PITCH, 1));
-        OPENALCALL(alSourcef(source, AL_GAIN, 1));
-        OPENALCALL(alSource3f(source, AL_POSITION, 0, 0, 0));
-        OPENALCALL(alSource3f(source, AL_VELOCITY, 0, 0, 0));
-        OPENALCALL(alSourcei(source, AL_LOOPING, AL_FALSE));
-
-        ALuint buffer;
-        OPENALCALL(alGenBuffers((ALuint)1, &buffer));
-
-        if (!loadWavFile(file, buffer)) {
-            std::cout << "[Engine] WAV could not be loaded." << std::endl;
-            return;
-        }
-
-        std::cout << "[Engine] WAV file loaded correctly." << std::endl;
-
-        /* Binding the buffer with the data to source */
-        OPENALCALL(alSourcei(source, AL_BUFFER, buffer));
-
-        auto t0 = std::chrono::steady_clock::now();
-
-        /* Playing the source */
-        OPENALCALL(alSourcePlay(source));
-
-        /* Wait while playing the song */
-        ALint source_state;
-        OPENALCALL(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
-        while (source_state == AL_PLAYING) {
-            OPENALCALL(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
-        }
-
-        auto dt = std::chrono::steady_clock::now() - t0;
-
-        // cleanup context
-        OPENALCALL(alDeleteSources(1, &source));
-        OPENALCALL(alDeleteBuffers(1, &buffer));
-
-        const auto duration = std::chrono::duration_cast<std::chrono::seconds>(dt).count();
-
-        std::cout << "[Engine] The wav file lasted " << duration << " seconds." << std::endl;
     }
 
     void Audio::removeSource(int channelIdx)

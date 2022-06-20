@@ -11,7 +11,6 @@ namespace QDUEngine
         friend class Application;
     public:
         float getMasterVolume() const;
-        void play2D(const char* file);
         void setMasterVolume(float volume);
     private:
         struct SourceEntry {
@@ -29,7 +28,6 @@ namespace QDUEngine
         void end() noexcept;
         void freeChannel(int channelIdx);
         AudioSource getNextFreeChannel();
-        bool loadWavFile(const char* filename, ALuint bufferId) const;
         void removeSource(int index);
         void start();
         void update(Scene* scene, float timeStep);
