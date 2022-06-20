@@ -15,7 +15,7 @@
         "posY": -8
       },
       "audio": {
-        "source": "examples/assets/upbeat_loop.wav",
+        "source": "examples/assets/trumpet_mono.wav",
         "posX": -4,
         "posY": -8,
         "posZ": 0,

@@ -24,7 +24,7 @@ namespace QDUEngine
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_PITCH, component->m_pitch));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_GAIN, component->m_volume));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_MAX_DISTANCE, component->m_radius));
-            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, component->m_radius * 0.2f));
+            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, 1.0));
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, stream->getBufferId()));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, stream->getTotalTime() - component->m_timeLeft));
             if (component->m_isPlaying) {
@@ -158,7 +158,7 @@ namespace QDUEngine
         }
 
         OPENALCALL(alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED));
-        m_masterVolume = 1.0f;
+        m_masterVolume = 0.9f;
         OPENALCALL(alListenerf(AL_GAIN, m_masterVolume));
 
         m_channels.reserve(channelAmount);
@@ -204,7 +204,7 @@ namespace QDUEngine
             }
             audioComponents.push_back(component);
         }
-        updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 0, 1});
+        updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 1, 0});
         updateAudioComponents(timeStep, audioComponents);
 
         if (audioComponents.size() <= m_channels.size()) {

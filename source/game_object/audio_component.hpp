@@ -35,7 +35,7 @@ namespace QDUEngine
         bool m_loop = false;
         float m_pitch = 1.f;
         Vector3D m_position = Vector3(0, 0, 0);
-        float m_radius = 0.f;
+        float m_radius = 2.f;
         std::shared_ptr<AudioStream> m_stream = nullptr;
         float m_timeLeft = 0.f;
         float m_volume = 1.f;
