@@ -17,6 +17,7 @@ namespace QDUEngine
         GameObject getGameObjectFrom(const char* path, std::shared_ptr<InputComponent>& input);
         Scene getSceneFrom(const char* path);
         static std::string getAbsolutePath(const char* path);
+        std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
         std::string getTempDir();
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         void run(const char* name, const Vector2D& windowSize);

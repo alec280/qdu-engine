@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <filesystem>
 
 #define OPENALCALL(function)\
 	function;\
@@ -19,7 +20,9 @@ namespace QDUEngine
     class AudioStream {
     public:
         AudioStream() = default;
+        explicit AudioStream(const char* filename);
         explicit AudioStream(const std::string& filename);
+        explicit AudioStream(const std::filesystem::path& filename);
         ~AudioStream();
         void clear();
         ALuint getBufferId() const;

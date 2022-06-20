@@ -7,6 +7,9 @@ namespace QDUEngine
         return totalPCMFrameCount * channels;
     }
 
+
+    AudioStream::AudioStream(const char* filename) : AudioStream(std::string(filename)) {}
+
     AudioStream::AudioStream(const std::string& filename) : m_source(filename)
     {
         WavData audioData;
@@ -37,6 +40,8 @@ namespace QDUEngine
             OPENALCALL(alBufferData(m_alBufferId, audioData.channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, audioData.pcmData.data(), audioData.pcmData.size() * 2, audioData.sampleRate));
         }
     }
+
+    AudioStream::AudioStream(const std::filesystem::path& filename) : AudioStream(filename.string()) {}
 
     AudioStream::~AudioStream() = default;
 

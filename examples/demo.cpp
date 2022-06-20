@@ -79,7 +79,7 @@ public:
         auto companionPtr = std::make_shared<GameObject>(companion);
         enemyInput->setGameObject(companionPtr);
         companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
-        auto audio = std::make_shared<AudioComponent>(AudioComponent(getAbsolutePath("examples/assets/double_bell.wav").c_str()));
+        auto audio = getAudio("examples/assets/double_bell.wav");
         audio->move(pos);
         companion.setAudioComponent(audio);
         m_scene.addGameObject(companion);
@@ -91,7 +91,7 @@ public:
         loadSceneFrom("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png");
         auto playerInput = std::make_shared<PlayerInput>();
-        auto audio = std::make_shared<AudioComponent>(AudioComponent());
+        auto audio = getAudio("");
         audio->setAsListener(true);
         audio->move(Vector(-2, -2));
         blueCube->move(Vector(-2, -2));

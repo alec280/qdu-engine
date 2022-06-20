@@ -61,6 +61,24 @@ namespace QDUEngine
         }
     }
 
+    std::shared_ptr<AudioComponent> Audio::getAudio(const char* audioPath)
+    {
+        std::string source = audioPath;
+        if (source.empty()) {
+            auto audioPtr = std::make_shared<AudioComponent>(AudioComponent());
+            return audioPtr;
+        }
+        for (auto& element : m_loadedComponents) {
+            if (element.first == audioPath) {
+                auto streamPtr = element.second;
+                return makeAudioPtr(streamPtr, source);
+            }
+        }
+        auto streamPtr = std::make_shared<AudioStream>(AudioStream(Grafica::getPath(audioPath)));
+        m_loadedComponents[audioPath] = streamPtr;
+        return makeAudioPtr(streamPtr, source);
+    }
+
     AudioSource Audio::getNextFreeChannel()
     {
         if (m_firstFreeChannelIdx == m_channels.capacity()) {
@@ -75,6 +93,14 @@ namespace QDUEngine
     float Audio::getMasterVolume() const
     {
         return m_masterVolume;
+    }
+
+    std::shared_ptr<AudioComponent> Audio::makeAudioPtr(std::shared_ptr<AudioStream>& ptr, std::string& source)
+    {
+        auto audioComponent = AudioComponent();
+        audioComponent.m_stream = ptr;
+        auto audioPtr = std::make_shared<AudioComponent>(audioComponent);
+        return audioPtr;
     }
 
     int Audio::removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)

@@ -50,6 +50,11 @@ namespace QDUEngine
         return Grafica::getPath(path).string();
     }
 
+    std::shared_ptr<AudioComponent> Application::getAudio(const char* audioPath)
+    {
+        return m_audio.getAudio(audioPath);
+    }
+
     GameObject Application::getGameObjectFrom(const char* path)
     {
         log("Loading new game object from file.");

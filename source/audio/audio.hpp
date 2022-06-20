@@ -22,12 +22,15 @@ namespace QDUEngine
         ALCdevice* m_audioDevice;
         std::vector<SourceEntry> m_channels;
         int m_firstFreeChannelIdx;
+        std::map<std::string, std::shared_ptr<AudioStream>> m_loadedComponents;
         float m_masterVolume;
         void assignChannel(std::shared_ptr<AudioComponent>& component);
         void clear();
         void end() noexcept;
         void freeChannel(int channelIdx);
+        std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
         AudioSource getNextFreeChannel();
+        static std::shared_ptr<AudioComponent> makeAudioPtr(std::shared_ptr<AudioStream>& ptr, std::string& source);
         int removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
         void removeSource(int index);
         void start();
