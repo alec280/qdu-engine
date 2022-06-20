@@ -4,6 +4,10 @@ namespace QDUEngine
 {
     void Audio::assignToChannel(std::shared_ptr<AudioComponent>& component)
     {
+        auto stream = component->getStream();
+        if (!stream) {
+            return;
+        }
         if (!component->m_isAssigned) {
             auto unusedSource = getNextFreeChannel();
             component->m_audioSource = unusedSource;
@@ -20,8 +24,8 @@ namespace QDUEngine
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_GAIN, component->m_volume));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_MAX_DISTANCE, component->m_radius));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, component->m_radius * 0.2f));
-            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, component->m_stream.getBufferId()));
-            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, component->m_stream.getTotalTime() - component->m_timeLeft));
+            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, stream->getBufferId()));
+            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, stream->getTotalTime() - component->m_timeLeft));
             if (component->m_playing) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
@@ -257,7 +261,7 @@ namespace QDUEngine
             audioComponent->m_timeLeft -= timeStep * audioComponent->m_pitch;
             if (audioComponent->m_loop) {
                 while (audioComponent->m_timeLeft < 0) {
-                    audioComponent->m_timeLeft += audioComponent->m_stream.getTotalTime();
+                    audioComponent->m_timeLeft += audioComponent->m_stream->getTotalTime();
                 }
             }
         }

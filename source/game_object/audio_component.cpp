@@ -7,7 +7,14 @@ namespace QDUEngine
         setSource(filename);
     }
 
-    AudioStream AudioComponent::getStream()
+    void AudioComponent::clear()
+    {
+        if (m_stream) {
+            m_stream->clear();
+        }
+    }
+
+    std::shared_ptr<AudioStream> AudioComponent::getStream()
     {
         return m_stream;
     }
@@ -19,7 +26,10 @@ namespace QDUEngine
 
     bool AudioComponent::hasSource()
     {
-        return !m_stream.getSource().empty();
+        if (m_stream == nullptr) {
+            return false;
+        }
+        return !m_stream->getSource().empty();
     }
 
     void AudioComponent::move(const Vector2D& by)
@@ -47,7 +57,7 @@ namespace QDUEngine
 
     void AudioComponent::setSource(const char* filename)
     {
-        m_stream = AudioStream(filename);
-        m_timeLeft = m_stream.getTotalTime();
+        m_stream = std::make_shared<AudioStream>(AudioStream(filename));
+        m_timeLeft = m_stream->getTotalTime();
     }
 }

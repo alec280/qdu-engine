@@ -11,7 +11,8 @@ namespace QDUEngine
         AudioComponent() = default;
         explicit AudioComponent(const char* filename);
         Vector3D getPosition();
-        AudioStream getStream();
+        std::shared_ptr<AudioStream> getStream();
+        void clear();
         bool hasSource();
         void move(const Vector2D& by);
         void move(const Vector3D& by);
@@ -20,7 +21,7 @@ namespace QDUEngine
         void setSource(const char* filename);
     private:
         AudioSource m_audioSource{};
-        AudioStream m_stream{};
+        std::shared_ptr<AudioStream> m_stream = nullptr;
         bool m_isAssigned = false;
         bool m_is3D = false;
         bool m_listener = false;

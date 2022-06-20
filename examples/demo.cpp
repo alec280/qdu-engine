@@ -36,14 +36,21 @@ public:
     void onAction(const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override
     {
+        auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
         if (visual == nullptr) {
             return;
         }
         if (compare(action, "leftClick")) {
             if (pos.x < 300) {
+                if (audio) {
+                    audio->move(Vector(-1, 0));
+                }
                 visual->move(Vector(-1, 0));
             } else {
+                if (audio) {
+                    audio->move(Vector(1, 0));
+                }
                 visual->move(Vector(1, 0));
             }
         }
