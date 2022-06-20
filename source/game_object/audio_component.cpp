@@ -7,6 +7,11 @@ namespace QDUEngine
         setSource(filename);
     }
 
+    AudioStream AudioComponent::getStream()
+    {
+        return m_audioStream;
+    }
+
     Vector3D AudioComponent::getPosition()
     {
         return m_position;

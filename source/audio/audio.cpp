@@ -224,7 +224,7 @@ namespace QDUEngine
             if (component->m_listener) {
                 listenerPosition = component->getPosition();
             }
-            //audioComponents.push_back(component);
+            audioComponents.push_back(component);
             /*
             if (component->m_to_play) {
                 audioComponents.push_back(component);

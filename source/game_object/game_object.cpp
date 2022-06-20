@@ -32,6 +32,9 @@ namespace QDUEngine
 
     void GameObject::end()
     {
+        if (m_audio != nullptr) {
+            m_audio->getStream().clear();
+        }
         if (m_visual != nullptr) {
             m_visual->getGraphNodePtr()->clear();
         }

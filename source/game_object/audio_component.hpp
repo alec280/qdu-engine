@@ -11,6 +11,7 @@ namespace QDUEngine
         AudioComponent() = default;
         explicit AudioComponent(const char* filename);
         Vector3D getPosition();
+        AudioStream getStream();
         bool hasSource();
         void move(const Vector2D& by);
         void move(const Vector3D& by);

@@ -40,16 +40,15 @@ namespace QDUEngine
 
     AudioStream::~AudioStream()
     {
-        if (m_alBufferId) {
-            OPENALCALL(alDeleteBuffers(1, &m_alBufferId));
-        }
-
+        return;
     }
 
     void AudioStream::clear()
     {
-        OPENALCALL(alDeleteBuffers(1, &m_alBufferId));
-        m_alBufferId = 0;
+        if (m_alBufferId) {
+            OPENALCALL(alDeleteBuffers(1, &m_alBufferId));
+            m_alBufferId = 0;
+        }
     }
 
     ALuint AudioStream::getBufferId() const
