@@ -6,18 +6,26 @@ class PlayerInput : public InputComponent {
 public:
     void onAction(const char* action, float value) override
     {
+        auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
         if (visual == nullptr) {
             return;
         }
+        if (audio == nullptr) {
+            return;
+        }
         if (compare(action, "left")) {
             visual->move(Vector(-value, 0));
+            audio->move(Vector(-value, 0));
         } else if (compare(action, "right")) {
             visual->move(Vector(value, 0));
+            audio->move(Vector(value, 0));
         } else if (compare(action, "down")) {
             visual->move(Vector(0, value));
+            audio->move(Vector(0, value));
         } else if (compare(action, "up")) {
             visual->move(Vector(0, -value));
+            audio->move(Vector(0, -value));
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
@@ -66,7 +74,6 @@ public:
         companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
         auto audio = std::make_shared<AudioComponent>(AudioComponent(getAbsolutePath("examples/assets/double_bell.wav").c_str()));
         companion.setAudioComponent(audio);
-
         m_scene.addGameObject(companion);
         audio->play();
         std::cout << "Companion added!" << std::endl;
@@ -78,7 +85,8 @@ public:
         auto playerInput = std::make_shared<PlayerInput>();
         auto audio = std::make_shared<AudioComponent>(AudioComponent());
         audio->setAsListener(true);
-        blueCube->move(QDUEngine::Vector(-2, -2));
+        audio->move(Vector(-2, -2));
+        blueCube->move(Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
         player.setAudioComponent(audio);
         m_scene.addMainObject(player);
@@ -97,7 +105,7 @@ public:
 class GlobalInput : public InputComponent {
 public:
     explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
-    void onAction(const char* action, float /*value*/) override
+    void onAction(const char* action, float) override
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";

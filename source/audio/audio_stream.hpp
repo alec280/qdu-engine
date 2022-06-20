@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <AL/al.h>
 #include <dr_wav.h>
 #include <string>
@@ -10,7 +11,7 @@
 	{\
 		ALenum error = alGetError(); \
 		if (error != AL_NO_ERROR) {  \
-            std::cout << "OpenAL Error" << std::endl; \
+            std::cout << "[Engine] OpenAL Error: " << alGetString(error) << std::endl; \
         }}
 
 namespace QDUEngine

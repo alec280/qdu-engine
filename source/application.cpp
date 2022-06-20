@@ -154,14 +154,19 @@ namespace QDUEngine
     void Application::run(const char* name, const Vector2D& windowSize)
     {
         log("PRE-START");
+        std::chrono::time_point<std::chrono::steady_clock> startTime = std::chrono::steady_clock::now();
         m_audio.start();
         m_window.start(name, windowSize, &m_input);
         userStart();
         log("START");
         while (!m_window.shouldClose()) {
+            std::chrono::time_point<std::chrono::steady_clock> newTime = std::chrono::steady_clock::now();
+            const auto frameTime = newTime - startTime;
+            startTime = newTime;
+            float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
             m_input.update(&m_scene);
             m_window.update(&m_scene);
-            m_audio.update(&m_scene);
+            m_audio.update(&m_scene, timeStep);
             m_scene.update();
             doTransition();
         }

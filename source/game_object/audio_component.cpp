@@ -2,9 +2,19 @@
 
 namespace QDUEngine
 {
-    AudioComponent::AudioComponent(const char* source)
+    AudioComponent::AudioComponent(const char* filename)
     {
-        setSource(source);
+        setSource(filename);
+    }
+
+    Vector3D AudioComponent::getPosition()
+    {
+        return m_position;
+    }
+
+    bool AudioComponent::hasSource()
+    {
+        return !m_audioStream.getSource().empty();
     }
 
     void AudioComponent::move(const Vector2D& by)
@@ -19,10 +29,10 @@ namespace QDUEngine
 
     void AudioComponent::play()
     {
-        if (m_playing || m_source.empty()) {
+        if (!hasSource()) {
             return;
         }
-        m_to_play = true;
+        m_playing = true;
     }
 
     void AudioComponent::setAsListener(bool value)
@@ -30,8 +40,9 @@ namespace QDUEngine
         m_listener = value;
     }
 
-    void AudioComponent::setSource(const char* audioPath)
+    void AudioComponent::setSource(const char* filename)
     {
-        m_source = audioPath;
+        m_audioStream = AudioStream(filename);
+        m_timeLeft = m_audioStream.getTotalTime();
     }
 }

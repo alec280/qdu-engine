@@ -1,29 +1,18 @@
 #pragma once
-#include <iostream>
-#include <cassert>
-#include <vector>
 #include <AL/alc.h>
-#include <dr_wav.h>
 #include <chrono>
 #include "glm/vec3.hpp"
 #include "../game_object/audio_component.hpp"
 #include "../scene/scene.hpp"
-#include "audio_source.hpp"
-
-#define OPENALCALL(function)\
-	function;\
-	{\
-		ALenum error = alGetError(); \
-		if (error != AL_NO_ERROR) {  \
-            std::cout << "OpenAL Error" << std::endl; \
-        }}
 
 namespace QDUEngine
 {
     class Audio {
         friend class Application;
     public:
+        float getMasterVolume() const;
         void play2D(const char* file);
+        void setMasterVolume(float volume);
     private:
         struct SourceEntry {
             ALuint m_sourceID;
@@ -35,11 +24,16 @@ namespace QDUEngine
         std::vector<SourceEntry> m_channels;
         int m_firstFreeChannelIdx;
         float m_masterVolume;
+        void assignToChannel(std::shared_ptr<AudioComponent>& component);
+        void clear();
         void end() noexcept;
-        AudioSource getNextFreeSource();
-        bool load_wav_file(const char* filename, ALuint bufferId) const;
+        void freeChannel(int channelIdx);
+        AudioSource getNextFreeChannel();
+        bool loadWavFile(const char* filename, ALuint bufferId) const;
+        void removeSource(int index);
         void start();
-        void update(Scene* scene);
+        void update(Scene* scene, float timeStep);
+        static void updateAudioComponents(float timeStep, std::vector<std::shared_ptr<AudioComponent>>& components);
         static void updateListener(const Vector3D& position, const Vector3D& frontVector, const Vector3D& upVector);
     };
 }

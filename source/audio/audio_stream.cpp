@@ -25,13 +25,11 @@ namespace QDUEngine
             m_alBufferId = 0;
         } else {
             audioData.pcmData.resize(size_t(audioData.getTotalSamples()));
-            m_totalTime = (float) audioData.totalPCMFrameCount / (float) audioData.sampleRate;
+            m_totalTime = (float)audioData.totalPCMFrameCount / (float)audioData.sampleRate;
             m_sampleRate = (int)audioData.sampleRate;
             m_channels = (int)audioData.channels;
             std::memcpy(audioData.pcmData.data(), sampleData, audioData.pcmData.size() * 2);
             drwav_free(sampleData, nullptr);
-
-            //Se pasa este vector de uint16_t a OpenAL
             OPENALCALL(alGenBuffers(1, &m_alBufferId));
             if (m_alBufferId == 0) {
                 std::cout << "[Engine] OpenAL wasn't able to load: " << filename << std::endl;

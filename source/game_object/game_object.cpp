@@ -9,6 +9,7 @@ namespace QDUEngine
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual) :
             m_attribute(attribute),
+            m_audio(nullptr),
             m_visual(visual),
             m_input(nullptr),
             m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
@@ -16,6 +17,7 @@ namespace QDUEngine
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             m_attribute(attribute),
+            m_audio(nullptr),
             m_visual(visual),
             m_input(input),
             m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
@@ -73,6 +75,8 @@ namespace QDUEngine
     void GameObject::setAudioComponent(std::shared_ptr<AudioComponent>& audioComponent)
     {
         m_audio = audioComponent;
+        auto ptr = std::make_shared<GameObject>(*this);
+        m_input->setGameObject(ptr);
     }
 
     void GameObject::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)
