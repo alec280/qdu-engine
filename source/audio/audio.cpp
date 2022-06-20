@@ -158,7 +158,7 @@ namespace QDUEngine
         }
 
         OPENALCALL(alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED));
-        m_masterVolume = 0.9f;
+        m_masterVolume = 1.0f;
         OPENALCALL(alListenerf(AL_GAIN, m_masterVolume));
 
         m_channels.reserve(channelAmount);

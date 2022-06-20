@@ -15,14 +15,15 @@
         "posY": -8
       },
       "audio": {
-        "source": "examples/assets/trumpet_mono.wav",
+        "source": "examples/assets/upbeat_loop.wav",
         "posX": -4,
         "posY": -8,
         "posZ": 0,
         "isListener": false,
         "loop": true,
-        "is3D": true,
-        "autoPlay": true
+        "is3D": false,
+        "autoPlay": true,
+        "radius": 2
       }
     },
     {

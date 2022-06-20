@@ -24,6 +24,7 @@ namespace QDUEngine
         void setAsListener(bool value);
         void setAsLooping(bool value);
         void setAutoPlay(bool value);
+        void setRadius(float value);
         void setSource(const char* filename);
     private:
         AudioSource m_audioSource{};

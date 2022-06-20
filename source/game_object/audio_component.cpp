@@ -13,8 +13,9 @@ namespace QDUEngine
         m_isPlaying = false;
         m_loop = false;
         m_position = {};
-        m_timeLeft = 0;
+        m_radius = 2.f;
         m_stream = nullptr;
+        m_timeLeft = 0;
     }
 
     nlohmann::json AudioComponent::getData()
@@ -27,6 +28,7 @@ namespace QDUEngine
                 {"posX",       m_position.x},
                 {"posY",       m_position.y},
                 {"posZ",       m_position.z},
+                {"radius",     m_radius},
                 {"source",     m_stream ? m_stream->getSource() : ""}
         };
     }
@@ -88,6 +90,10 @@ namespace QDUEngine
         m_autoPlay = value;
     }
 
+    void AudioComponent::setRadius(float value)
+    {
+        m_radius = value;
+    }
 
     void AudioComponent::setSource(const char* filename)
     {
