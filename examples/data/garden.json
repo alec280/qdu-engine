@@ -21,7 +21,7 @@
         "posZ": 0,
         "isListener": false,
         "loop": true,
-        "is3D": false,
+        "is3D": true,
         "autoPlay": true
       }
     },

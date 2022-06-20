@@ -68,9 +68,9 @@ namespace QDUEngine
         m_timeLeft = m_stream->getTotalTime();
     }
 
-    void AudioComponent::setAutoPlay(bool value)
+    void AudioComponent::setAs3D(bool value)
     {
-        m_autoPlay = value;
+        m_is3D = value;
     }
 
     void AudioComponent::setAsListener(bool value)
@@ -82,6 +82,12 @@ namespace QDUEngine
     {
         m_loop = value;
     }
+
+    void AudioComponent::setAutoPlay(bool value)
+    {
+        m_autoPlay = value;
+    }
+
 
     void AudioComponent::setSource(const char* filename)
     {

@@ -120,6 +120,7 @@ namespace QDUEngine
                 audioPtr = getAudio(audio["source"].get<std::string>().c_str());
                 audioPtr->move(Vector3(audio["posX"].get<float>(), audio["posY"].get<float>(), audio["posZ"].get<float>()));
                 audioPtr->setAsListener(audio["isListener"]);
+                audioPtr->setAs3D(audio["is3D"]);
                 audioPtr->setAsLooping(audio["loop"]);
                 if (audio["autoPlay"].get<bool>()) {
                     audioPtr->setAutoPlay(audio["autoPlay"]);
