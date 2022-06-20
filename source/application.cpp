@@ -171,6 +171,7 @@ namespace QDUEngine
             doTransition();
         }
         log("PRE-END");
+        m_audio.clear();
         m_scene.end();
         if (m_tempDir != nullptr) {
             std::filesystem::remove_all(Grafica::getPath(m_tempDir));

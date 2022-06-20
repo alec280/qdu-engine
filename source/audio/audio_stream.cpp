@@ -38,13 +38,7 @@ namespace QDUEngine
         }
     }
 
-    AudioStream::~AudioStream()
-    {
-        return;
-        if (m_alBufferId) {
-            OPENALCALL(alDeleteBuffers(1, &m_alBufferId));
-        }
-    }
+    AudioStream::~AudioStream() = default;
 
     void AudioStream::clear()
     {
