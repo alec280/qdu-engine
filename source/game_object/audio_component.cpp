@@ -9,9 +9,11 @@ namespace QDUEngine
 
     void AudioComponent::clear()
     {
-        if (m_stream) {
-            m_stream->clear();
-        }
+        //if (m_stream) {
+        //    m_stream->clear();
+        //}
+        m_isPlaying = false;
+        m_position = {};
     }
 
     nlohmann::json AudioComponent::getData()
@@ -22,6 +24,7 @@ namespace QDUEngine
                 {"isLooping", m_isLooping},
                 {"posX", m_position.x},
                 {"posY", m_position.y},
+                {"posZ", m_position.z},
                 {"source", m_stream ? m_stream->getSource() : ""}
         };
     }

@@ -39,6 +39,9 @@ namespace QDUEngine
         for (auto& sourceEntry : m_channels) {
             OPENALCALL(alDeleteSources(1, &(sourceEntry.m_sourceID)));
         }
+        for (auto& stream : m_loadedComponents) {
+            stream.second->clear();
+        }
     }
 
     void Audio::end() noexcept

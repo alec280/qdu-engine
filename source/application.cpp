@@ -40,7 +40,14 @@ namespace QDUEngine
         }
         if (!toScene.empty()) {
             loadSceneFrom(toScene.c_str());
-            main->getVisualComponent()->move(toPos);
+            auto audio = main->getAudioComponent();
+            if (audio) {
+                audio->move(toPos);
+            }
+            auto visual = main->getVisualComponent();
+            if (visual) {
+                visual->move(toPos);
+            }
             m_scene.addMainObject(main);
         }
     }
@@ -110,6 +117,9 @@ namespace QDUEngine
             auto audio = objectData.value("audio", nlohmann::json::object());
             if (!audio.empty()) {
                 std::cout << audio["source"] << std::endl;
+                auto audioPtr = getAudio(audio["source"].get<std::string>().c_str());
+                audioPtr->move(Vector3(audio["posX"].get<float>(), audio["posY"].get<float>(), audio["posZ"].get<float>()));
+                audioPtr->setAsListener(audio["isListener"]);
             }
             std::shared_ptr<InputComponent> input = nullptr;
             auto objectId = objectData.value("id", "");
