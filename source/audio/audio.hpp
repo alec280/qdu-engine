@@ -2,12 +2,13 @@
 #include <iostream>
 #include <cassert>
 #include <vector>
-#include <AL/al.h>
 #include <AL/alc.h>
 #include <dr_wav.h>
 #include <chrono>
+#include "glm/vec3.hpp"
 #include "../game_object/audio_component.hpp"
 #include "../scene/scene.hpp"
+#include "audio_source.hpp"
 
 #define OPENALCALL(function)\
 	function;\
@@ -24,22 +25,21 @@ namespace QDUEngine
     public:
         void play2D(const char* file);
     private:
-        struct OpenALSourceArrayEntry {
+        struct SourceEntry {
             ALuint m_sourceID;
-            uint32_t m_nextFreeIndex;
-            OpenALSourceArrayEntry(ALuint source, uint32_t nextFreeIndex) :
-                    m_sourceID(source), m_nextFreeIndex(nextFreeIndex) {}
+            int m_nextFreeIdx;
+            SourceEntry(ALuint source, int nextFreeIndex) : m_sourceID(source), m_nextFreeIdx(nextFreeIndex) {}
         };
         ALCcontext* m_audioContext;
         ALCdevice* m_audioDevice;
-        std::vector<OpenALSourceArrayEntry> m_openALSources;
-        uint32_t m_firstFreeOpenALSourceIndex;
-        uint32_t m_channels;
-        //std::vector<FreeAudioSource> m_freeAudioSources;
+        std::vector<SourceEntry> m_channels;
+        int m_firstFreeChannelIdx;
         float m_masterVolume;
         void end() noexcept;
+        AudioSource getNextFreeSource();
         bool load_wav_file(const char* filename, ALuint bufferId) const;
         void start();
         void update(Scene* scene);
+        static void updateListener(const Vector3D& position, const Vector3D& frontVector, const Vector3D& upVector);
     };
 }

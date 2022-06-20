@@ -9,6 +9,17 @@ namespace QDUEngine
         alcCloseDevice(m_audioDevice);
     }
 
+    AudioSource Audio::getNextFreeSource()
+    {
+        if (m_firstFreeChannelIdx == m_channels.capacity()) {
+            std::cout << "[Engine] Not enough channels available." << std::endl;
+        }
+        auto& entry = m_channels[m_firstFreeChannelIdx];
+        int channelIdx = m_firstFreeChannelIdx;
+        m_firstFreeChannelIdx = entry.m_nextFreeIdx;
+        return {entry.m_sourceID, channelIdx};
+    }
+
     bool Audio::load_wav_file(const char* filename, ALuint bufferId) const
     {
         struct WavData {
@@ -103,7 +114,7 @@ namespace QDUEngine
 
     void Audio::start()
     {
-        const int channels = 32;
+        const int channelAmount = 32;
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {
@@ -120,29 +131,46 @@ namespace QDUEngine
         m_masterVolume = 1.0f;
         OPENALCALL(alListenerf(AL_GAIN, m_masterVolume));
 
-        m_channels = channels;
-        m_openALSources.reserve(channels);
-        for (unsigned int i = 0; i < channels; i++) {
+        m_channels.reserve(channelAmount);
+        for (unsigned int i = 0; i < channelAmount; i++) {
             ALuint source = 0;
             OPENALCALL(alGenSources(1, &source));
-            m_openALSources.emplace_back(source, i + 1);
+            m_channels.emplace_back(source, i + 1);
         }
-        m_firstFreeOpenALSourceIndex = 0;
+        m_firstFreeChannelIdx = 0;
     }
 
     void Audio::update(Scene* scene)
     {
+        auto listenerPosition = Vector3D{};
+        auto componentsToPlay = std::vector<std::shared_ptr<AudioComponent>>{};
         for (auto& object : scene->getObjects()) {
             auto component = object->getAudioComponent();
             if (component == nullptr) {
                 continue;
             }
+            if (component->m_listener) {
+                listenerPosition = component->m_position;
+            }
             if (component->m_to_play) {
+                componentsToPlay.push_back(component);
                 component->m_to_play = false;
                 component->m_playing = true;
                 play2D(component->m_source.c_str());
                 component->m_playing = false;
             }
         }
+        OPENALCALL(alListenerf(AL_GAIN, m_masterVolume));
+        updateListener(listenerPosition, Vector3D{}, Vector3D{});
+    }
+
+    void Audio::updateListener(const Vector3D& position, const Vector3D& frontVector, const Vector3D& upVector)
+    {
+        OPENALCALL(alListener3f(AL_POSITION, position.x, position.y, position.z));
+        ALfloat forwardAndUpVectors[] = {
+                frontVector.x, frontVector.y, frontVector.z,
+                upVector.x, upVector.y, upVector.z
+        };
+        OPENALCALL(alListenerfv(AL_ORIENTATION, forwardAndUpVectors));
     }
 }

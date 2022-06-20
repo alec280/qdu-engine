@@ -76,8 +76,11 @@ public:
         loadSceneFrom("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png");
         auto playerInput = std::make_shared<PlayerInput>();
+        auto audio = std::make_shared<AudioComponent>(AudioComponent());
+        audio->setAsListener(true);
         blueCube->move(QDUEngine::Vector(-2, -2));
         auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
+        player.setAudioComponent(audio);
         m_scene.addMainObject(player);
 
         auto redCube = getTexturedCube("examples/assets/enemy.png");

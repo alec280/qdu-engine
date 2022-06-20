@@ -22,6 +22,7 @@ set(QDU_HEADERS
         scene/scene.hpp
         scene/window.hpp
         audio/audio.hpp
+        audio/audio_source.hpp
         application.hpp
         )
 set(QDU_SOURCES
@@ -46,6 +47,7 @@ set(QDU_SOURCES
         scene/scene.cpp
         scene/window.cpp
         audio/audio.cpp
+        audio/audio_source.cpp
         application.cpp
         )
 

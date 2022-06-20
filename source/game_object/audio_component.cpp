@@ -2,7 +2,15 @@
 
 namespace QDUEngine
 {
-    AudioComponent::AudioComponent(const char* source) : m_source(source) {}
+    AudioComponent::AudioComponent(const char* source)
+    {
+        setSource(source);
+    }
+
+    void AudioComponent::move(const Vector2D& by)
+    {
+        m_position += by;
+    }
 
     void AudioComponent::move(const Vector3D& by)
     {
@@ -15,6 +23,11 @@ namespace QDUEngine
             return;
         }
         m_to_play = true;
+    }
+
+    void AudioComponent::setAsListener(bool value)
+    {
+        m_listener = value;
     }
 
     void AudioComponent::setSource(const char* audioPath)
