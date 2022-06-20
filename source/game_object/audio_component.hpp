@@ -20,7 +20,7 @@ namespace QDUEngine
         void setSource(const char* filename);
     private:
         AudioSource m_audioSource{};
-        AudioStream m_audioStream{};
+        AudioStream m_stream{};
         bool m_isAssigned = false;
         bool m_is3D = false;
         bool m_listener = false;

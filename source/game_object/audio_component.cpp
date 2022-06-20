@@ -9,7 +9,7 @@ namespace QDUEngine
 
     AudioStream AudioComponent::getStream()
     {
-        return m_audioStream;
+        return m_stream;
     }
 
     Vector3D AudioComponent::getPosition()
@@ -19,7 +19,7 @@ namespace QDUEngine
 
     bool AudioComponent::hasSource()
     {
-        return !m_audioStream.getSource().empty();
+        return !m_stream.getSource().empty();
     }
 
     void AudioComponent::move(const Vector2D& by)
@@ -47,7 +47,7 @@ namespace QDUEngine
 
     void AudioComponent::setSource(const char* filename)
     {
-        m_audioStream = AudioStream(filename);
-        m_timeLeft = m_audioStream.getTotalTime();
+        m_stream = AudioStream(filename);
+        m_timeLeft = m_stream.getTotalTime();
     }
 }

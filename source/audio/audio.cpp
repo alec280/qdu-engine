@@ -20,8 +20,8 @@ namespace QDUEngine
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_GAIN, component->m_volume));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_MAX_DISTANCE, component->m_radius));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, component->m_radius * 0.2f));
-            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, component->m_audioStream.getBufferId()));
-            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, component->m_audioStream.getTotalTime() - component->m_timeLeft));
+            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, component->m_stream.getBufferId()));
+            OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, component->m_stream.getTotalTime() - component->m_timeLeft));
             if (component->m_playing) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
@@ -236,7 +236,6 @@ namespace QDUEngine
             */
         }
         updateListener(listenerPosition, Vector3D{}, Vector3D{});
-        /*
         updateAudioComponents(timeStep, audioComponents);
 
         if (audioComponents.size() <= m_channels.size()) {
@@ -244,7 +243,6 @@ namespace QDUEngine
                 assignToChannel(component);
             }
         }
-        */
     }
 
     void Audio::updateAudioComponents(float timeStep, std::vector<std::shared_ptr<AudioComponent>>& components)
@@ -259,7 +257,7 @@ namespace QDUEngine
             audioComponent->m_timeLeft -= timeStep * audioComponent->m_pitch;
             if (audioComponent->m_loop) {
                 while (audioComponent->m_timeLeft < 0) {
-                    audioComponent->m_timeLeft += audioComponent->m_audioStream.getTotalTime();
+                    audioComponent->m_timeLeft += audioComponent->m_stream.getTotalTime();
                 }
             }
         }
