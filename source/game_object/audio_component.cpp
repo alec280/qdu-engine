@@ -14,14 +14,26 @@ namespace QDUEngine
         }
     }
 
-    std::shared_ptr<AudioStream> AudioComponent::getStream()
+    nlohmann::json AudioComponent::getData()
     {
-        return m_stream;
+        return {
+                {"is3D", m_is3D},
+                {"isListener", m_isListener},
+                {"posX", m_position.x},
+                {"posY", m_position.y},
+                {"source", m_stream ? m_stream->getSource() : ""}
+        };
     }
+
 
     Vector3D AudioComponent::getPosition()
     {
         return m_position;
+    }
+
+    std::shared_ptr<AudioStream> AudioComponent::getStream()
+    {
+        return m_stream;
     }
 
     bool AudioComponent::hasSource()
@@ -47,12 +59,12 @@ namespace QDUEngine
         if (!hasSource()) {
             return;
         }
-        m_playing = true;
+        m_isPlaying = true;
     }
 
     void AudioComponent::setAsListener(bool value)
     {
-        m_listener = value;
+        m_isListener = value;
     }
 
     void AudioComponent::setSource(const char* filename)

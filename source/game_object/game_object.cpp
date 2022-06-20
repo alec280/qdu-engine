@@ -43,10 +43,15 @@ namespace QDUEngine
 
     nlohmann::json GameObject::getData()
     {
-        return {
-            {"id", getId()},
-            {"visual", m_visual->getData()}
-        };
+        nlohmann::json result;
+        result["id"] = getId();
+        if (m_visual) {
+            result["visual"] = m_visual->getData();
+        }
+        if (m_audio) {
+            result["audio"] = m_audio->getData();
+        }
+        return result;
     }
 
     std::string GameObject::getId()

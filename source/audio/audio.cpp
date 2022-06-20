@@ -18,14 +18,14 @@ namespace QDUEngine
             } else {
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE));
             }
-            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_loop));
+            OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_isLooping));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_PITCH, component->m_pitch));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_GAIN, component->m_volume));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_MAX_DISTANCE, component->m_radius));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, component->m_radius * 0.2f));
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, stream->getBufferId()));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, stream->getTotalTime() - component->m_timeLeft));
-            if (component->m_playing) {
+            if (component->m_isPlaying) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
         }
@@ -86,7 +86,7 @@ namespace QDUEngine
             auto position = component->getPosition();
             float squareRadius = component->m_radius * component->m_radius;
             float squareDistance = position.squareDistanceTo(listenerPosition);
-            if (component->m_playing && squareDistance <= squareRadius) {
+            if (component->m_isPlaying && squareDistance <= squareRadius) {
                 currentIndex++;
             } else {
                 //audioDataManager.SwapComponents(currentIndex, backIndex);
@@ -158,7 +158,7 @@ namespace QDUEngine
             if (component == nullptr) {
                 continue;
             }
-            if (component->m_listener) {
+            if (component->m_isListener) {
                 listenerPosition = component->getPosition();
             }
             audioComponents.push_back(component);
@@ -166,9 +166,9 @@ namespace QDUEngine
             if (component->m_to_play) {
                 audioComponents.push_back(component);
                 component->m_to_play = false;
-                component->m_playing = true;
+                component->m_isPlaying = true;
                 play2D(component->m_source.c_str());
-                component->m_playing = false;
+                component->m_isPlaying = false;
             }
             */
         }
@@ -187,14 +187,14 @@ namespace QDUEngine
     void Audio::updateAudioComponents(float timeStep, std::vector<std::shared_ptr<AudioComponent>>& components)
     {
         for (auto& audioComponent : components) {
-            if (!audioComponent->m_playing) {
+            if (!audioComponent->m_isPlaying) {
                 continue;
             }
             if (audioComponent->m_timeLeft < 0) {
-                audioComponent->m_playing = false;
+                audioComponent->m_isPlaying = false;
             }
             audioComponent->m_timeLeft -= timeStep * audioComponent->m_pitch;
-            if (audioComponent->m_loop) {
+            if (audioComponent->m_isLooping) {
                 while (audioComponent->m_timeLeft < 0) {
                     audioComponent->m_timeLeft += audioComponent->m_stream->getTotalTime();
                 }
