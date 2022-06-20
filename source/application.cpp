@@ -267,6 +267,7 @@ namespace QDUEngine
     {
         log("Ending previous scene.");
         saveScene();
+        m_audio.stopAll(&m_scene);
         m_scene.end();
         m_scene = scene;
         log("Previous scene ended.");

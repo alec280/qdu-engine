@@ -172,6 +172,20 @@ namespace QDUEngine
         m_firstFreeChannelIdx = 0;
     }
 
+    void Audio::stopAll(Scene* scene)
+    {
+        for (auto& object : scene->getObjects()) {
+            auto component = object->getAudioComponent();
+            if (!component) {
+                continue;
+            }
+            if (component->m_isAssigned) {
+                removeSource(component->m_audioSource.m_channelIdx);
+                component->m_isAssigned = false;
+            }
+        }
+    }
+
     void Audio::setMasterVolume(float volume)
     {
         m_masterVolume = std::clamp(volume, 0.0f, 1.0f);

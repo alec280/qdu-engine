@@ -34,6 +34,7 @@ namespace QDUEngine
         int removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
         void removeSource(int index);
         void start();
+        void stopAll(Scene* scene);
         void update(Scene* scene, float timeStep);
         static void updateAudioComponents(float timeStep, std::vector<std::shared_ptr<AudioComponent>>& components);
         static void updateListener(const Vector3D& position, const Vector3D& frontVector, const Vector3D& upVector);
