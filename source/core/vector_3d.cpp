@@ -30,14 +30,20 @@ namespace QDUEngine
         return Vector3(copy);
     }
 
+    float Vector3D::squareDistanceTo(const Vector3D &vector3D) const {
+        return (this->x - vector3D.x) * (this->x - vector3D.x) +
+               (this->y - vector3D.y) * (this->y - vector3D.y) +
+               (this->z - vector3D.z) * (this->z - vector3D.z);
+    }
+
     std::string Vector3D::toString() const
     {
         std::string result =
                 "(" +
                 std::to_string((int)x) +
-                "," +
+                ", " +
                 std::to_string((int)y) +
-                "," +
+                ", " +
                 std::to_string((int)z) +
                 ")";
         return result;
@@ -45,7 +51,7 @@ namespace QDUEngine
 
     std::ostream &operator<<(std::ostream& os, const Vector3D& vector3D)
     {
-        return os << "( " << vector3D.x << ", " << vector3D.y << ", " << vector3D.z << ")";
+        return os << vector3D.toString();
     }
 
     bool operator==(const Vector3D& lhs, const Vector3D& rhs)

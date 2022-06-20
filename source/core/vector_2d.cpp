@@ -38,7 +38,7 @@ namespace QDUEngine
 
     std::ostream &operator<<(std::ostream& os, const Vector2D& vector2D)
     {
-        return os << "( " << vector2D.x << ", " << vector2D.y << ")";
+        return os << vector2D.toString();
     }
 
     bool operator==(const Vector2D& lhs, const Vector2D& rhs)

@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include "vector_2d.hpp"
+#include "glm/vec3.hpp"
+#include "glm/gtx/norm.inl"
 
 namespace QDUEngine
 {
@@ -14,6 +16,7 @@ namespace QDUEngine
         Vector3D& operator+=(const Vector2D& vector2D);
         Vector3D& operator-=(const Vector2D& vector2D);
         Vector3D& operator*=(float rhs);
+        float squareDistanceTo(const Vector3D& vector3D) const;
         std::string toString() const;
     };
 

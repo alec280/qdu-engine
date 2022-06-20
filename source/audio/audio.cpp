@@ -2,7 +2,7 @@
 
 namespace QDUEngine
 {
-    void Audio::assignToChannel(std::shared_ptr<AudioComponent>& component)
+    void Audio::assignChannel(std::shared_ptr<AudioComponent>& component)
     {
         auto stream = component->getStream();
         if (!stream) {
@@ -15,8 +15,7 @@ namespace QDUEngine
             if (!component->m_is3D) {
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_TRUE));
                 OPENALCALL(alSource3f(unusedSource.m_sourceID, AL_POSITION, 0.0f, 0.0f, 0.0f));
-            }
-            else {
+            } else {
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE));
             }
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_loop));
@@ -29,10 +28,8 @@ namespace QDUEngine
             if (component->m_playing) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
-
         }
-        if (component->m_is3D)
-        {
+        if (component->m_is3D) {
             auto pos = component->m_position;
             OPENALCALL(alSource3f(component->m_audioSource.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
         }
@@ -78,6 +75,35 @@ namespace QDUEngine
     float Audio::getMasterVolume() const
     {
         return m_masterVolume;
+    }
+
+    int Audio::removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
+    {
+        int currentIndex = 0;
+        int backIndex = (int)components.size();
+        while (currentIndex <= backIndex) {
+            std::shared_ptr<AudioComponent>& component = components[currentIndex];
+            auto position = component->getPosition();
+            float squareRadius = component->m_radius * component->m_radius;
+            float squareDistance = position.squareDistanceTo(listenerPosition);
+            if (component->m_playing && squareDistance <= squareRadius) {
+                currentIndex++;
+            } else {
+                //audioDataManager.SwapComponents(currentIndex, backIndex);
+                backIndex--;
+            }
+        }
+        for (auto& component : components) {
+            if (component->m_isAssigned) {
+                auto audioSource = component->m_audioSource;
+                OPENALCALL(alSourcef(audioSource.m_sourceID, AL_GAIN, 0.0f));
+                OPENALCALL(alSourceStop(audioSource.m_sourceID));
+                OPENALCALL(alSourcei(audioSource.m_sourceID, AL_BUFFER, 0));
+                freeChannel(audioSource.m_channelIdx);
+                component->m_isAssigned = false;
+            }
+        }
+        return currentIndex;
     }
 
     void Audio::removeSource(int channelIdx)
@@ -151,8 +177,10 @@ namespace QDUEngine
 
         if (audioComponents.size() <= m_channels.size()) {
             for (auto& component : audioComponents) {
-                assignToChannel(component);
+                assignChannel(component);
             }
+        } else {
+            removeAudioSourceComponents(listenerPosition, audioComponents);
         }
     }
 

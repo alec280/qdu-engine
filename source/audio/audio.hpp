@@ -23,11 +23,12 @@ namespace QDUEngine
         std::vector<SourceEntry> m_channels;
         int m_firstFreeChannelIdx;
         float m_masterVolume;
-        void assignToChannel(std::shared_ptr<AudioComponent>& component);
+        void assignChannel(std::shared_ptr<AudioComponent>& component);
         void clear();
         void end() noexcept;
         void freeChannel(int channelIdx);
         AudioSource getNextFreeChannel();
+        int removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
         void removeSource(int index);
         void start();
         void update(Scene* scene, float timeStep);
