@@ -9,21 +9,25 @@ namespace QDUEngine
 
     void AudioComponent::clear()
     {
+        m_autoPlay = false;
         m_isPlaying = false;
+        m_loop = false;
         m_position = {};
+        m_timeLeft = 0;
+        m_stream = nullptr;
     }
 
     nlohmann::json AudioComponent::getData()
     {
         return {
-                {"autoPlay", m_autoPlay},
+                {"autoPlay",   m_autoPlay},
                 {"is3D",       m_is3D},
                 {"isListener", m_isListener},
-                {"loop",  m_loop},
+                {"loop",       m_loop},
                 {"posX",       m_position.x},
                 {"posY",       m_position.y},
                 {"posZ",       m_position.z},
-                {"source", m_stream ? m_stream->getSource() : ""}
+                {"source",     m_stream ? m_stream->getSource() : ""}
         };
     }
 
@@ -61,6 +65,7 @@ namespace QDUEngine
             return;
         }
         m_isPlaying = true;
+        m_timeLeft = m_stream->getTotalTime();
     }
 
     void AudioComponent::setAutoPlay(bool value)

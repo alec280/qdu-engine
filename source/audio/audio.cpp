@@ -191,15 +191,6 @@ namespace QDUEngine
                 listenerPosition = component->getPosition();
             }
             audioComponents.push_back(component);
-            /*
-            if (component->m_to_play) {
-                audioComponents.push_back(component);
-                component->m_to_play = false;
-                component->m_isPlaying = true;
-                play2D(component->m_source.c_str());
-                component->m_isPlaying = false;
-            }
-            */
         }
         updateListener(listenerPosition, Vector3D{}, Vector3D{});
         updateAudioComponents(timeStep, audioComponents);
