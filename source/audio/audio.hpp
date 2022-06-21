@@ -32,7 +32,7 @@ namespace QDUEngine
         std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
         AudioSource getNextFreeChannel();
         static std::shared_ptr<AudioComponent> makeAudioPtr(std::shared_ptr<AudioStream>& ptr, std::string& source);
-        void removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
+        std::vector<std::shared_ptr<AudioComponent>> removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
         void removeSource(int index);
         void start();
         void stopAll(Scene* scene);

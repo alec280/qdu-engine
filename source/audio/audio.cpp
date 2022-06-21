@@ -112,24 +112,33 @@ namespace QDUEngine
         return audioPtr;
     }
 
-    void Audio::removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
+    std::vector<std::shared_ptr<AudioComponent>> Audio::removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
     {
+        auto usefulComponents = std::vector<std::shared_ptr<AudioComponent>>{};
         for (auto& component : components) {
-            if (!component->m_isAssigned) {
-                continue;
-            }
+            //if (!component->m_isAssigned) {
+            //    usefulComponents.push_back(component);
+            //    continue;
+           // }
             if (component->m_timeLeft > 0 && component->m_isPlaying) {
-                continue;
+                if (!component->m_is3D) {
+                    usefulComponents.push_back(component);
+                    continue;
+                }
+                auto position = component->getPosition();
+                float squareRadius = component->m_radius * component->m_radius;
+                float squareDistance = position.squareDistanceTo(listenerPosition);
+                if (squareDistance <= squareRadius) {
+                    usefulComponents.push_back(component);
+                    continue;
+                }
             }
-            auto position = component->getPosition();
-            float squareRadius = component->m_radius * component->m_radius;
-            float squareDistance = position.squareDistanceTo(listenerPosition);
-            if (squareDistance <= squareRadius && component->m_is3D) {
-                continue;
+            if (component->m_isAssigned) {
+                removeSource(component->m_audioSource.m_channelIdx);
+                component->m_isAssigned = false;
             }
-            removeSource(component->m_audioSource.m_channelIdx);
-            component->m_isAssigned = false;
         }
+        return usefulComponents;
     }
 
     void Audio::removeSource(int channelIdx)
@@ -205,9 +214,12 @@ namespace QDUEngine
         }
         updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 1, 0});
         updateAudioComponents(timeStep, audioComponents);
-        removeRedundantSources(listenerPosition, audioComponents);
-        for (auto& componentIn : audioComponents) {
-            assignChannel(componentIn, (int)audioComponents.size());
+        auto usefulComponents = audioComponents;
+        if (audioComponents.size() > m_channels.capacity()) {
+            usefulComponents = removeRedundantSources(listenerPosition, audioComponents);
+        }
+        for (auto& componentIn : usefulComponents) {
+            assignChannel(componentIn, (int)usefulComponents.size());
         }
     }
 
