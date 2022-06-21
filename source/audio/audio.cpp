@@ -112,6 +112,15 @@ namespace QDUEngine
         return audioPtr;
     }
 
+    void Audio::playAudio(const char* path, bool is3D, Vector3D pos)
+    {
+        auto component = getAudio(path);
+        component->setAs3D(is3D);
+        component->move(pos);
+        component->play();
+        m_oneOffAudioComponents.push_back(component);
+    }
+
     std::vector<std::shared_ptr<AudioComponent>> Audio::removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
     {
         auto usefulComponents = std::vector<std::shared_ptr<AudioComponent>>{};
@@ -148,7 +157,7 @@ namespace QDUEngine
 
     void Audio::start()
     {
-        const int channelAmount = 32;
+        const int channelAmount = 2;
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {
@@ -208,6 +217,11 @@ namespace QDUEngine
             }
             audioComponents.push_back(component);
         }
+
+        for (auto& component : m_oneOffAudioComponents) {
+            audioComponents.push_back(component);
+        }
+
         updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 1, 0});
         updateAudioComponents(timeStep, audioComponents);
         auto usefulComponents = audioComponents;
@@ -217,6 +231,14 @@ namespace QDUEngine
         for (auto& componentIn : usefulComponents) {
             assignChannel(componentIn, (int)usefulComponents.size());
         }
+
+        auto toKeep = std::vector<std::shared_ptr<AudioComponent>>{};
+        for (auto& component : m_oneOffAudioComponents) {
+            if (component->m_isAssigned) {
+                toKeep.push_back(component);
+            }
+        }
+        m_oneOffAudioComponents = toKeep;
     }
 
     void Audio::updateAudioComponents(float timeStep, std::vector<std::shared_ptr<AudioComponent>>& components)

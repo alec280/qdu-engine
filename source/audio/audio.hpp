@@ -25,6 +25,7 @@ namespace QDUEngine
         int m_lastRequestCount = 0;
         std::map<std::string, std::shared_ptr<AudioStream>> m_loadedComponents;
         float m_masterVolume;
+        std::vector<std::shared_ptr<AudioComponent>> m_oneOffAudioComponents;
         void assignChannel(std::shared_ptr<AudioComponent>& component, int requestCount);
         void clear();
         void end() noexcept;
@@ -32,6 +33,7 @@ namespace QDUEngine
         std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
         AudioSource getNextFreeChannel();
         static std::shared_ptr<AudioComponent> makeAudioPtr(std::shared_ptr<AudioStream>& ptr, std::string& source);
+        void playAudio(const char* audioPath, bool is3D, Vector3D pos);
         std::vector<std::shared_ptr<AudioComponent>> removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components);
         void removeSource(int index);
         void start();
