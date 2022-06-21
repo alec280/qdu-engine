@@ -116,10 +116,6 @@ namespace QDUEngine
     {
         auto usefulComponents = std::vector<std::shared_ptr<AudioComponent>>{};
         for (auto& component : components) {
-            //if (!component->m_isAssigned) {
-            //    usefulComponents.push_back(component);
-            //    continue;
-           // }
             if (component->m_timeLeft > 0 && component->m_isPlaying) {
                 if (!component->m_is3D) {
                     usefulComponents.push_back(component);
@@ -152,7 +148,7 @@ namespace QDUEngine
 
     void Audio::start()
     {
-        const int channelAmount = 2;
+        const int channelAmount = 32;
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {
