@@ -2,7 +2,7 @@
 
 namespace QDUEngine
 {
-    void Audio::assignChannel(std::shared_ptr<AudioComponent>& component)
+    void Audio::assignChannel(std::shared_ptr<AudioComponent>& component, int requestCount)
     {
         auto stream = component->getStream();
         if (!stream) {
@@ -10,6 +10,14 @@ namespace QDUEngine
         }
         if (!component->m_isAssigned) {
             auto unusedSource = getNextFreeChannel();
+            if (unusedSource.m_channelIdx == -1) {
+                if (requestCount != m_lastRequestCount) {
+                    std::cout << "[Engine] Not enough channels available (requesting: "
+                    << requestCount << ", maximum: " << m_channels.capacity() << ")." << std::endl;
+                    m_lastRequestCount = requestCount;
+                }
+                return;
+            }
             component->m_audioSource = unusedSource;
             component->m_isAssigned = true;
             if (!component->m_is3D) {
@@ -83,7 +91,7 @@ namespace QDUEngine
     AudioSource Audio::getNextFreeChannel()
     {
         if (m_firstFreeChannelIdx == m_channels.capacity()) {
-            std::cout << "[Engine] Not enough channels available." << std::endl;
+            return {0, -1};
         }
         auto& entry = m_channels[m_firstFreeChannelIdx];
         int channelIdx = m_firstFreeChannelIdx;
@@ -104,33 +112,24 @@ namespace QDUEngine
         return audioPtr;
     }
 
-    int Audio::removeAudioSourceComponents(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
+    void Audio::removeRedundantSources(const Vector3D& listenerPosition, std::vector<std::shared_ptr<AudioComponent>>& components)
     {
-        int currentIndex = 0;
-        int backIndex = (int)components.size();
-        while (currentIndex <= backIndex) {
-            std::shared_ptr<AudioComponent>& component = components[currentIndex];
+        for (auto& component : components) {
+            if (!component->m_isAssigned) {
+                continue;
+            }
+            if (component->m_timeLeft > 0 && component->m_isPlaying) {
+                continue;
+            }
             auto position = component->getPosition();
             float squareRadius = component->m_radius * component->m_radius;
             float squareDistance = position.squareDistanceTo(listenerPosition);
-            if (component->m_isPlaying && squareDistance <= squareRadius) {
-                currentIndex++;
-            } else {
-                //audioDataManager.SwapComponents(currentIndex, backIndex);
-                backIndex--;
+            if (squareDistance <= squareRadius && component->m_is3D) {
+                continue;
             }
+            removeSource(component->m_audioSource.m_channelIdx);
+            component->m_isAssigned = false;
         }
-        for (auto& component : components) {
-            if (component->m_isAssigned) {
-                auto audioSource = component->m_audioSource;
-                OPENALCALL(alSourcef(audioSource.m_sourceID, AL_GAIN, 0.0f));
-                OPENALCALL(alSourceStop(audioSource.m_sourceID));
-                OPENALCALL(alSourcei(audioSource.m_sourceID, AL_BUFFER, 0));
-                freeChannel(audioSource.m_channelIdx);
-                component->m_isAssigned = false;
-            }
-        }
-        return currentIndex;
     }
 
     void Audio::removeSource(int channelIdx)
@@ -144,7 +143,7 @@ namespace QDUEngine
 
     void Audio::start()
     {
-        const int channelAmount = 32;
+        const int channelAmount = 2;
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {
@@ -206,13 +205,9 @@ namespace QDUEngine
         }
         updateListener(listenerPosition, Vector3D{0, 0, -1}, Vector3D{0, 1, 0});
         updateAudioComponents(timeStep, audioComponents);
-
-        if (audioComponents.size() <= m_channels.size()) {
-            for (auto& component : audioComponents) {
-                assignChannel(component);
-            }
-        } else {
-            removeAudioSourceComponents(listenerPosition, audioComponents);
+        removeRedundantSources(listenerPosition, audioComponents);
+        for (auto& componentIn : audioComponents) {
+            assignChannel(componentIn, (int)audioComponents.size());
         }
     }
 
