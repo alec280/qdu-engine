@@ -24,9 +24,7 @@ namespace QDUEngine
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_TRUE));
                 OPENALCALL(alSource3f(unusedSource.m_sourceID, AL_POSITION, 0.0f, 0.0f, 0.0f));
             } else {
-                auto pos = component->m_position;
                 OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE));
-                OPENALCALL(alSource3f(unusedSource.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
             }
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_LOOPING, component->m_loop));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_PITCH, component->m_pitch));
@@ -38,6 +36,11 @@ namespace QDUEngine
             if (component->m_isPlaying) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
             }
+        }
+        if (component->m_is3D) {
+            auto pos = component->m_position;
+            auto source = component->m_audioSource;
+            OPENALCALL(alSource3f(source.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
         }
     }
 
@@ -148,7 +151,7 @@ namespace QDUEngine
 
     void Audio::start()
     {
-        const int channelAmount = 2;
+        const int channelAmount = 32;
         m_audioDevice = alcOpenDevice(nullptr);
 
         if (!m_audioDevice) {

@@ -40,11 +40,11 @@ namespace QDUEngine
     {
         std::string result =
                 "(" +
-                std::to_string((int)x) +
+                std::to_string(x) +
                 ", " +
-                std::to_string((int)y) +
+                std::to_string(y) +
                 ", " +
-                std::to_string((int)z) +
+                std::to_string(z) +
                 ")";
         return result;
     }

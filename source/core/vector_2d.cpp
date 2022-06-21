@@ -32,7 +32,7 @@ namespace QDUEngine
 
     std::string Vector2D::toString() const
     {
-        std::string result = "(" + std::to_string((int)x) + "," + std::to_string((int)y) + ")";
+        std::string result = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
         return result;
     }
 
