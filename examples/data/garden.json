@@ -23,7 +23,8 @@
         "loop": true,
         "is3D": false,
         "autoPlay": true,
-        "radius": 2
+        "radius": 2,
+        "pitch": 1
       }
     },
     {

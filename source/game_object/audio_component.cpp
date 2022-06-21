@@ -28,6 +28,7 @@ namespace QDUEngine
                 {"posX",       m_position.x},
                 {"posY",       m_position.y},
                 {"posZ",       m_position.z},
+                {"pitch",      m_pitch},
                 {"radius",     m_radius},
                 {"source",     m_stream ? m_stream->getSource() : ""}
         };
@@ -88,6 +89,11 @@ namespace QDUEngine
     void AudioComponent::setAutoPlay(bool value)
     {
         m_autoPlay = value;
+    }
+
+    void AudioComponent::setPitch(float value)
+    {
+        m_pitch = value;
     }
 
     void AudioComponent::setRadius(float value)

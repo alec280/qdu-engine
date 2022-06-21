@@ -126,17 +126,8 @@ namespace QDUEngine
         auto usefulComponents = std::vector<std::shared_ptr<AudioComponent>>{};
         for (auto& component : components) {
             if (component->m_timeLeft > 0 && component->m_isPlaying) {
-                if (!component->m_is3D) {
-                    usefulComponents.push_back(component);
-                    continue;
-                }
-                auto position = component->getPosition();
-                float squareRadius = component->m_radius * component->m_radius;
-                float squareDistance = position.squareDistanceTo(listenerPosition);
-                if (squareDistance <= squareRadius) {
-                    usefulComponents.push_back(component);
-                    continue;
-                }
+                usefulComponents.push_back(component);
+                continue;
             }
             if (component->m_isAssigned) {
                 removeSource(component->m_audioSource.m_channelIdx);

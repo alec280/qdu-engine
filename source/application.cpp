@@ -123,6 +123,7 @@ namespace QDUEngine
                 audioPtr->setAs3D(audio["is3D"]);
                 audioPtr->setAsLooping(audio["loop"]);
                 audioPtr->setRadius(audio["radius"]);
+                audioPtr->setPitch(audio["pitch"]);
                 if (audio["autoPlay"].get<bool>()) {
                     audioPtr->setAutoPlay(audio["autoPlay"]);
                     audioPtr->play();

@@ -303,7 +303,8 @@
         "loop": true,
         "is3D": true,
         "autoPlay": true,
-        "radius": 5
+        "radius": 5,
+        "pitch": 1
       }
     },
     {

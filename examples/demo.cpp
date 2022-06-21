@@ -56,6 +56,25 @@ public:
     void onUpdate(float timeStep) override {}
 };
 
+class SpeedsterInput : public InputComponent {
+public:
+    void onAction(const char* action, float value) override {}
+    void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onUpdate(float timeStep) override
+    {
+        auto audio = m_gameObject->getAudioComponent();
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr || audio == nullptr) {
+            return;
+        }
+        m_time += timeStep;
+        visual->move(Vector(sin(m_time) * 3,0) - visual->getPosition());
+        audio->move(Vector3(sin(m_time) * 3,0, 0) - audio->getPosition());
+    }
+private:
+    float m_time = 0.f;
+};
+
 class Static : public GameObject {
 public:
     explicit Static(std::shared_ptr<VisualComponent>& visual) : GameObject(nullptr, visual) {}
@@ -88,12 +107,14 @@ public:
     void addSpeedster()
     {
         auto redCube = getTexturedCube("examples/assets/enemy.png");
-        auto speedster = Static(redCube);
+        auto speedsterInput = std::make_shared<SpeedsterInput>();
+        auto speedster = Character(redCube, (std::shared_ptr<InputComponent>&)speedsterInput);
         auto audio = getAudio("examples/assets/trumpet_mono.wav");
         audio->setAsLooping(true);
         audio->setAs3D(true);
         audio->setRadius(3);
         audio->setAutoPlay(true);
+        audio->setPitch(2);
         audio->play();
         speedster.setAudioComponent(audio);
         m_scene.addGameObject(speedster);
