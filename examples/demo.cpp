@@ -26,6 +26,7 @@ public:
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onUpdate(float timeStep) override {}
 };
 
 class EnemyInput : public InputComponent {
@@ -52,6 +53,7 @@ public:
             }
         }
     }
+    void onUpdate(float timeStep) override {}
 };
 
 class Static : public GameObject {
@@ -192,6 +194,7 @@ public:
             m_combo[1] = false;
         }
     }
+    void onUpdate(float timeStep) override {}
 private:
     bool m_combo[2]{false, false};
     Dungeon* m_application;

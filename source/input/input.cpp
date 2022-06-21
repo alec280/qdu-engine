@@ -116,7 +116,7 @@ namespace QDUEngine
         }
     }
 
-    void Input::update(Scene* scene)
+    void Input::update(Scene* scene, float timeStep)
     {
         for (auto& action : m_cursorActions) {
             m_cursorActions.at(action.first) = 0;
@@ -155,6 +155,13 @@ namespace QDUEngine
                     m_globalInput->onAction(action.first.c_str(), value);
                 }
             }
+        }
+        for (auto& object : scene->getObjects()) {
+            auto component = object->getInputComponent();
+            if (component == nullptr) {
+                continue;
+            }
+            component->onUpdate(timeStep);
         }
     }
 

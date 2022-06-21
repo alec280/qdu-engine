@@ -201,7 +201,7 @@ namespace QDUEngine
             const auto frameTime = newTime - startTime;
             startTime = newTime;
             float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
-            m_input.update(&m_scene);
+            m_input.update(&m_scene, timeStep);
             m_window.update(&m_scene);
             m_audio.update(&m_scene, timeStep);
             m_scene.update();

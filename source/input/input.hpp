@@ -22,7 +22,7 @@ namespace QDUEngine
     private:
         bool keyPressed(int key, int action);
         void cursorMoved(double xPos, double yPos);
-        void update(Scene* scene);
+        void update(Scene* scene, float timeStep);
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
         std::shared_ptr<InputComponent> m_globalInput = nullptr;
