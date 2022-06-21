@@ -8,10 +8,7 @@ public:
     {
         auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
-        if (visual == nullptr) {
-            return;
-        }
-        if (audio == nullptr) {
+        if (visual == nullptr || audio == nullptr) {
             return;
         }
         if (compare(action, "left")) {
@@ -86,6 +83,20 @@ public:
         audio->play();
         std::cout << "Companion added!" << std::endl;
     }
+    void addSpeedster()
+    {
+        auto redCube = getTexturedCube("examples/assets/enemy.png");
+        auto speedster = Static(redCube);
+        auto audio = getAudio("examples/assets/trumpet_mono.wav");
+        audio->setAsLooping(true);
+        audio->setAs3D(true);
+        audio->setRadius(3);
+        audio->setAutoPlay(true);
+        audio->play();
+        speedster.setAudioComponent(audio);
+        m_scene.addGameObject(speedster);
+        std::cout << "Speedster added!" << std::endl;
+    }
     void userStart() noexcept override
     {
         loadSceneFrom("examples/data/garden.json");
@@ -152,6 +163,8 @@ public:
             }
             std::cin.ignore(1);
             m_application->bindKey(&tmp, "right");
+        } else if (compare(action, "speedster")) {
+            m_application->addSpeedster();
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override
@@ -199,6 +212,7 @@ int main()
     dungeon.bindKey("S", "down");
     dungeon.bindKey("D", "right");
     dungeon.bindKey("M", "map");
+    dungeon.bindKey("X", "speedster");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");
     dungeon.bindJoystick("RS_X", "right");
