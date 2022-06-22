@@ -10,7 +10,7 @@
       "fromX": 0,
       "fromY": 4,
       "toX": 0,
-      "toY": -7
+      "toY": -8
     }
   },
   "objects": [
@@ -162,8 +162,8 @@
     {
       "visual": {
         "source": "examples/assets/bush.png",
-        "posX": 3,
-        "posY": 3
+        "posX": 4,
+        "posY": 4
       }
     },
     {
@@ -197,8 +197,8 @@
     {
       "visual": {
         "source": "examples/assets/bush.png",
-        "posX": -3,
-        "posY": 3
+        "posX": -4,
+        "posY": 4
       }
     },
     {
@@ -269,13 +269,6 @@
         "source": "examples/assets/bush.png",
         "posX": -4,
         "posY": -4
-      }
-    },
-    {
-      "visual": {
-        "source": "examples/assets/bush.png",
-        "posX": -4,
-        "posY": -5
       }
     },
     {
