@@ -1,0 +1,13 @@
+{
+  "transitions": {
+    "examples/data/garden.json": {
+      "fromX": 0,
+      "fromY": -8,
+      "toX": 0,
+      "toY": 3
+    }
+  },
+  "objects": [
+
+  ]
+}
