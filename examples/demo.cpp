@@ -203,6 +203,8 @@ public:
             m_application->bindKey(&tmp, "right");
         } else if (compare(action, "speedster")) {
             m_application->addSpeedster();
+        } else if (compare(action, "pause")) {
+            m_application->setPaused(!m_application->isPaused());
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override
@@ -251,6 +253,7 @@ int main()
     dungeon.bindKey("S", "down");
     dungeon.bindKey("D", "right");
     dungeon.bindKey("M", "map");
+    dungeon.bindKey("P", "pause");
     dungeon.bindKey("X", "speedster");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");

@@ -193,6 +193,11 @@ namespace QDUEngine
         return m_window.getTexturedCube(texturePath);
     }
 
+    bool Application::isPaused()
+    {
+        return m_paused;
+    }
+
     void Application::loadSceneFrom(const char* path)
     {
         auto nextScene = getSceneFrom(path);
@@ -218,10 +223,13 @@ namespace QDUEngine
         userStart();
         log("START");
         while (!m_window.shouldClose()) {
+            float timeStep = 0.0;
             std::chrono::time_point<std::chrono::steady_clock> newTime = std::chrono::steady_clock::now();
             const auto frameTime = newTime - startTime;
             startTime = newTime;
-            float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+            if (!isPaused()) {
+                timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+            }
             m_input.update(&m_scene, timeStep);
             m_window.update(&m_scene);
             m_audio.update(&m_scene, timeStep);
@@ -289,6 +297,11 @@ namespace QDUEngine
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
         m_input.m_globalInput = inputComponent;
+    }
+
+    void Application::setPaused(bool value)
+    {
+        m_paused = value;
     }
 
     void Application::setScene(Scene& scene)

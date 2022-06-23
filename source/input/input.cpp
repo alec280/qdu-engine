@@ -36,6 +36,8 @@ namespace QDUEngine
 
             } else if (checkKey("X", string, act, GLFW_KEY_X, key, action)) {
 
+            } else if (checkKey("P", string, act, GLFW_KEY_P, key, action)) {
+
             }
         }
         return false;
@@ -194,11 +196,9 @@ namespace QDUEngine
     void Input::cursorPressed(int button, int action)
     {
         for (auto& binding : m_cursorBindings) {
-            if (binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+            if ((binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)) {
                 m_cursorActions.at(binding.second) = 1;
             }
         }
