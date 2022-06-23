@@ -85,17 +85,15 @@ namespace QDUEngine
     std::shared_ptr<VisualComponent> Window::getMesh(const char* objPath, const char* texturePath)
     {
         std::string source = texturePath;
-        /*
         for (auto& element : m_loadedComponents) {
-            if (element.first == texturePath) {
-                auto meshPtr = element.second;
-                return makeVisualPtr(meshPtr, source);
+            if (element.texture == texturePath && element.object == objPath) {
+                auto meshPtr = element.graphPtr;
+                return makeVisualPtr(meshPtr, source, objPath);
             }
         }
-        */
         auto meshPtr = getMeshPtr(objPath, texturePath);
-        //m_loadedComponents[texturePath] = meshPtr;
-        return makeVisualPtr(meshPtr, source);
+        m_loadedComponents.push_back({texturePath, objPath, meshPtr});
+        return makeVisualPtr(meshPtr, source, objPath);
     }
 
     std::shared_ptr<Grafica::SceneGraphNode> Window::getMeshPtr(const char* objPath, const char* texturePath)
@@ -175,19 +173,30 @@ namespace QDUEngine
     {
         std::string source = texturePath;
         for (auto& element : m_loadedComponents) {
-            if (element.first == texturePath) {
-                auto cubePtr = element.second;
-                return makeVisualPtr(cubePtr, source);
+            if (element.texture == texturePath && element.object.empty()) {
+                auto cubePtr = element.graphPtr;
+                return makeVisualPtr(cubePtr, source, "");
             }
         }
         auto cubePtr = getCubePtr(texturePath);
-        m_loadedComponents[texturePath] = cubePtr;
-        return makeVisualPtr(cubePtr, source);
+        m_loadedComponents.push_back({texturePath, "", cubePtr});
+        return makeVisualPtr(cubePtr, source, "");
     }
 
     std::shared_ptr<VisualComponent> Window::makeVisualPtr(
             std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
-            std::string& source
+            std::string& source,
+            const char* obj
+    )
+    {
+        auto objString = std::string(obj);
+        return makeVisualPtr(grPtr, source, objString);
+    }
+
+    std::shared_ptr<VisualComponent> Window::makeVisualPtr(
+            std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
+            std::string& source,
+            std::string& obj
     )
     {
         auto graph = Grafica::SceneGraphNode("");
@@ -195,6 +204,7 @@ namespace QDUEngine
         auto graphPtr = std::make_shared<Grafica::SceneGraphNode>(graph);
         auto visualComponent = VisualComponent(graphPtr);
         visualComponent.setSource(source);
+        visualComponent.setObj(obj);
         auto visualPtr = std::make_shared<VisualComponent>(visualComponent);
         return visualPtr;
     }

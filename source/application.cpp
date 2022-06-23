@@ -123,7 +123,12 @@ namespace QDUEngine
             auto visual = objectData.value("visual", nlohmann::json::object());
             std::shared_ptr<VisualComponent> cube = nullptr;
             if (!visual.empty()) {
-                cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+                auto objFile = visual.value("obj", "");
+                if (objFile.empty()) {
+                    cube = getTexturedCube(visual["source"].get<std::string>().c_str());
+                } else {
+                    cube = getTexturedMesh(objFile.c_str(), visual["source"].get<std::string>().c_str());
+                }
                 cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
                 cube->scale(Vector3(visual.value("scaleX", 1.f),
                                     visual.value("scaleY", 1.f),

@@ -30,6 +30,7 @@ namespace QDUEngine
     nlohmann::json VisualComponent::getData()
     {
         return {
+                {"obj", m_obj},
                 {"posX", m_position.x},
                 {"posY", m_position.y},
                 {"scaleX", m_scale.x},
@@ -62,6 +63,11 @@ namespace QDUEngine
     void VisualComponent::scale(const Vector3D& to)
     {
         m_scale = to;
+    }
+
+    void VisualComponent::setObj(std::string& path)
+    {
+        m_obj = path;
     }
 
     void VisualComponent::setSource(std::string& path)
