@@ -16,6 +16,29 @@ namespace QDUEngine
 
     VisualComponent::VisualComponent() : m_position() {}
 
+    void VisualComponent::clear()
+    {
+        m_graphNodePtr->clear();
+        m_position = {};
+    }
+
+    void VisualComponent::move(const Vector2D& by)
+    {
+        m_position += by;
+    }
+
+    nlohmann::json VisualComponent::getData()
+    {
+        return {
+                {"posX", m_position.x},
+                {"posY", m_position.y},
+                {"scaleX", m_scale.x},
+                {"scaleY", m_scale.y},
+                {"scaleZ", m_scale.z},
+                {"source", m_source}
+        };
+    }
+
     gr::SceneGraphNodePtr VisualComponent::getGraphNodePtr()
     {
         return m_graphNodePtr;
@@ -26,33 +49,23 @@ namespace QDUEngine
         return m_position;
     }
 
-    void VisualComponent::move(const Vector2D& by)
+    Vector3D VisualComponent::getScale()
     {
-        m_position += by;
-    }
-
-    void VisualComponent::clear()
-    {
-        m_graphNodePtr->clear();
-        m_position = {};
-    }
-
-    void VisualComponent::setSource(std::string& path)
-    {
-        m_source = path;
-    }
-
-    nlohmann::json VisualComponent::getData()
-    {
-        return {
-            {"source", m_source},
-            {"posX", m_position.x},
-            {"posY", m_position.y}
-        };
+        return m_scale;
     }
 
     std::string& VisualComponent::getSource()
     {
         return m_source;
+    }
+
+    void VisualComponent::scale(const Vector3D& to)
+    {
+        m_scale = to;
+    }
+
+    void VisualComponent::setSource(std::string& path)
+    {
+        m_source = path;
     }
 }

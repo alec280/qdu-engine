@@ -149,8 +149,8 @@ public:
             auto navMesh = getTexturedMesh(
                     "examples/assets/obstacles_nav_mesh.obj",
                     "examples/assets/enemy.png");
-            navMesh->getGraphNodePtr()->transform *= Grafica::Transformations::scale(2, 1, 1);
-            navMesh->move(Vector(-0.5, -0.5));
+            navMesh->scale(Vector3(-1, 1, 1));
+            navMesh->move(Vector(0.5, -0.5));
             auto nav = Static(navMesh);
             m_scene.addGameObject(nav);
             m_obstaclesLoaded = true;

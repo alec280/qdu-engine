@@ -287,8 +287,9 @@ namespace QDUEngine
                 continue;
             }
             auto pos = visualComponent->getPosition();
+            auto scale = visualComponent->getScale();
             auto nodePtr = visualComponent->getGraphNodePtr();
-            nodePtr->transform = tr::translate(pos.x, pos.y,0);
+            nodePtr->transform = tr::translate(pos.x, pos.y,0) * tr::scale(scale.x, scale.y, scale.z);
             drawSceneGraphNode(nodePtr, *m_pipeline, "model");
         }
         glfwSwapBuffers(m_window);
