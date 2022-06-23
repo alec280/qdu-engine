@@ -27,6 +27,11 @@ namespace QDUEngine
         m_transitions[toScene] = std::pair<Vector2D, Vector2D>(fromTile, toTile);
     }
 
+    std::string Scene::getName()
+    {
+        return m_name;
+    }
+
     std::vector<std::shared_ptr<GameObject>> Scene::getObjects()
     {
         return m_gameObjects;

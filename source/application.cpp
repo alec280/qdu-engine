@@ -49,6 +49,7 @@ namespace QDUEngine
                 visual->move(toPos);
             }
             m_scene.addMainObject(main);
+            onTransition();
         }
     }
 
@@ -60,6 +61,11 @@ namespace QDUEngine
     std::shared_ptr<AudioComponent> Application::getAudio(const char* audioPath)
     {
         return m_audio.getAudio(audioPath);
+    }
+
+    std::shared_ptr<VisualComponent> Application::getTexturedMesh(const char* objPath, const char* texturePath)
+    {
+        return m_window.getMesh(objPath, texturePath);
     }
 
     GameObject Application::getGameObjectFrom(const char* path)

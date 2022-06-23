@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <fstream>
+#include <glm/vec2.hpp>
 #include "../grafica/easy_shaders.h"
 #include "../grafica/simple_eigen.h"
 #include "../input/input.hpp"
@@ -14,6 +15,8 @@ namespace QDUEngine
     private:
         void end();
         std::shared_ptr<Grafica::SceneGraphNode> getCubePtr(const char* texturePath);
+        std::shared_ptr<VisualComponent> getMesh(const char* objPath, const char* texturePath);
+        std::shared_ptr<Grafica::SceneGraphNode> getMeshPtr(const char* objPath, const char* texturePath);
         static std::shared_ptr<VisualComponent> makeVisualPtr(
                 std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
                 std::string& source

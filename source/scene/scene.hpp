@@ -10,6 +10,7 @@ namespace QDUEngine
     public:
         void addGameObject(GameObject& gameObject);
         void addMainObject(GameObject& gameObject);
+        std::string getName();
         nlohmann::json getData();
         std::vector<std::shared_ptr<GameObject>> getObjects();
     private:

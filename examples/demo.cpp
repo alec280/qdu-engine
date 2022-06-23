@@ -143,6 +143,21 @@ public:
         saveGameObject(&enemy, saveTo.c_str());
         playAudio("examples/assets/trumpet_mono.wav", false, Vector3(0, 0, 0));
     }
+    void onTransition() noexcept override
+    {
+        if (m_scene.getName() == "obstacles.json" && !m_obstaclesLoaded) {
+            auto navMesh = getTexturedMesh(
+                    "examples/assets/obstacles_nav_mesh.obj",
+                    "examples/assets/enemy.png");
+            navMesh->getGraphNodePtr()->transform *= Grafica::Transformations::scale(2, 1, 1);
+            navMesh->move(Vector(-0.5, -0.5));
+            auto nav = Static(navMesh);
+            m_scene.addGameObject(nav);
+            m_obstaclesLoaded = true;
+        }
+    }
+private:
+    bool m_obstaclesLoaded = false;
 };
 
 class GlobalInput : public InputComponent {

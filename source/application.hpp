@@ -9,6 +9,7 @@ namespace QDUEngine
     class Application {
     public:
         virtual void userStart() = 0;
+        virtual void onTransition() = 0;
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);
         void bindKey(const char* key, const char* action);
         void bindJoystick(const char* key, const char* action);
@@ -17,6 +18,7 @@ namespace QDUEngine
         Scene getSceneFrom(const char* path);
         static std::string getAbsolutePath(const char* path);
         std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
+        std::shared_ptr<VisualComponent> getTexturedMesh(const char* objPath, const char* texturePath);
         std::string getTempDir();
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         void loadSceneFrom(const char* path);
