@@ -148,7 +148,7 @@ public:
         if (m_scene.getName() == "obstacles.json" && !m_obstaclesLoaded) {
             auto navMesh = getTexturedMesh(
                     "examples/assets/obstacles_nav_mesh.obj",
-                    "examples/assets/enemy.png");
+                    "examples/assets/white.png");
             navMesh->scale(Vector3(-1, 1, 1));
             navMesh->move(Vector(0.5, -0.5));
             auto nav = Static(navMesh);

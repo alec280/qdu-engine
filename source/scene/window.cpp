@@ -107,6 +107,25 @@ namespace QDUEngine
             return nullptr;
         }
         std::string line;
+        int i = 0;
+        Vector2D textureCycle[] = {
+                {0, 0},
+                {1, 0},
+                {0, 0},
+                {1, 0},
+                {0, 0},
+                {1, 0},
+                {0, 0},
+                {1, 0},
+                {0, 1},
+                {1, 1},
+                {0, 1},
+                {1, 1},
+                {0, 1},
+                {1, 1},
+                {0, 1},
+                {1, 1},
+        };
         while (std::getline(in, line)) {
             if (line.substr(0, 2) == "v ") {
                 std::istringstream v(line.substr(2));
@@ -118,11 +137,12 @@ namespace QDUEngine
                 shape.vertices.push_back(x);
                 shape.vertices.push_back(y);
                 shape.vertices.push_back(z);
-                shape.vertices.push_back(0.f);
-                shape.vertices.push_back(0.f);
+                shape.vertices.push_back(textureCycle[i].x);
+                shape.vertices.push_back(abs(textureCycle[i].y));
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(1.f);
+                i = (i + 1) % 16;
             } else if (line.substr(0,2) == "f ") {
                 std::istringstream v(line.substr(2));
                 glm::vec3 vert;
