@@ -77,6 +77,9 @@ namespace QDUEngine
         auto visual = data["visual"];
         auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
         cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        cube->scale(Vector3(visual.value("scaleX", 1.f),
+                            visual.value("scaleY", 1.f),
+                            visual.value("scaleZ", 1.f)));
         return {nullptr, cube};
     }
 
@@ -89,6 +92,9 @@ namespace QDUEngine
         auto visual = data["visual"];
         auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
         cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        cube->scale(Vector3(visual.value("scaleX", 1.f),
+                            visual.value("scaleY", 1.f),
+                            visual.value("scaleZ", 1.f)));
         return {nullptr, cube, input};
     }
 
@@ -119,6 +125,9 @@ namespace QDUEngine
             if (!visual.empty()) {
                 cube = getTexturedCube(visual["source"].get<std::string>().c_str());
                 cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+                cube->scale(Vector3(visual.value("scaleX", 1.f),
+                                    visual.value("scaleY", 1.f),
+                                    visual.value("scaleZ", 1.f)));
             }
             auto audio = objectData.value("audio", nlohmann::json::object());
             std::shared_ptr<AudioComponent> audioPtr = nullptr;
