@@ -151,6 +151,7 @@ public:
                     "examples/assets/white.png");
             navMesh->scale(Vector3(-1, 1, 1));
             navMesh->move(Vector(0.5, -0.5));
+            navMesh->setDebugOnly(true);
             auto nav = Static(navMesh);
             m_scene.addGameObject(nav);
             m_obstaclesLoaded = true;

@@ -105,6 +105,7 @@ namespace QDUEngine
             return nullptr;
         }
         std::string line;
+        /*
         int i = 0;
         Vector2D textureCycle[] = {
                 {0, 0},
@@ -124,6 +125,7 @@ namespace QDUEngine
                 {0, 1},
                 {1, 1},
         };
+        */
         while (std::getline(in, line)) {
             if (line.substr(0, 2) == "v ") {
                 std::istringstream v(line.substr(2));
@@ -135,12 +137,12 @@ namespace QDUEngine
                 shape.vertices.push_back(x);
                 shape.vertices.push_back(y);
                 shape.vertices.push_back(z);
-                shape.vertices.push_back(textureCycle[i].x);
-                shape.vertices.push_back(abs(textureCycle[i].y));
+                shape.vertices.push_back(0.f);
+                shape.vertices.push_back(0.f);
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(1.f);
-                i = (i + 1) % 16;
+                //i = (i + 1) % 16;
             } else if (line.substr(0,2) == "f ") {
                 std::istringstream v(line.substr(2));
                 glm::vec3 vert;
@@ -298,7 +300,7 @@ namespace QDUEngine
         m_projection = projection;
     }
 
-    void Window::update(Scene* scene)
+    void Window::update(Scene* scene, bool debug)
     {
         gr::Vector3f const viewPos(0, 10, -12);
         gr::Vector3f const eye(0, 0, 0);
@@ -316,10 +318,14 @@ namespace QDUEngine
             if (visualComponent == nullptr) {
                 continue;
             }
+            if (visualComponent->isDebugOnly() && !debug) {
+                continue;
+            }
             auto pos = visualComponent->getPosition();
             auto scale = visualComponent->getScale();
             auto nodePtr = visualComponent->getGraphNodePtr();
-            nodePtr->transform = tr::translate(pos.x, pos.y,0) * tr::scale(scale.x, scale.y, scale.z);
+            nodePtr->transform = tr::translate(pos.x, pos.y,0) *
+                    tr::scale(scale.x, scale.y, scale.z);
             drawSceneGraphNode(nodePtr, *m_pipeline, "model");
         }
         glfwSwapBuffers(m_window);

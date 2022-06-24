@@ -30,6 +30,7 @@ namespace QDUEngine
     nlohmann::json VisualComponent::getData()
     {
         return {
+                {"debugOnly", m_debugOnly},
                 {"obj", m_obj},
                 {"posX", m_position.x},
                 {"posY", m_position.y},
@@ -60,9 +61,19 @@ namespace QDUEngine
         return m_source;
     }
 
+    bool VisualComponent::isDebugOnly()
+    {
+        return m_debugOnly;
+    }
+
     void VisualComponent::scale(const Vector3D& to)
     {
         m_scale = to;
+    }
+
+    void VisualComponent::setDebugOnly(bool value)
+    {
+        m_debugOnly = value;
     }
 
     void VisualComponent::setObj(std::string& path)

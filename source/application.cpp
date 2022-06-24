@@ -80,6 +80,7 @@ namespace QDUEngine
         cube->scale(Vector3(visual.value("scaleX", 1.f),
                             visual.value("scaleY", 1.f),
                             visual.value("scaleZ", 1.f)));
+        cube->setDebugOnly(visual.value("debugOnly", false));
         return {nullptr, cube};
     }
 
@@ -95,6 +96,7 @@ namespace QDUEngine
         cube->scale(Vector3(visual.value("scaleX", 1.f),
                             visual.value("scaleY", 1.f),
                             visual.value("scaleZ", 1.f)));
+        cube->setDebugOnly(visual.value("debugOnly", false));
         return {nullptr, cube, input};
     }
 
@@ -133,6 +135,7 @@ namespace QDUEngine
                 cube->scale(Vector3(visual.value("scaleX", 1.f),
                                     visual.value("scaleY", 1.f),
                                     visual.value("scaleZ", 1.f)));
+                cube->setDebugOnly(visual.value("debugOnly", false));
             }
             auto audio = objectData.value("audio", nlohmann::json::object());
             std::shared_ptr<AudioComponent> audioPtr = nullptr;
@@ -231,7 +234,7 @@ namespace QDUEngine
                 timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
             }
             m_input.update(&m_scene, timeStep);
-            m_window.update(&m_scene);
+            m_window.update(&m_scene, isPaused());
             m_audio.update(&m_scene, timeStep);
             m_scene.update();
             doTransition();

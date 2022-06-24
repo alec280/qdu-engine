@@ -22,14 +22,17 @@ namespace QDUEngine
         Vector2D getPosition();
         Vector3D getScale();
         std::string& getSource();
+        bool isDebugOnly();
         void move(const Vector2D& by);
+        void setDebugOnly(bool value);
         void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);
         void setObj(std::string& path);
         void setSource(std::string& path);
         void scale(const Vector3D& to);
     private:
-        std::string m_obj;
+        bool m_debugOnly = false;
         Grafica::SceneGraphNodePtr m_graphNodePtr;
+        std::string m_obj;
         Vector2D m_position;
         Vector3D m_scale = {1, 1, 1};
         std::string m_source;
