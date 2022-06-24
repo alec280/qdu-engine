@@ -21,6 +21,7 @@ set(QDU_HEADERS
         core/dictionary.hpp
         scene/scene.hpp
         scene/window.hpp
+        scene/navigation_mesh.hpp
         audio/audio.hpp
         audio/audio_source.hpp
         audio/audio_stream.hpp
@@ -47,6 +48,7 @@ set(QDU_SOURCES
         core/dictionary.cpp
         scene/scene.cpp
         scene/window.cpp
+        scene/navigation_mesh.cpp
         audio/audio.cpp
         audio/audio_source.cpp
         audio/audio_stream.cpp

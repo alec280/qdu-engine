@@ -83,21 +83,15 @@ namespace QDUEngine
         return nullptr;
     }
 
-    void Scene::setNavigation(std::shared_ptr<GameObject>& gameObject)
+    void Scene::setNavigationMesh(std::shared_ptr<NavigationMesh>& navMesh)
     {
         if (m_navigation) {
             m_gameObjectsQueue.erase(
                     std::remove(m_gameObjectsQueue.begin(),m_gameObjectsQueue.end(), m_navigation),
                     m_gameObjectsQueue.end());
         }
-        m_navigation = gameObject;
-        m_gameObjectsQueue.push_back(gameObject);
-    }
-
-    void Scene::setNavigation(std::shared_ptr<VisualComponent>& visualComponent)
-    {
-        auto gameObject = std::make_shared<GameObject>(GameObject(nullptr, visualComponent));
-        setNavigation(gameObject);
+        m_navigation = navMesh;
+        m_gameObjectsQueue.push_back((std::shared_ptr<GameObject>&)navMesh);
     }
 
     void Scene::update()

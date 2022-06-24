@@ -21,6 +21,7 @@ namespace QDUEngine
         void end();
         std::shared_ptr<Grafica::SceneGraphNode> getCubePtr(const char* texturePath);
         std::shared_ptr<VisualComponent> getMesh(const char* objPath, const char* texturePath);
+        NavigationMesh getNavigationMesh(const char* objPath, const char* texturePath);
         std::shared_ptr<Grafica::SceneGraphNode> getMeshPtr(const char* objPath, const char* texturePath);
         std::shared_ptr<VisualComponent> makeVisualPtr(
                 std::shared_ptr<Grafica::SceneGraphNode>& grPtr,

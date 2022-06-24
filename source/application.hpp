@@ -23,12 +23,14 @@ namespace QDUEngine
         std::shared_ptr<VisualComponent> getTexturedCube(const char* texturePath);
         bool isPaused();
         void loadSceneFrom(const char* path);
+        std::shared_ptr<VisualComponent> loadVisualComponent(nlohmann::json& data);
         void playAudio(const char* path, bool is3D, Vector3D pos);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);
         static void saveGameObject(GameObject* object, const char *path);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setPaused(bool value);
+        void setNavigationMesh(Scene* scene, const char* objPath, const char* texturePath);
         void setScene(Scene& scene);
         void setTempDir(const char* path);
     protected:
@@ -41,7 +43,6 @@ namespace QDUEngine
         char* m_tempDir = nullptr;
         Window m_window{};
         void doTransition();
-        GameObject loadGameObject(nlohmann::json& data);
         static void log(const char* msg);
         void saveScene();
     };

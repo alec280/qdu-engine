@@ -171,6 +171,12 @@ namespace QDUEngine
         return meshPtr;
     }
 
+    NavigationMesh Window::getNavigationMesh(const char* objPath, const char* texturePath)
+    {
+        auto navMesh = NavigationMesh(getMesh(objPath, texturePath));
+        return navMesh;
+    }
+
     std::shared_ptr<VisualComponent> Window::getTexturedCube(const char* texturePath)
     {
         std::string source = texturePath;
