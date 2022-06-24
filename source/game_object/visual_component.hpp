@@ -23,6 +23,7 @@ namespace QDUEngine
         Vector3D getScale();
         std::string& getSource();
         bool isDebugOnly();
+        void loadData(nlohmann::json& data);
         void move(const Vector2D& by);
         void setDebugOnly(bool value);
         void setGraphNodePtr(const Grafica::SceneGraphNodePtr& graphNodePtr);

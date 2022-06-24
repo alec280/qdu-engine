@@ -205,11 +205,7 @@ namespace QDUEngine
         } else {
             visualPtr = getTexturedMesh(objFile.c_str(), data["source"].get<std::string>().c_str());
         }
-        visualPtr->move(Vector(data["posX"].get<float>(), data["posY"].get<float>()));
-        visualPtr->scale(Vector3(data.value("scaleX", 1.f),
-                            data.value("scaleY", 1.f),
-                            data.value("scaleZ", 1.f)));
-        visualPtr->setDebugOnly(data.value("debugOnly", false));
+        visualPtr->loadData(data);
         return visualPtr;
     }
 

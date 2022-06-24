@@ -181,13 +181,8 @@ namespace QDUEngine
     {
         auto objPath = data["obj"].get<std::string>();
         auto texturePath = data["source"].get<std::string>();
-        auto navMesh = NavigationMesh(getMesh(objPath.c_str(), texturePath.c_str()));
-        auto visualPtr = navMesh.getVisualComponent();
-        visualPtr->move(Vector(data["posX"].get<float>(), data["posY"].get<float>()));
-        visualPtr->scale(Vector3(data.value("scaleX", 1.f),
-                                 data.value("scaleY", 1.f),
-                                 data.value("scaleZ", 1.f)));
-        visualPtr->setDebugOnly(data.value("debugOnly", false));
+        auto navMesh = getNavigationMesh(objPath.c_str(), texturePath.c_str());
+        navMesh.getVisualComponent()->loadData(data);
         return navMesh;
     }
 

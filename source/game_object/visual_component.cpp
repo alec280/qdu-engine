@@ -22,6 +22,15 @@ namespace QDUEngine
         m_position = {};
     }
 
+    void VisualComponent::loadData(nlohmann::json& data)
+    {
+        move(Vector(data["posX"].get<float>(), data["posY"].get<float>()));
+        scale(Vector3(data.value("scaleX", 1.f),
+                                 data.value("scaleY", 1.f),
+                                 data.value("scaleZ", 1.f)));
+        setDebugOnly(data.value("debugOnly", false));
+    }
+
     void VisualComponent::move(const Vector2D& by)
     {
         m_position += by;
