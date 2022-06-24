@@ -165,13 +165,10 @@ namespace QDUEngine
         auto navigation = data.value("navigation", nlohmann::json::object());
         if (!navigation.empty()) {
             auto objectId = navigation.value("id", "");
-            auto objPath = navigation["visual"]["obj"].get<std::string>();
-            auto texturePath = navigation["visual"]["source"].get<std::string>();
-            auto navMesh = std::make_shared<NavigationMesh>(m_window.getNavigationMesh(objPath.c_str(), texturePath.c_str()));
+            auto navMesh = std::make_shared<NavigationMesh>(m_window.getNavigationMesh(navigation["visual"]));
             if (!objectId.empty()) {
                 navMesh->m_id = objectId;
             }
-            navMesh->m_visual = loadVisualComponent(navigation["visual"]);
             newScene.setNavigationMesh(navMesh);
         }
         log("Scene loaded from file.");
