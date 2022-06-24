@@ -83,6 +83,11 @@ namespace QDUEngine
         return nullptr;
     }
 
+    std::shared_ptr<NavigationMesh> Scene::getNavigationMesh()
+    {
+        return m_navigation;
+    }
+
     void Scene::setNavigationMesh(std::shared_ptr<NavigationMesh>& navMesh)
     {
         if (m_navigation) {
