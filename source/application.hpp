@@ -41,6 +41,7 @@ namespace QDUEngine
         char* m_tempDir = nullptr;
         Window m_window{};
         void doTransition();
+        GameObject loadGameObject(nlohmann::json& data);
         static void log(const char* msg);
         void saveScene();
     };

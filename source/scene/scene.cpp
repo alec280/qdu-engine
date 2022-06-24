@@ -52,8 +52,11 @@ namespace QDUEngine
 
     nlohmann::json Scene::getData() {
         nlohmann::json data{{"transitions", {}}, {"objects", nlohmann::json::array()}};
+        if (m_navigation) {
+            data["navigation"] = m_navigation->getData();
+        }
         for (auto& object : m_gameObjects) {
-            if (object == m_mainObject) {
+            if (object == m_mainObject || object == m_navigation) {
                 continue;
             }
             data["objects"].push_back(object->getData());
@@ -78,6 +81,23 @@ namespace QDUEngine
             }
         }
         return nullptr;
+    }
+
+    void Scene::setNavigation(std::shared_ptr<GameObject>& gameObject)
+    {
+        if (m_navigation) {
+            m_gameObjectsQueue.erase(
+                    std::remove(m_gameObjectsQueue.begin(),m_gameObjectsQueue.end(), m_navigation),
+                    m_gameObjectsQueue.end());
+        }
+        m_navigation = gameObject;
+        m_gameObjectsQueue.push_back(gameObject);
+    }
+
+    void Scene::setNavigation(std::shared_ptr<VisualComponent>& visualComponent)
+    {
+        auto gameObject = std::make_shared<GameObject>(GameObject(nullptr, visualComponent));
+        setNavigation(gameObject);
     }
 
     void Scene::update()
