@@ -69,6 +69,7 @@ public:
             auto from = m_gameObject->getVisualComponent()->getPosition();
             auto to = main->getVisualComponent()->getPosition();
             auto path = navMesh->getPath(from, to);
+            std::cout << path.size() << std::endl;
             for (auto cell : path) {
                 std::cout << cell << std::endl;
             }

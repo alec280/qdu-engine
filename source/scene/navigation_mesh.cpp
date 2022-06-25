@@ -23,6 +23,17 @@ namespace QDUEngine
         }
     }
 
+    std::vector<int> NavigationMesh::auxGetPath(std::map<int, int>& cameFrom, int current)
+    {
+        auto result = std::vector<int>{current};
+        int realCurrent = current;
+        while (cameFrom.contains(realCurrent)) {
+            realCurrent = cameFrom[realCurrent];
+            result.insert(result.begin(), realCurrent);
+        }
+        return result;
+    }
+
     int NavigationMesh::getCell(Vector2D& pos)
     {
         int i = 0;
@@ -50,6 +61,43 @@ namespace QDUEngine
 
     std::vector<int> NavigationMesh::getPath(int from, int to)
     {
+        auto openList = std::vector<int>{from};
+        auto cameFrom = std::map<int, int>{};
+        auto scores = std::map<int, float>{{from ,0}};
+        while(!openList.empty()) {
+            int minCell = -1;
+            float minValue = std::numeric_limits<float>::infinity();
+            for (auto cell : openList) {
+                if (!scores.contains(cell)) {
+                    continue;
+                }
+                if (scores[cell] < minValue) {
+                    minValue = scores[cell];
+                    minCell = cell;
+                }
+            }
+            if (minCell == to) {
+                return auxGetPath(cameFrom, minCell);
+            }
+            openList.erase(std::remove(openList.begin(), openList.end(), minCell), openList.end());
+            for (auto connection : m_cells[minCell].connections) {
+                float score = std::numeric_limits<float>::infinity();
+                float scoreConnection = std::numeric_limits<float>::infinity();
+                if (scores.contains(minCell)) {
+                    score = scores[minCell] + 1;
+                }
+                if (scores.contains(connection)) {
+                    scoreConnection = scores[connection];
+                }
+                if (score < scoreConnection) {
+                    cameFrom[connection] = minCell;
+                    scores[connection] = score;
+                    if (std::find(openList.begin(), openList.end(), connection) == openList.end()) {
+                        openList.push_back(connection);
+                    }
+                }
+            }
+        }
         return {};
     }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include "../game_object/game_object.hpp"
 
 namespace QDUEngine
@@ -20,6 +21,7 @@ namespace QDUEngine
             std::vector<int> connections{};
         };
         std::vector<CellData> m_cells{};
+        std::vector<int> auxGetPath(std::map<int, int>& cameFrom, int current);
     public:
         std::vector<CellData> getCells();
     };
