@@ -4,7 +4,7 @@ using namespace QDUEngine;
 
 class PlayerInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override
+    void onAction(Scene* scene, const char* action, float value) override
     {
         auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
@@ -31,7 +31,34 @@ public:
 
 class EnemyInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override {}
+    void onAction(Scene* scene, const char* action, float value) override {}
+    void onCursorAction(const char* action, Vector2D& pos) override
+    {
+        auto audio = m_gameObject->getAudioComponent();
+        auto visual = m_gameObject->getVisualComponent();
+        if (visual == nullptr) {
+            return;
+        }
+        if (compare(action, "leftClick")) {
+            if (pos.x < 300) {
+                if (audio) {
+                    audio->move(Vector(-1, 0));
+                }
+                visual->move(Vector(-1, 0));
+            } else {
+                if (audio) {
+                    audio->move(Vector(1, 0));
+                }
+                visual->move(Vector(1, 0));
+            }
+        }
+    }
+    void onUpdate(float timeStep) override {}
+};
+
+class HunterInput : public InputComponent {
+public:
+    void onAction(Scene* scene, const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override
     {
         auto audio = m_gameObject->getAudioComponent();
@@ -58,7 +85,7 @@ public:
 
 class SpeedsterInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override {}
+    void onAction(Scene* scene, const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override {}
     void onUpdate(float timeStep) override
     {
@@ -152,6 +179,12 @@ public:
             m_obstaclesLoaded = true;
             auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
             navMeshVisual->move(Vector(-0.5, -0.5));
+
+            auto redCube = getTexturedCube("examples/assets/enemy.png");
+            auto enemyInput = std::make_shared<HunterInput>();
+            redCube->move(QDUEngine::Vector(0, 3));
+            auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
+            m_scene.addGameObject(enemy);
         }
     }
 private:
@@ -161,7 +194,7 @@ private:
 class GlobalInput : public InputComponent {
 public:
     explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
-    void onAction(const char* action, float) override
+    void onAction(Scene* scene, const char* action, float) override
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";
@@ -260,6 +293,7 @@ int main()
     dungeon.bindKey("M", "map");
     dungeon.bindKey("P", "pause");
     dungeon.bindKey("C", "cell");
+    dungeon.bindKey("H", "hunt");
     dungeon.bindKey("X", "speedster");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");

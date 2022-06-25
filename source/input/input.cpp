@@ -153,10 +153,10 @@ namespace QDUEngine
                     if (component == nullptr) {
                         continue;
                     }
-                    component->onAction(action.first.c_str(), value);
+                    component->onAction(scene, action.first.c_str(), value);
                 }
                 if (m_globalInput != nullptr) {
-                    m_globalInput->onAction(action.first.c_str(), value);
+                    m_globalInput->onAction(scene, action.first.c_str(), value);
                 }
             }
         }
