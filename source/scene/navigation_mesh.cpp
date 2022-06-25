@@ -13,8 +13,12 @@ namespace QDUEngine
 
     void NavigationMesh::addConnection(int from, int to, bool bilateral)
     {
-        m_cells[from].connections.push_back(to);
-        if (bilateral) {
+        auto fromCell = m_cells[from].connections;
+        auto toCell = m_cells[to].connections;
+        if (!std::count(fromCell.begin(), fromCell.end(), to)) {
+            m_cells[from].connections.push_back(to);
+        }
+        if (bilateral && !std::count(toCell.begin(), toCell.end(), from)) {
             m_cells[to].connections.push_back(from);
         }
     }
@@ -29,6 +33,11 @@ namespace QDUEngine
             i++;
         }
         return -1;
+    }
+
+    std::vector<NavigationMesh::CellData> NavigationMesh::getCells()
+    {
+        return m_cells;
     }
 
     Vector2D NavigationMesh::getCellPosition(int cell)

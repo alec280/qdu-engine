@@ -20,5 +20,7 @@ namespace QDUEngine
             std::vector<int> connections{};
         };
         std::vector<CellData> m_cells{};
+    public:
+        std::vector<CellData> getCells();
     };
 }

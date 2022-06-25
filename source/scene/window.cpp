@@ -171,6 +171,27 @@ namespace QDUEngine
                 i += 4;
             }
         }
+        const Vector2D ORTHOGONAL_VECTORS[]{
+            Vector(1, 0),
+            Vector(-1, 0),
+            Vector(0, 1),
+            Vector(0, -1)
+        };
+        auto cells = navMesh.getCells();
+        for (int i = 0; i < cells.size(); i++) {
+            auto cell = cells[i];
+            for (int j = 0; j < cells.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                auto cellSecond = cells[j];
+                for (auto& vec : ORTHOGONAL_VECTORS) {
+                    if (cell.begin + vec == cellSecond.begin) {
+                        navMesh.addConnection(i, j, true);
+                    }
+                }
+            }
+        }
         return navMesh;
     }
 
