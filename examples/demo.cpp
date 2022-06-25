@@ -69,14 +69,30 @@ public:
             auto from = m_gameObject->getVisualComponent()->getPosition();
             auto to = main->getVisualComponent()->getPosition();
             auto path = navMesh->getPath(from, to);
-            std::cout << path.size() << std::endl;
-            for (auto cell : path) {
-                std::cout << cell << std::endl;
+            m_path.clear();
+            for (auto& cell : path) {
+                m_path.push_back(navMesh->getCellPosition(cell));
             }
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override {}
-    void onUpdate(float timeStep) override {}
+    void onUpdate(float timeStep) override {
+        m_delay -= timeStep;
+        if (m_delay > 0) {
+            return;
+        }
+        m_delay = 0.1;
+        if (!m_path.empty()) {
+            auto current = m_gameObject->getVisualComponent()->getPosition();
+            auto to = m_path.front();
+            auto moveBy = to - current;
+            m_gameObject->getVisualComponent()->move(moveBy);
+            m_path.erase(std::remove(m_path.begin(), m_path.end(), to), m_path.end());
+        }
+    }
+private:
+    float m_delay = 0.1;
+    std::vector<Vector2D> m_path{};
 };
 
 class SpeedsterInput : public InputComponent {
