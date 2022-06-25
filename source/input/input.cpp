@@ -38,6 +38,8 @@ namespace QDUEngine
 
             } else if (checkKey("P", string, act, GLFW_KEY_P, key, action)) {
 
+            } else if (checkKey("C", string, act, GLFW_KEY_C, key, action)) {
+
             }
         }
         return false;

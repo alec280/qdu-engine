@@ -13,6 +13,13 @@ namespace QDUEngine
 
     int NavigationMesh::getCell(Vector2D& pos)
     {
-        return 0;
+        int i = 0;
+        for (auto& cell : m_cells) {
+            if (pos.x >= cell.begin.x && pos.x < cell.end.x && pos.y >= cell.begin.y && pos.y < cell.end.y) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 }

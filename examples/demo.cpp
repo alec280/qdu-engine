@@ -203,6 +203,13 @@ public:
             m_application->addSpeedster();
         } else if (compare(action, "pause")) {
             m_application->setPaused(!m_application->isPaused());
+        } else if (compare(action, "cell")) {
+            auto navMesh = m_application->getNavigationMesh();
+            auto mainObj = m_application->getMainObject();
+            if (navMesh && mainObj) {
+                auto pos = mainObj->getVisualComponent()->getPosition();
+                std::cout << "Main object is in cell: " << navMesh->getCell(pos) << std::endl;
+            }
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override
@@ -252,6 +259,7 @@ int main()
     dungeon.bindKey("D", "right");
     dungeon.bindKey("M", "map");
     dungeon.bindKey("P", "pause");
+    dungeon.bindKey("C", "cell");
     dungeon.bindKey("X", "speedster");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");

@@ -90,6 +90,16 @@ namespace QDUEngine
         return {nullptr, cube, input};
     }
 
+    std::shared_ptr<GameObject> Application::getMainObject()
+    {
+        return m_scene.m_mainObject;
+    }
+
+    std::shared_ptr<NavigationMesh> Application::getNavigationMesh()
+    {
+        return m_scene.getNavigationMesh();
+    }
+
     Scene Application::getSceneFrom(const char* path)
     {
         if (m_tempDir == nullptr) {
