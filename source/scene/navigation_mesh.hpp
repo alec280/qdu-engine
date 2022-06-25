@@ -8,6 +8,7 @@ namespace QDUEngine
     public:
         explicit NavigationMesh(std::shared_ptr<VisualComponent> visualComponent);
         void addCell(Vector2D& begin, Vector2D& end);
+        void addConnection(int from, int to, bool bilateral);
         int getCell(Vector2D& pos);
         Vector2D getCellPosition(int cell);
         std::vector<int> getPath(int from, int to);
