@@ -5,6 +5,12 @@
       "fromY": -8,
       "toX": 0,
       "toY": 3
+    },
+    "examples/data/obstacles.json": {
+      "fromX": 0,
+      "fromY": 4,
+      "toX": 0,
+      "toY": -8
     }
   },
   "objects": [
@@ -156,8 +162,8 @@
     {
       "visual": {
         "source": "examples/assets/bush.png",
-        "posX": 3,
-        "posY": 3
+        "posX": 4,
+        "posY": 4
       }
     },
     {
@@ -184,13 +190,6 @@
     {
       "visual": {
         "source": "examples/assets/bush.png",
-        "posX": 0,
-        "posY": 4
-      }
-    },
-    {
-      "visual": {
-        "source": "examples/assets/bush.png",
         "posX": -1,
         "posY": 4
       }
@@ -198,8 +197,8 @@
     {
       "visual": {
         "source": "examples/assets/bush.png",
-        "posX": -3,
-        "posY": 3
+        "posX": -4,
+        "posY": 4
       }
     },
     {
@@ -270,13 +269,6 @@
         "source": "examples/assets/bush.png",
         "posX": -4,
         "posY": -4
-      }
-    },
-    {
-      "visual": {
-        "source": "examples/assets/bush.png",
-        "posX": -4,
-        "posY": -5
       }
     },
     {

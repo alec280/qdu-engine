@@ -4,7 +4,7 @@ using namespace QDUEngine;
 
 class PlayerInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override
+    void onAction(Scene* scene, const char* action, float value) override
     {
         auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
@@ -31,7 +31,7 @@ public:
 
 class EnemyInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override {}
+    void onAction(Scene* scene, const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override
     {
         auto audio = m_gameObject->getAudioComponent();
@@ -56,9 +56,48 @@ public:
     void onUpdate(float timeStep) override {}
 };
 
+class HunterInput : public InputComponent {
+public:
+    void onAction(Scene* scene, const char* action, float value) override
+    {
+        if (compare(action, "hunt")) {
+            auto main = scene->getMainObject();
+            auto navMesh = scene->getNavigationMesh();
+            if (!main || !navMesh){
+                return;
+            }
+            auto from = m_gameObject->getVisualComponent()->getPosition();
+            auto to = main->getVisualComponent()->getPosition();
+            auto path = navMesh->getPath(from, to);
+            m_path.clear();
+            for (auto& cell : path) {
+                m_path.push_back(navMesh->getCellPosition(cell));
+            }
+        }
+    }
+    void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onUpdate(float timeStep) override {
+        m_delay -= timeStep;
+        if (m_delay > 0) {
+            return;
+        }
+        m_delay = 0.1;
+        if (!m_path.empty()) {
+            auto current = m_gameObject->getVisualComponent()->getPosition();
+            auto to = m_path.front();
+            auto moveBy = to - current;
+            m_gameObject->getVisualComponent()->move(moveBy);
+            m_path.erase(std::remove(m_path.begin(), m_path.end(), to), m_path.end());
+        }
+    }
+private:
+    float m_delay = 0.1;
+    std::vector<Vector2D> m_path{};
+};
+
 class SpeedsterInput : public InputComponent {
 public:
-    void onAction(const char* action, float value) override {}
+    void onAction(Scene* scene, const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override {}
     void onUpdate(float timeStep) override
     {
@@ -143,12 +182,31 @@ public:
         saveGameObject(&enemy, saveTo.c_str());
         playAudio("examples/assets/trumpet_mono.wav", false, Vector3(0, 0, 0));
     }
+    void onTransition() noexcept override
+    {
+        if (m_scene.getName() == "obstacles.json" && !m_obstaclesLoaded) {
+            setNavigationMesh(&m_scene,
+                    "examples/assets/obstacles_nav_mesh.obj",
+                    "examples/assets/white.png");
+            m_obstaclesLoaded = true;
+            auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
+            navMeshVisual->move(Vector(-0.5, -0.5));
+
+            auto redCube = getTexturedCube("examples/assets/enemy.png");
+            auto enemyInput = std::make_shared<HunterInput>();
+            redCube->move(QDUEngine::Vector(0, 3));
+            auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
+            m_scene.addGameObject(enemy);
+        }
+    }
+private:
+    bool m_obstaclesLoaded = false;
 };
 
 class GlobalInput : public InputComponent {
 public:
     explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
-    void onAction(const char* action, float) override
+    void onAction(Scene* scene, const char* action, float) override
     {
         if (compare(action, "map")) {
             std::cout << "Rebind left: ";
@@ -188,6 +246,15 @@ public:
             m_application->bindKey(&tmp, "right");
         } else if (compare(action, "speedster")) {
             m_application->addSpeedster();
+        } else if (compare(action, "pause")) {
+            m_application->setPaused(!m_application->isPaused());
+        } else if (compare(action, "cell")) {
+            auto navMesh = m_application->getNavigationMesh();
+            auto mainObj = m_application->getMainObject();
+            if (navMesh && mainObj) {
+                auto pos = mainObj->getVisualComponent()->getPosition();
+                std::cout << "Main object is in cell: " << navMesh->getCell(pos) << std::endl;
+            }
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override
@@ -236,6 +303,9 @@ int main()
     dungeon.bindKey("S", "down");
     dungeon.bindKey("D", "right");
     dungeon.bindKey("M", "map");
+    dungeon.bindKey("P", "pause");
+    dungeon.bindKey("C", "cell");
+    dungeon.bindKey("H", "hunt");
     dungeon.bindKey("X", "speedster");
     dungeon.bindJoystick("LS_X", "right");
     dungeon.bindJoystick("LS_Y", "down");

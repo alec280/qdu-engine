@@ -1,0 +1,425 @@
+{
+  "transitions": {
+    "examples/data/garden.json": {
+      "fromX": 0,
+      "fromY": -9,
+      "toX": 0,
+      "toY": 3
+    }
+  },
+  "objects": [
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -3,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -2,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -1,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 1,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 2,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 3,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -9
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -7
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 4,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 3,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 2,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 1,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -1,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -3,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -2,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": -4,
+        "posY": -7
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/bush.png",
+        "posX": 0,
+        "posY": 5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -2,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -2,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -1,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 0,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 0,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 2,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 2,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 1,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 0,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -1,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -3,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": -2,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 0,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 1,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 3,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 2,
+        "posY": -4
+      }
+    }
+  ]
+}

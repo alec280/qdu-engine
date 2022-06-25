@@ -36,6 +36,10 @@ namespace QDUEngine
 
             } else if (checkKey("X", string, act, GLFW_KEY_X, key, action)) {
 
+            } else if (checkKey("P", string, act, GLFW_KEY_P, key, action)) {
+
+            } else if (checkKey("C", string, act, GLFW_KEY_C, key, action)) {
+
             }
         }
         return false;
@@ -149,10 +153,10 @@ namespace QDUEngine
                     if (component == nullptr) {
                         continue;
                     }
-                    component->onAction(action.first.c_str(), value);
+                    component->onAction(scene, action.first.c_str(), value);
                 }
                 if (m_globalInput != nullptr) {
-                    m_globalInput->onAction(action.first.c_str(), value);
+                    m_globalInput->onAction(scene, action.first.c_str(), value);
                 }
             }
         }
@@ -194,11 +198,9 @@ namespace QDUEngine
     void Input::cursorPressed(int button, int action)
     {
         for (auto& binding : m_cursorBindings) {
-            if (binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+            if ((binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)) {
                 m_cursorActions.at(binding.second) = 1;
             }
         }

@@ -49,6 +49,7 @@ namespace QDUEngine
                 visual->move(toPos);
             }
             m_scene.addMainObject(main);
+            onTransition();
         }
     }
 
@@ -62,15 +63,19 @@ namespace QDUEngine
         return m_audio.getAudio(audioPath);
     }
 
+    std::shared_ptr<VisualComponent> Application::getTexturedMesh(const char* objPath, const char* texturePath)
+    {
+        return m_window.getMesh(objPath, texturePath);
+    }
+
     GameObject Application::getGameObjectFrom(const char* path)
     {
         log("Loading new game object from file.");
         auto fullPath = Grafica::getPath(path);
-        log("New game object loaded from file.");
         auto data = nlohmann::json::parse(std::ifstream(fullPath));
         auto visual = data["visual"];
-        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
-        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        auto cube = loadVisualComponent(visual);
+        log("New game object loaded from file.");
         return {nullptr, cube};
     }
 
@@ -78,12 +83,21 @@ namespace QDUEngine
     {
         log("Loading new game object from file.");
         auto fullPath = Grafica::getPath(path);
-        log("New game object loaded from file.");
         auto data = nlohmann::json::parse(std::ifstream(fullPath));
         auto visual = data["visual"];
-        auto cube = getTexturedCube(visual["source"].get<std::string>().c_str());
-        cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+        auto cube = loadVisualComponent(visual);
+        log("New game object loaded from file.");
         return {nullptr, cube, input};
+    }
+
+    std::shared_ptr<GameObject> Application::getMainObject()
+    {
+        return m_scene.getMainObject();
+    }
+
+    std::shared_ptr<NavigationMesh> Application::getNavigationMesh()
+    {
+        return m_scene.getNavigationMesh();
     }
 
     Scene Application::getSceneFrom(const char* path)
@@ -111,8 +125,7 @@ namespace QDUEngine
             auto visual = objectData.value("visual", nlohmann::json::object());
             std::shared_ptr<VisualComponent> cube = nullptr;
             if (!visual.empty()) {
-                cube = getTexturedCube(visual["source"].get<std::string>().c_str());
-                cube->move(Vector(visual["posX"].get<float>(), visual["posY"].get<float>()));
+                cube = loadVisualComponent(visual);
             }
             auto audio = objectData.value("audio", nlohmann::json::object());
             std::shared_ptr<AudioComponent> audioPtr = nullptr;
@@ -159,6 +172,15 @@ namespace QDUEngine
             auto toVector = Vector(transitionData["toX"].get<float>(), transitionData["toY"].get<float>());
             newScene.addTransition(toSceneName, fromVector, toVector);
         }
+        auto navigation = data.value("navigation", nlohmann::json::object());
+        if (!navigation.empty()) {
+            auto objectId = navigation.value("id", "");
+            auto navMesh = std::make_shared<NavigationMesh>(m_window.getNavigationMesh(navigation["visual"]));
+            if (!objectId.empty()) {
+                navMesh->m_id = objectId;
+            }
+            newScene.setNavigationMesh(navMesh);
+        }
         log("Scene loaded from file.");
         return newScene;
     }
@@ -173,10 +195,28 @@ namespace QDUEngine
         return m_window.getTexturedCube(texturePath);
     }
 
+    bool Application::isPaused()
+    {
+        return m_paused;
+    }
+
     void Application::loadSceneFrom(const char* path)
     {
         auto nextScene = getSceneFrom(path);
         setScene(nextScene);
+    }
+
+    std::shared_ptr<VisualComponent> Application::loadVisualComponent(nlohmann::json& data)
+    {
+        auto objFile = data.value("obj", "");
+        std::shared_ptr<VisualComponent> visualPtr = nullptr;
+        if (objFile.empty()) {
+            visualPtr = getTexturedCube(data["source"].get<std::string>().c_str());
+        } else {
+            visualPtr = getTexturedMesh(objFile.c_str(), data["source"].get<std::string>().c_str());
+        }
+        visualPtr->loadData(data);
+        return visualPtr;
     }
 
     void Application::log(const char* msg)
@@ -198,12 +238,15 @@ namespace QDUEngine
         userStart();
         log("START");
         while (!m_window.shouldClose()) {
+            float timeStep = 0.0;
             std::chrono::time_point<std::chrono::steady_clock> newTime = std::chrono::steady_clock::now();
             const auto frameTime = newTime - startTime;
             startTime = newTime;
-            float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+            if (!isPaused()) {
+                timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+            }
             m_input.update(&m_scene, timeStep);
-            m_window.update(&m_scene);
+            m_window.update(&m_scene, isPaused());
             m_audio.update(&m_scene, timeStep);
             m_scene.update();
             doTransition();
@@ -269,6 +312,18 @@ namespace QDUEngine
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
         m_input.m_globalInput = inputComponent;
+    }
+
+    void Application::setPaused(bool value)
+    {
+        m_paused = value;
+    }
+
+    void Application::setNavigationMesh(Scene* scene, const char* objPath, const char* texturePath)
+    {
+        auto navMesh = std::make_shared<NavigationMesh>(m_window.getNavigationMesh(objPath, texturePath));
+        navMesh->getVisualComponent()->setDebugOnly(true);
+        m_scene.setNavigationMesh(navMesh);
     }
 
     void Application::setScene(Scene& scene)
