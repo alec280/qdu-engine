@@ -9,10 +9,14 @@ namespace QDUEngine
         explicit NavigationMesh(std::shared_ptr<VisualComponent> visualComponent);
         void addCell(Vector2D& begin, Vector2D& end);
         int getCell(Vector2D& pos);
+        Vector2D getCellPosition(int cell);
+        std::vector<int> getPath(int from, int to);
+        std::vector<int> getPath(Vector2D& from, Vector2D& to);
     private:
         struct CellData {
             Vector2D begin;
             Vector2D end;
+            std::vector<int> connections{};
         };
         std::vector<CellData> m_cells{};
     };

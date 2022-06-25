@@ -22,4 +22,22 @@ namespace QDUEngine
         }
         return -1;
     }
+
+    Vector2D NavigationMesh::getCellPosition(int cell)
+    {
+        if (cell >= m_cells.size() || cell == -1) {
+            return {0, 0};
+        }
+        return m_cells[cell].begin;
+    }
+
+    std::vector<int> NavigationMesh::getPath(int from, int to)
+    {
+        return {};
+    }
+
+    std::vector<int> NavigationMesh::getPath(Vector2D& from, Vector2D& to)
+    {
+        return getPath(getCell(from), getCell(to));
+    }
 }

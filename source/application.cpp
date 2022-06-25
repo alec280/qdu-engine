@@ -92,7 +92,7 @@ namespace QDUEngine
 
     std::shared_ptr<GameObject> Application::getMainObject()
     {
-        return m_scene.m_mainObject;
+        return m_scene.getMainObject();
     }
 
     std::shared_ptr<NavigationMesh> Application::getNavigationMesh()

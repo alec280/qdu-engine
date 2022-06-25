@@ -11,6 +11,7 @@ namespace QDUEngine
     public:
         void addGameObject(GameObject& gameObject);
         void addMainObject(GameObject& gameObject);
+        std::shared_ptr<GameObject> getMainObject();
         std::string getName();
         std::shared_ptr<NavigationMesh> getNavigationMesh();
         nlohmann::json getData();

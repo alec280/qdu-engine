@@ -58,28 +58,23 @@ public:
 
 class HunterInput : public InputComponent {
 public:
-    void onAction(Scene* scene, const char* action, float value) override {}
-    void onCursorAction(const char* action, Vector2D& pos) override
+    void onAction(Scene* scene, const char* action, float value) override
     {
-        auto audio = m_gameObject->getAudioComponent();
-        auto visual = m_gameObject->getVisualComponent();
-        if (visual == nullptr) {
-            return;
-        }
-        if (compare(action, "leftClick")) {
-            if (pos.x < 300) {
-                if (audio) {
-                    audio->move(Vector(-1, 0));
-                }
-                visual->move(Vector(-1, 0));
-            } else {
-                if (audio) {
-                    audio->move(Vector(1, 0));
-                }
-                visual->move(Vector(1, 0));
+        if (compare(action, "hunt")) {
+            auto main = scene->getMainObject();
+            auto navMesh = scene->getNavigationMesh();
+            if (!main || !navMesh){
+                return;
+            }
+            auto from = m_gameObject->getVisualComponent()->getPosition();
+            auto to = main->getVisualComponent()->getPosition();
+            auto path = navMesh->getPath(from, to);
+            for (auto cell : path) {
+                std::cout << cell << std::endl;
             }
         }
     }
+    void onCursorAction(const char* action, Vector2D& pos) override {}
     void onUpdate(float timeStep) override {}
 };
 
