@@ -91,41 +91,20 @@ namespace QDUEngine
                 return makeVisualPtr(meshPtr, source, objPath);
             }
         }
-        auto meshPtr = getMeshPtr(objPath, texturePath);
+        auto meshPtr = getMeshData(objPath, texturePath).graphPtr;
         m_loadedComponents.push_back({texturePath, objPath, meshPtr});
         return makeVisualPtr(meshPtr, source, objPath);
     }
 
-    std::shared_ptr<Grafica::SceneGraphNode> Window::getMeshPtr(const char* objPath, const char* texturePath)
+    Window::MeshData Window::getMeshData(const char* objPath, const char* texturePath)
     {
         gr::Shape shape(8);
         std::ifstream in(gr::getPath(objPath).c_str(), std::ios::in);
         if (!in) {
             std::cerr << "[Engine] Cannot open: " << objPath << std::endl;
-            return nullptr;
+            return {shape, nullptr};
         }
         std::string line;
-        /*
-        int i = 0;
-        Vector2D textureCycle[] = {
-                {0, 0},
-                {1, 0},
-                {0, 0},
-                {1, 0},
-                {0, 0},
-                {1, 0},
-                {0, 0},
-                {1, 0},
-                {0, 1},
-                {1, 1},
-                {0, 1},
-                {1, 1},
-                {0, 1},
-                {1, 1},
-                {0, 1},
-                {1, 1},
-        };
-        */
         while (std::getline(in, line)) {
             if (line.substr(0, 2) == "v ") {
                 std::istringstream v(line.substr(2));
@@ -142,7 +121,6 @@ namespace QDUEngine
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(0.f);
                 shape.vertices.push_back(1.f);
-                //i = (i + 1) % 16;
             } else if (line.substr(0,2) == "f ") {
                 std::istringstream v(line.substr(2));
                 glm::vec3 vert;
@@ -168,12 +146,31 @@ namespace QDUEngine
                 tr::identity(),
                 texturedPtr
         );
-        return meshPtr;
+        return {shape, meshPtr};
     }
 
     NavigationMesh Window::getNavigationMesh(const char* objPath, const char* texturePath)
     {
         auto navMesh = NavigationMesh(getMesh(objPath, texturePath));
+        auto shape = getMeshData(objPath, texturePath).shape;
+        std::vector<float> coords{};
+        bool swap = false;
+        for (int i = 0; i < shape.indices.size();) {
+            coords.push_back(shape.vertices[shape.indices[i] * 8]);
+            coords.push_back(shape.vertices[shape.indices[i] * 8 + 1]);
+            if (coords.size() == 4) {
+                auto begin = Vector(coords.at(0), coords.at(1));
+                auto end = Vector(coords.at(2), coords.at(3));
+                navMesh.addCell(begin, end);
+                coords.clear();
+            }
+            swap = !swap;
+            if (swap) {
+                i += 2;
+            } else {
+                i += 4;
+            }
+        }
         return navMesh;
     }
 

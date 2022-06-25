@@ -18,12 +18,16 @@ namespace QDUEngine
             std::string object;
             std::shared_ptr<Grafica::SceneGraphNode> graphPtr;
         };
+        struct MeshData {
+            Grafica::Shape shape;
+            std::shared_ptr<Grafica::SceneGraphNode> graphPtr;
+        };
         void end();
         std::shared_ptr<Grafica::SceneGraphNode> getCubePtr(const char* texturePath);
         std::shared_ptr<VisualComponent> getMesh(const char* objPath, const char* texturePath);
         NavigationMesh getNavigationMesh(const char* objPath, const char* texturePath);
         NavigationMesh getNavigationMesh(nlohmann::json& data);
-        std::shared_ptr<Grafica::SceneGraphNode> getMeshPtr(const char* objPath, const char* texturePath);
+        MeshData getMeshData(const char* objPath, const char* texturePath);
         std::shared_ptr<VisualComponent> makeVisualPtr(
                 std::shared_ptr<Grafica::SceneGraphNode>& grPtr,
                 std::string& source,
