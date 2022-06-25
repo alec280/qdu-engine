@@ -151,8 +151,7 @@ public:
                     "examples/assets/white.png");
             m_obstaclesLoaded = true;
             auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
-            navMeshVisual->scale(Vector3(-1, 1, 1));
-            navMeshVisual->move(Vector(0.5, -0.5));
+            navMeshVisual->move(Vector(-0.5, -0.5));
         }
     }
 private:

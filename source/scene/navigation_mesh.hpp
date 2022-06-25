@@ -7,5 +7,8 @@ namespace QDUEngine
         friend class Scene;
     public:
         explicit NavigationMesh(std::shared_ptr<VisualComponent> visualComponent);
+        int getCell(Vector2D& pos);
+    private:
+        std::vector<int> m_cell{};
     };
 }
