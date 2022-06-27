@@ -7,6 +7,12 @@ namespace QDUEngine
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
             return true;
         }
+        if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+            m_debug = !m_debug;
+        }
+        if (m_debug) {
+            return false;
+        }
         for (auto& binding : m_keyBindings) {
             auto string = binding.first;
             auto act = binding.second;

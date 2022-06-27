@@ -267,6 +267,7 @@ namespace QDUEngine
             m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
             doTransition();
+            setDebugMode(m_input.m_debug);
         }
         log("PRE-END");
         m_audio.clear();
@@ -325,6 +326,20 @@ namespace QDUEngine
         file.open(path);
         file << std::setw(4) << data;
         file.close();
+    }
+
+    void Application::setDebugMode(bool value)
+    {
+        if (value == m_debug) {
+            return;
+        }
+        if (m_debug) {
+            log("Debug mode activated.");
+        } else {
+            log("Debug mode deactivated.");
+        }
+        m_debug = value;
+        setPaused(value);
     }
 
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)

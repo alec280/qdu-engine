@@ -24,6 +24,7 @@ namespace QDUEngine
         void update(Scene* scene, float timeStep);
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
+        bool m_debug = false;
         std::shared_ptr<InputComponent> m_globalInput = nullptr;
         std::map<std::string, std::shared_ptr<InputComponent>> m_loadedComponents{};
         std::map<CursorButton, const char*> m_cursorBindings{};

@@ -4,7 +4,6 @@
 #include "scene/scene.hpp"
 #include "audio/audio.hpp"
 
-
 namespace QDUEngine
 {
     class Application {
@@ -51,5 +50,6 @@ namespace QDUEngine
         float getRunningAverage();
         static void log(const char* msg);
         void saveScene();
+        void setDebugMode(bool value);
     };
 }

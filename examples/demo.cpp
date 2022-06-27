@@ -265,7 +265,13 @@ public:
         } else if (compare(action, "speedster")) {
             m_application->addSpeedster();
         } else if (compare(action, "pause")) {
-            m_application->setPaused(!m_application->isPaused());
+            auto paused = m_application->isPaused();
+            if (paused) {
+                std::cout << "User pause" << std::endl;
+            } else {
+                std::cout << "User unpause" << std::endl;
+            }
+            m_application->setPaused(!paused);
         } else if (compare(action, "cell")) {
             auto navMesh = m_application->getNavigationMesh();
             auto mainObj = m_application->getMainObject();
