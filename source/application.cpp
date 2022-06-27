@@ -95,11 +95,6 @@ namespace QDUEngine
         return m_scene.getMainObject();
     }
 
-    Application::MaxFrameRate Application::getMaximumFrameRate()
-    {
-        return m_maximumFrameRate;
-    }
-
     std::shared_ptr<NavigationMesh> Application::getNavigationMesh()
     {
         return m_scene.getNavigationMesh();
@@ -255,54 +250,18 @@ namespace QDUEngine
         log("START");
         while (!m_window.shouldClose()) {
             std::chrono::time_point<std::chrono::steady_clock> newTime = std::chrono::steady_clock::now();
-            std::chrono::duration<double, std::milli> frameTime = newTime - startTime;
-            auto timeStep = (float)frameTime.count();
+            const auto frameTime = newTime - startTime;
+            startTime = newTime;
+            float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
             if (m_recentFrameRates.size() == 5) {
                 m_recentFrameRates.pop_front();
             }
             m_recentFrameRates.push_back(timeStep);
             if (!isPaused()) {
-                const static float fps24 = 1000.0 / 24.0;
-                const static float fps30 = 1000.0 / 30.0;
-                const static float fps60 = 1000.0 / 60.0;
-                const static float fps120 = 1000.0 / 120.0;
                 timeStep = getRunningAverage();
-                int maxFrameRate = getMaximumFrameRate();
-                switch (maxFrameRate) {
-                    case MaxFrameRate::UNLIMITED:
-                        break;
-                    case MaxFrameRate::FPS_24:
-                        if (timeStep < fps24) {
-                            std::chrono::duration<double, std::milli> delta_ms(fps24 - timeStep);
-                            auto delta_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
-                            std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
-                        }
-                        startTime = std::chrono::steady_clock::now();
-                        std::cout << timeStep + (startTime - newTime).count() << std::endl;
-                        timeStep = fps24;
-                        break;
-                    case MaxFrameRate::FPS_30:
-                        if (timeStep < fps30) {
-                            timeStep = fps30;
-                        }
-                        break;
-                    case MaxFrameRate::FPS_60:
-                        if (timeStep < fps60) {
-                            timeStep = fps60;
-                        }
-                        break;
-                    case MaxFrameRate::FPS_120:
-                        if (timeStep < fps120) {
-                            timeStep = fps120;
-                        }
-                        break;
-                    default:
-                        break;
-                }
             } else {
                 timeStep = 0.f;
             }
-            std::cout << 1.0 / timeStep << std::endl;
             m_input.update(&m_scene, timeStep);
             m_window.update(&m_scene, isPaused());
             m_audio.update(&m_scene, timeStep);
@@ -371,11 +330,6 @@ namespace QDUEngine
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)
     {
         m_input.m_globalInput = inputComponent;
-    }
-
-    void Application::setMaximumFrameRate(MaxFrameRate frameRate)
-    {
-        m_maximumFrameRate = frameRate;
     }
 
     void Application::setPaused(bool value)
