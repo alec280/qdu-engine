@@ -247,6 +247,7 @@ namespace QDUEngine
         std::chrono::time_point<std::chrono::steady_clock> startTime = std::chrono::steady_clock::now();
         m_audio.start();
         m_window.start(name, windowSize, &m_input);
+        m_debug.start();
         userStart();
         log("START");
         while (!m_window.shouldClose()) {
@@ -341,6 +342,7 @@ namespace QDUEngine
             m_mustResume = m_paused;
             setPaused(true);
             log("Debug mode activated.");
+            m_debug.showSceneInformation(&m_scene);
         }
     }
 
