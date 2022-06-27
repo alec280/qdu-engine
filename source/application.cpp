@@ -257,14 +257,13 @@ namespace QDUEngine
                 m_recentFrameRates.pop_front();
             }
             m_recentFrameRates.push_back(timeStep);
+            float averageTimeStep = 0.f;
             if (!isPaused()) {
-                timeStep = getRunningAverage();
-            } else {
-                timeStep = 0.f;
+                averageTimeStep = getRunningAverage();
             }
-            m_input.update(&m_scene, timeStep);
+            m_input.update(&m_scene, averageTimeStep);
             m_window.update(&m_scene, isPaused());
-            m_audio.update(&m_scene, timeStep);
+            m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
             doTransition();
         }
