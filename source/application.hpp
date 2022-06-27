@@ -40,10 +40,11 @@ namespace QDUEngine
         explicit Application();
         Scene m_scene{};
     private:
-        std::deque<float> m_recentFrameRates{};
         Audio m_audio{};
+        bool m_debug = false;
         Input m_input{};
         bool m_paused = false;
+        std::deque<float> m_recentFrameRates{};
         char* m_tempDir = nullptr;
         Window m_window{};
         void doTransition();

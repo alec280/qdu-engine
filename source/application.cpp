@@ -262,7 +262,7 @@ namespace QDUEngine
                 averageTimeStep = getRunningAverage();
             }
             m_input.update(&m_scene, averageTimeStep);
-            m_window.update(&m_scene, isPaused());
+            m_window.update(&m_scene, m_debug);
             m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
             doTransition();
