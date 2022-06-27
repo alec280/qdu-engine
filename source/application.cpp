@@ -333,13 +333,15 @@ namespace QDUEngine
         if (value == m_debug) {
             return;
         }
-        if (m_debug) {
-            log("Debug mode activated.");
-        } else {
-            log("Debug mode deactivated.");
-        }
         m_debug = value;
-        setPaused(value);
+        if (!m_debug) {
+            log("Debug mode deactivated.");
+            setPaused(m_mustResume);
+        } else {
+            m_mustResume = m_paused;
+            setPaused(true);
+            log("Debug mode activated.");
+        }
     }
 
     void Application::setGlobalInput(std::shared_ptr<InputComponent>& inputComponent)

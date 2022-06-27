@@ -42,6 +42,7 @@ namespace QDUEngine
         Audio m_audio{};
         bool m_debug = false;
         Input m_input{};
+        bool m_mustResume = true;
         bool m_paused = false;
         std::deque<float> m_recentFrameRates{};
         char* m_tempDir = nullptr;
