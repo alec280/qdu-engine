@@ -20,7 +20,7 @@ namespace QDUEngine
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Separator();
         ImGui::Text("Scene data:");
-        ImGui::TextWrapped("%s", scene->getData().dump(2).c_str());
+        ImGui::TextUnformatted(scene->getData().dump(2).c_str());
         ImGui::SetNextWindowSize({0, 0});
         ImGui::End();
         ImGui::Render();
