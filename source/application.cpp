@@ -264,6 +264,9 @@ namespace QDUEngine
                 averageTimeStep = getRunningAverage();
             }
             m_input.update(&m_scene, averageTimeStep);
+            if (m_debugMode) {
+                m_debug.showSceneInformation(&m_scene);
+            }
             m_window.update(&m_scene, m_debugMode);
             m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
@@ -279,6 +282,7 @@ namespace QDUEngine
         }
         m_audio.end();
         m_recentFrameRates.clear();
+        m_debug.end();
         log("END");
     }
 
@@ -342,7 +346,6 @@ namespace QDUEngine
             m_mustResume = m_paused;
             setPaused(true);
             log("Debug mode activated.");
-            m_debug.showSceneInformation(&m_scene);
         }
     }
 

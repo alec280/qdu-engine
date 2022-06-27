@@ -11,6 +11,7 @@ namespace QDUEngine
     class DebugManager {
         friend class Application;
     private:
+        void end() noexcept;
         void showSceneInformation(Scene* scene);
         void start();
     };

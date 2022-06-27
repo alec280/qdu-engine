@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <glm/vec2.hpp>
+#include "../debug/debug_manager.hpp"
 #include "../grafica/easy_shaders.h"
 #include "../grafica/simple_eigen.h"
 #include "../input/input.hpp"

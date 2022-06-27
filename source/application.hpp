@@ -1,6 +1,5 @@
 #pragma once
 #include <deque>
-#include "debug/debug_manager.hpp"
 #include "scene/window.hpp"
 #include "audio/audio.hpp"
 

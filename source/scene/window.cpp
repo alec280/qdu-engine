@@ -361,6 +361,9 @@ namespace QDUEngine
                     tr::scale(scale.x, scale.y, scale.z);
             drawSceneGraphNode(nodePtr, *m_pipeline, "model");
         }
+        if (debug) {
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
         glfwSwapBuffers(m_window);
     }
 }
