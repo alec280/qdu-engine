@@ -267,9 +267,9 @@ public:
         } else if (compare(action, "pause")) {
             auto paused = m_application->isPaused();
             if (paused) {
-                std::cout << "User pause" << std::endl;
-            } else {
                 std::cout << "User unpause" << std::endl;
+            } else {
+                std::cout << "User pause" << std::endl;
             }
             m_application->setPaused(!paused);
         } else if (compare(action, "cell")) {
