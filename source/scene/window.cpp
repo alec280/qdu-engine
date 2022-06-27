@@ -333,12 +333,20 @@ namespace QDUEngine
         m_projection = projection;
     }
 
-    void Window::update(Scene* scene, bool debug)
+    void Window::update(Scene* scene, bool debug, Vector3D debugCameraPos)
     {
         gr::Vector3f const viewPos(0, 10, -12);
         gr::Vector3f const eye(0, 0, 0);
         gr::Vector3f const at(0, 0, -1);
-        gr::Matrix4f view = tr::lookAt(viewPos, eye, at);
+        gr::Matrix4f view{};
+
+        if (debug) {
+            gr::Vector3f viewPosDebug(debugCameraPos.x, debugCameraPos.y, debugCameraPos.z);
+            gr::Vector3f eyeDebug(debugCameraPos.x, debugCameraPos.y - 10, debugCameraPos.z + 12);
+            view = tr::lookAt(viewPosDebug, eyeDebug, at);
+        } else {
+            view = tr::lookAt(viewPos, eye, at);
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_pipeline->shaderProgram);

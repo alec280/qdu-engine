@@ -40,7 +40,7 @@ namespace QDUEngine
                 std::string& obj
         );
         void start(const char* name, const Vector2D& window_size, Input* input);
-        void update(Scene* scene, bool debug);
+        void update(Scene* scene, bool debug, Vector3D debugCameraPos);
         Vector2D screenToPos();
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<LoadedComponent> m_loadedComponents{};

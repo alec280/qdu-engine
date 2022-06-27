@@ -12,7 +12,9 @@ namespace QDUEngine
         friend class Application;
     private:
         void end() noexcept;
+        Vector3D getCameraPos();
         void showSceneInformation(Scene* scene);
         void start();
+        float m_cameraPos[3]{0, 10, -12};
     };
 }

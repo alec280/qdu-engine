@@ -11,6 +11,11 @@ namespace QDUEngine
         ImGui::DestroyContext();
     }
 
+    Vector3D DebugManager::getCameraPos()
+    {
+        return Vector3(m_cameraPos[0], m_cameraPos[1], m_cameraPos[2]);
+    }
+
     void DebugManager::showSceneInformation(Scene* scene)
     {
         ImGui_ImplOpenGL3_NewFrame();
@@ -18,6 +23,7 @@ namespace QDUEngine
         ImGui::NewFrame();
         ImGui::Begin("Debug info:");
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::InputFloat3("Camera position", m_cameraPos);
         ImGui::Separator();
         ImGui::Text("Scene data:");
         ImGui::TextUnformatted(scene->getData().dump(2).c_str());

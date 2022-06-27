@@ -267,7 +267,7 @@ namespace QDUEngine
             if (m_debugMode) {
                 m_debug.showSceneInformation(&m_scene);
             }
-            m_window.update(&m_scene, m_debugMode);
+            m_window.update(&m_scene, m_debugMode, m_debug.getCameraPos());
             m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
             doTransition();
