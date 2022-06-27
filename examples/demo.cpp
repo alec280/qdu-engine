@@ -178,6 +178,7 @@ public:
         bindJoystick("RS_X", "right");
         bindJoystick("RS_Y", "down");
         setTempDir("examples/tmp");
+        setMaximumFrameRate(MaxFrameRate::FPS_24);
 
         loadSceneFrom("examples/data/garden.json");
         auto blueCube = getTexturedCube("examples/assets/player.png");
