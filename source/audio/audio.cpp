@@ -33,13 +33,23 @@ namespace QDUEngine
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_REFERENCE_DISTANCE, 1.0));
             OPENALCALL(alSourcei(unusedSource.m_sourceID, AL_BUFFER, stream->getBufferId()));
             OPENALCALL(alSourcef(unusedSource.m_sourceID, AL_SEC_OFFSET, stream->getTotalTime() - component->m_timeLeft));
-            if (component->m_isPlaying) {
+            if (component->m_isPlaying && !m_paused) {
                 OPENALCALL(alSourcePlay( unusedSource.m_sourceID));
+            }
+        }
+        auto source = component->m_audioSource;
+        ALint state;
+        OPENALCALL(alGetSourcei(source.m_sourceID, AL_SOURCE_STATE, &state));
+        if (m_paused && state == AL_PLAYING) {
+            OPENALCALL(alSourceStop(source.m_sourceID));
+        } else if (!m_paused && state != AL_PLAYING) {
+            if (component->m_isPlaying) {
+                OPENALCALL(alSourcef(source.m_sourceID, AL_SEC_OFFSET, stream->getTotalTime() - component->m_timeLeft));
+                OPENALCALL(alSourcePlay(source.m_sourceID));
             }
         }
         if (component->m_is3D) {
             auto pos = component->m_position;
-            auto source = component->m_audioSource;
             OPENALCALL(alSource3f(source.m_sourceID, AL_POSITION, pos.x, pos.y, pos.z));
         }
     }
@@ -199,6 +209,11 @@ namespace QDUEngine
 
     void Audio::update(Scene* scene, float timeStep)
     {
+        if (timeStep == 0 && !m_paused) {
+            m_paused = true;
+        } else if (timeStep > 0 && m_paused){
+            m_paused = false;
+        }
         auto listenerPosition = Vector3(0, 0, 0);
         auto audioComponents = std::vector<std::shared_ptr<AudioComponent>>{};
         for (auto& object : scene->getObjects()) {

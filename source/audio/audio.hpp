@@ -26,6 +26,7 @@ namespace QDUEngine
         std::map<std::string, std::shared_ptr<AudioStream>> m_loadedComponents;
         float m_masterVolume;
         std::vector<std::shared_ptr<AudioComponent>> m_oneOffAudioComponents;
+        bool m_paused = false;
         void assignChannel(std::shared_ptr<AudioComponent>& component, int requestCount);
         void clear();
         void end() noexcept;

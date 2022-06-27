@@ -152,6 +152,7 @@ namespace QDUEngine
                     audioPtr->setAutoPlay(audio["autoPlay"]);
                     audioPtr->play();
                 }
+                audioPtr->setTimeLeft(audio.value("timeLeft", audioPtr->getTimeLeft()));
             }
             std::shared_ptr<InputComponent> input = nullptr;
             auto objectId = objectData.value("id", "");

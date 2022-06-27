@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <cstdlib>
 #include <nlohmann/json.hpp>
 #include "../core/vector_3d.hpp"
 #include "../audio/audio_source.hpp"
@@ -12,11 +13,12 @@ namespace QDUEngine
     public:
         AudioComponent() = default;
         explicit AudioComponent(const char* filename);
+        bool hasSource();
         Vector3D getPosition();
         std::shared_ptr<AudioStream> getStream();
         void clear();
         nlohmann::json getData();
-        bool hasSource();
+        float getTimeLeft();
         void move(const Vector2D& by);
         void move(const Vector3D& by);
         void play();
@@ -27,6 +29,7 @@ namespace QDUEngine
         void setRadius(float value);
         void setPitch(float value);
         void setSource(const char* filename);
+        void setTimeLeft(float value);
     private:
         AudioSource m_audioSource{};
         bool m_autoPlay = false;

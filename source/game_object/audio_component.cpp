@@ -18,6 +18,14 @@ namespace QDUEngine
         m_timeLeft = 0;
     }
 
+    bool AudioComponent::hasSource()
+    {
+        if (m_stream == nullptr) {
+            return false;
+        }
+        return !m_stream->getSource().empty();
+    }
+
     nlohmann::json AudioComponent::getData()
     {
         return {
@@ -30,7 +38,8 @@ namespace QDUEngine
                 {"posZ",       m_position.z},
                 {"pitch",      m_pitch},
                 {"radius",     m_radius},
-                {"source",     m_stream ? m_stream->getSource() : ""}
+                {"source",     m_stream ? m_stream->getSource() : ""},
+                {"timeLeft",   m_timeLeft}
         };
     }
 
@@ -44,12 +53,9 @@ namespace QDUEngine
         return m_stream;
     }
 
-    bool AudioComponent::hasSource()
+    float AudioComponent::getTimeLeft()
     {
-        if (m_stream == nullptr) {
-            return false;
-        }
-        return !m_stream->getSource().empty();
+        return m_timeLeft;
     }
 
     void AudioComponent::move(const Vector2D& by)
@@ -105,5 +111,10 @@ namespace QDUEngine
     {
         m_stream = std::make_shared<AudioStream>(AudioStream(filename));
         m_timeLeft = m_stream->getTotalTime();
+    }
+
+    void AudioComponent::setTimeLeft(float value)
+    {
+        m_timeLeft = fmax(0.f, value);
     }
 }
