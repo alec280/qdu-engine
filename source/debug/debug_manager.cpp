@@ -11,35 +11,18 @@ namespace QDUEngine
         ImGui::DestroyContext();
     }
 
-    void GLAPIENTRY MessageCallback(GLenum source,
-                         GLenum type,
-                         GLuint id,
-                         GLenum severity,
-                         GLsizei length,
-                         const GLchar* message,
-                         const void* userParam)
-    {
-        std::cout << "OpenGL Error: type = " << type << ", message = " << message << std::endl;
-    }
-
     void DebugManager::showSceneInformation(Scene* scene)
     {
-        //glUseProgram(m_lineShader.GetProgramID());
-        //glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-        //glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-        //m_physicsWorldPtr->debugDrawWorld();
-
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        {
-            ImGui::Begin("Debug Settings:");
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::Separator();
-            ImGui::Text("System Debug Draw:");
-            ImGui::End();
-        }
-        //eventManager.Publish(DebugGUIEvent());
+        ImGui::Begin("Debug info:");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Separator();
+        ImGui::Text("Scene data:");
+        ImGui::TextWrapped("%s", scene->getData().dump(2).c_str());
+        ImGui::SetNextWindowSize({0, 0});
+        ImGui::End();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
@@ -48,9 +31,6 @@ namespace QDUEngine
     void DebugManager::start()
     {
         glEnable(GL_DEBUG_OUTPUT);
-        //glDebugMessageCallback(MessageCallback, 0);
-        //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;

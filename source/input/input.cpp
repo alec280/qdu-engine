@@ -65,6 +65,9 @@ namespace QDUEngine
 
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)
     {
+        if (m_debugMode) {
+            return;
+        }
         for (int joystickId = GLFW_JOYSTICK_1; joystickId < GLFW_JOYSTICK_LAST; ++joystickId)
         {
             int const joystickConnected = glfwJoystickPresent(joystickId);
@@ -203,6 +206,9 @@ namespace QDUEngine
 
     void Input::cursorPressed(int button, int action)
     {
+        if (m_debugMode) {
+            return;
+        }
         for (auto& binding : m_cursorBindings) {
             if ((binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) ||
                 (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) ||
