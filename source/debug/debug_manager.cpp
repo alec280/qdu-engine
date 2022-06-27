@@ -34,7 +34,6 @@ namespace QDUEngine
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(glfwGetCurrentContext(), true);
         ImGui_ImplOpenGL3_Init("#version 450");
