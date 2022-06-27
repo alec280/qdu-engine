@@ -1,4 +1,5 @@
 #pragma once
+#include <deque>
 #include "scene/window.hpp"
 #include "scene/scene.hpp"
 #include "audio/audio.hpp"
@@ -39,12 +40,14 @@ namespace QDUEngine
         explicit Application();
         Scene m_scene{};
     private:
+        std::deque<float> m_recentFrameRates{};
         Audio m_audio{};
         Input m_input{};
         bool m_paused = false;
         char* m_tempDir = nullptr;
         Window m_window{};
         void doTransition();
+        float getRunningAverage();
         static void log(const char* msg);
         void saveScene();
     };

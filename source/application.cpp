@@ -100,6 +100,17 @@ namespace QDUEngine
         return m_scene.getNavigationMesh();
     }
 
+    float Application::getRunningAverage()
+    {
+        float totalFrameRate = 0.f;
+        int totalFrames = 0;
+        for (auto frameRate : m_recentFrameRates) {
+            totalFrameRate += frameRate;
+            totalFrames++;
+        }
+        return totalFrameRate / (float)totalFrames;
+    }
+
     Scene Application::getSceneFrom(const char* path)
     {
         if (m_tempDir == nullptr) {
@@ -238,12 +249,18 @@ namespace QDUEngine
         userStart();
         log("START");
         while (!m_window.shouldClose()) {
-            float timeStep = 0.0;
             std::chrono::time_point<std::chrono::steady_clock> newTime = std::chrono::steady_clock::now();
             const auto frameTime = newTime - startTime;
             startTime = newTime;
+            float timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+            if (m_recentFrameRates.size() == 5) {
+                m_recentFrameRates.pop_front();
+            }
+            m_recentFrameRates.push_back(timeStep);
             if (!isPaused()) {
-                timeStep = std::chrono::duration_cast<std::chrono::duration<float>>(frameTime).count();
+                timeStep = getRunningAverage();
+            } else {
+                timeStep = 0.f;
             }
             m_input.update(&m_scene, timeStep);
             m_window.update(&m_scene, isPaused());
@@ -259,6 +276,7 @@ namespace QDUEngine
             log("Temporary directory cleared.");
         }
         m_audio.end();
+        m_recentFrameRates.clear();
         log("END");
     }
 
