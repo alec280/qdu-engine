@@ -8,9 +8,9 @@ namespace QDUEngine
             return true;
         }
         if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-            m_debug = !m_debug;
+            m_debugMode = !m_debugMode;
         }
-        if (m_debug) {
+        if (m_debugMode) {
             return false;
         }
         for (auto& binding : m_keyBindings) {

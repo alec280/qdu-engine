@@ -1,5 +1,6 @@
 #pragma once
 #include <deque>
+#include "debug/debug_manager.hpp"
 #include "scene/window.hpp"
 #include "scene/scene.hpp"
 #include "audio/audio.hpp"
@@ -40,7 +41,8 @@ namespace QDUEngine
         Scene m_scene{};
     private:
         Audio m_audio{};
-        bool m_debug = false;
+        bool m_debugMode = false;
+        DebugManager m_debug;
         Input m_input{};
         bool m_mustResume = true;
         bool m_paused = false;

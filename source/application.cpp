@@ -263,11 +263,11 @@ namespace QDUEngine
                 averageTimeStep = getRunningAverage();
             }
             m_input.update(&m_scene, averageTimeStep);
-            m_window.update(&m_scene, m_debug);
+            m_window.update(&m_scene, m_debugMode);
             m_audio.update(&m_scene, averageTimeStep);
             m_scene.update();
             doTransition();
-            setDebugMode(m_input.m_debug);
+            setDebugMode(m_input.m_debugMode);
         }
         log("PRE-END");
         m_audio.clear();
@@ -330,11 +330,11 @@ namespace QDUEngine
 
     void Application::setDebugMode(bool value)
     {
-        if (value == m_debug) {
+        if (value == m_debugMode) {
             return;
         }
-        m_debug = value;
-        if (!m_debug) {
+        m_debugMode = value;
+        if (!m_debugMode) {
             log("Debug mode deactivated.");
             setPaused(m_mustResume);
         } else {

@@ -63,7 +63,7 @@ namespace QDUEngine
     {
         auto openList = std::vector<int>{from};
         auto cameFrom = std::map<int, int>{};
-        auto scores = std::map<int, float>{{from ,0}};
+        auto scores = std::map<int, float>{std::pair<int, float>(from, 0.f)};
         while(!openList.empty()) {
             int minCell = -1;
             float minValue = std::numeric_limits<float>::infinity();

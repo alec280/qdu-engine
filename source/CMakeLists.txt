@@ -25,6 +25,7 @@ set(QDU_HEADERS
         audio/audio.hpp
         audio/audio_source.hpp
         audio/audio_stream.hpp
+        debug/debug_manager.hpp
         application.hpp
         )
 set(QDU_SOURCES
@@ -52,6 +53,7 @@ set(QDU_SOURCES
         audio/audio.cpp
         audio/audio_source.cpp
         audio/audio_stream.cpp
+        debug/debug_manager.cpp
         application.cpp
         )
 
