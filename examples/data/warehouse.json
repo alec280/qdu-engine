@@ -293,6 +293,18 @@
         "source": "examples/assets/box.png",
         "posX": -3,
         "posY": -7
+      },
+      "audio": {
+        "source": "examples/assets/trumpet_mono.wav",
+        "posX": -3,
+        "posY": -7,
+        "posZ": 0,
+        "isListener": false,
+        "loop": true,
+        "is3D": true,
+        "autoPlay": true,
+        "radius": 5,
+        "pitch": 1
       }
     },
     {

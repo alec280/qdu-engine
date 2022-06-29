@@ -9,6 +9,7 @@ namespace QDUEngine
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual) :
             m_attribute(attribute),
+            m_audio(nullptr),
             m_visual(visual),
             m_input(nullptr),
             m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
@@ -16,6 +17,7 @@ namespace QDUEngine
 
     GameObject::GameObject(AttributeComponent* attribute, std::shared_ptr<VisualComponent>& visual, std::shared_ptr<InputComponent>& input) :
             m_attribute(attribute),
+            m_audio(nullptr),
             m_visual(visual),
             m_input(input),
             m_id(std::to_string(m_hash("GameObject" + std::to_string(m_current_id++))))
@@ -30,6 +32,9 @@ namespace QDUEngine
 
     void GameObject::end()
     {
+        if (m_audio != nullptr) {
+            m_audio->clear();
+        }
         if (m_visual != nullptr) {
             m_visual->getGraphNodePtr()->clear();
         }
@@ -38,15 +43,25 @@ namespace QDUEngine
 
     nlohmann::json GameObject::getData()
     {
-        return {
-            {"id", getId()},
-            {"visual", m_visual->getData()}
-        };
+        nlohmann::json result;
+        result["id"] = getId();
+        if (m_visual) {
+            result["visual"] = m_visual->getData();
+        }
+        if (m_audio) {
+            result["audio"] = m_audio->getData();
+        }
+        return result;
     }
 
-    const std::string GameObject::getId()
+    std::string GameObject::getId()
     {
         return m_id;
+    }
+
+    std::shared_ptr<AudioComponent> GameObject::getAudioComponent()
+    {
+        return m_audio;
     }
 
     std::shared_ptr<InputComponent> GameObject::getInputComponent()
@@ -63,6 +78,15 @@ namespace QDUEngine
     {
         ostream << "[GameObject:" << gameObject.m_id << "]";
         return ostream;
+    }
+
+    void GameObject::setAudioComponent(std::shared_ptr<AudioComponent>& audioComponent)
+    {
+        m_audio = audioComponent;
+        auto ptr = std::make_shared<GameObject>(*this);
+        if (m_input) {
+            m_input->setGameObject(ptr);
+        }
     }
 
     void GameObject::setInputComponent(std::shared_ptr<InputComponent>& inputComponent)

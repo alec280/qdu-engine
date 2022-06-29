@@ -32,13 +32,13 @@ namespace QDUEngine
 
     std::string Vector2D::toString() const
     {
-        std::string result = "(" + std::to_string((int)x) + "," + std::to_string((int)y) + ")";
+        std::string result = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
         return result;
     }
 
     std::ostream &operator<<(std::ostream& os, const Vector2D& vector2D)
     {
-        return os << "( " << vector2D.x << ", " << vector2D.y << ")";
+        return os << vector2D.toString();
     }
 
     bool operator==(const Vector2D& lhs, const Vector2D& rhs)

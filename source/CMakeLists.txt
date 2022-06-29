@@ -14,11 +14,18 @@ set(QDU_HEADERS
         game_object/input_component.hpp
         game_object/visual_component.hpp
         game_object/attribute_component.hpp
+        game_object/audio_component.hpp
         map/map.hpp
         core/vector_2d.hpp
+        core/vector_3d.hpp
         core/dictionary.hpp
         scene/scene.hpp
         scene/window.hpp
+        scene/navigation_mesh.hpp
+        audio/audio.hpp
+        audio/audio_source.hpp
+        audio/audio_stream.hpp
+        debug/debug_manager.hpp
         application.hpp
         )
 set(QDU_SOURCES
@@ -35,11 +42,18 @@ set(QDU_SOURCES
         game_object/input_component.cpp
         game_object/visual_component.cpp
         game_object/attribute_component.cpp
+        game_object/audio_component.cpp
         map/map.cpp
         core/vector_2d.cpp
+        core/vector_3d.cpp
         core/dictionary.cpp
         scene/scene.cpp
         scene/window.cpp
+        scene/navigation_mesh.cpp
+        audio/audio.cpp
+        audio/audio_source.cpp
+        audio/audio_stream.cpp
+        debug/debug_manager.cpp
         application.cpp
         )
 

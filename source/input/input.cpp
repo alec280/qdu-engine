@@ -7,6 +7,14 @@ namespace QDUEngine
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
             return true;
         }
+#if _DEBUG
+        if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+            m_debugMode = !m_debugMode;
+        }
+        if (m_debugMode) {
+            return false;
+        }
+#endif
         for (auto& binding : m_keyBindings) {
             auto string = binding.first;
             auto act = binding.second;
@@ -34,6 +42,12 @@ namespace QDUEngine
 
             } else if (checkKey("O", string, act, GLFW_KEY_O, key, action)) {
 
+            } else if (checkKey("X", string, act, GLFW_KEY_X, key, action)) {
+
+            } else if (checkKey("P", string, act, GLFW_KEY_P, key, action)) {
+
+            } else if (checkKey("C", string, act, GLFW_KEY_C, key, action)) {
+
             }
         }
         return false;
@@ -53,6 +67,9 @@ namespace QDUEngine
 
     void Input::pollJoysticks(std::map<std::size_t, Joystick>& joysticks)
     {
+        if (m_debugMode) {
+            return;
+        }
         for (int joystickId = GLFW_JOYSTICK_1; joystickId < GLFW_JOYSTICK_LAST; ++joystickId)
         {
             int const joystickConnected = glfwJoystickPresent(joystickId);
@@ -114,7 +131,7 @@ namespace QDUEngine
         }
     }
 
-    void Input::update(Scene* scene)
+    void Input::update(Scene* scene, float timeStep)
     {
         for (auto& action : m_cursorActions) {
             m_cursorActions.at(action.first) = 0;
@@ -147,12 +164,19 @@ namespace QDUEngine
                     if (component == nullptr) {
                         continue;
                     }
-                    component->onAction(action.first.c_str(), value);
+                    component->onAction(scene, action.first.c_str(), value);
                 }
                 if (m_globalInput != nullptr) {
-                    m_globalInput->onAction(action.first.c_str(), value);
+                    m_globalInput->onAction(scene, action.first.c_str(), value);
                 }
             }
+        }
+        for (auto& object : scene->getObjects()) {
+            auto component = object->getInputComponent();
+            if (component == nullptr) {
+                continue;
+            }
+            component->onUpdate(timeStep);
         }
     }
 
@@ -184,12 +208,13 @@ namespace QDUEngine
 
     void Input::cursorPressed(int button, int action)
     {
+        if (m_debugMode) {
+            return;
+        }
         for (auto& binding : m_cursorBindings) {
-            if (binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
-                m_cursorActions.at(binding.second) = 1;
-            } else if (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+            if ((binding.first == CursorButton::LEFT && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::MIDDLE && button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) ||
+                (binding.first == CursorButton::RIGHT && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)) {
                 m_cursorActions.at(binding.second) = 1;
             }
         }

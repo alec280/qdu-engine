@@ -5,26 +5,26 @@
 
 namespace QDUEngine
 {
-    struct Joystick
-    {
-        std::vector<bool> buttons;
-        std::vector<float> axes;
-        Joystick(std::size_t const numberOfButtons, std::size_t const numberOfAxes):
-                buttons(numberOfButtons, false), axes(numberOfAxes, 0.0F)
-        {}
-    };
-
     class Input {
         friend class Application;
         friend class Window;
     public:
         enum CursorButton { LEFT, MIDDLE, RIGHT };
     private:
+        struct Joystick
+        {
+            std::vector<bool> buttons;
+            std::vector<float> axes;
+            Joystick(std::size_t const numberOfButtons, std::size_t const numberOfAxes):
+                    buttons(numberOfButtons, false), axes(numberOfAxes, 0.0F)
+            {}
+        };
         bool keyPressed(int key, int action);
         void cursorMoved(double xPos, double yPos);
-        void update(Scene* scene);
+        void update(Scene* scene, float timeStep);
         bool checkKey(const char* key, std::string& string, const char* action, int code, int keyGLFW, int actionGLFW);
         Vector2D m_cursorPos{};
+        bool m_debugMode = false;
         std::shared_ptr<InputComponent> m_globalInput = nullptr;
         std::map<std::string, std::shared_ptr<InputComponent>> m_loadedComponents{};
         std::map<CursorButton, const char*> m_cursorBindings{};
