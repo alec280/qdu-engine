@@ -76,4 +76,6 @@ The engine seeks to provide utilities according to the Entity-Component-System a
 
 - **Scene**: Contains the active GameObjects. Can be switch, stored, and loaded from JSON files.
 
+- **NavigationMesh**: Allows to handle pathfinding inside a Scene with the use of A*. It can be loaded from a OBJ file (requires triangular faces).
+
 For more information, review the `demo.cpp` example inside the `examples` folder.
