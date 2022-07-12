@@ -226,7 +226,7 @@ private:
 
 class GlobalInput : public InputComponent {
 public:
-    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
+    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon) {}
     void onAction(Scene* scene, const char* action, float) override
     {
         if (compare(action, "map")) {
@@ -287,7 +287,7 @@ public:
     void onCursorAction(const char* action, Vector2D& pos) override
     {
         auto zPlane = Vector3(0, 0, 1);
-        std::cout << "World pos: " << m_application->screenToWorld(pos, zPlane, 0) << std::endl;
+        auto worldPos = m_application->screenToWorld(pos, zPlane, 0);
         if (compare(action, "leftClick")) {
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
@@ -303,10 +303,8 @@ public:
             if (!m_combo[0] || !m_combo[1]) {
                 return;
             }
-            if (pos.x > 400) {
-                m_application->addCompanion(m_spawnPos);
-                m_spawnPos += Vector(1, 1);
-            }
+            auto integerPosition = Vector(ceil(worldPos.x), ceil(worldPos.y));
+            m_application->addCompanion(integerPosition);
             m_combo[0] = false;
             m_combo[1] = false;
         }
@@ -315,7 +313,6 @@ public:
 private:
     bool m_combo[2]{false, false};
     Dungeon* m_application;
-    Vector2D m_spawnPos;
 };
 
 int main()
