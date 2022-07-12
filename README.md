@@ -79,3 +79,7 @@ The engine seeks to provide utilities according to the Entity-Component-System a
 - **NavigationMesh**: Allows to handle pathfinding inside a Scene with the use of A*. It can be loaded from a OBJ file (requires triangular faces).
 
 For more information, review the `demo.cpp` example inside the `examples` folder.
+
+## FAQ
+Q. `saveGameObject()` and `saveScene()` don't create a file. Why? <br>
+A. Those functions don't create folders, the specified dir path must be created beforehand.

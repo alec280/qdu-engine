@@ -299,7 +299,7 @@ namespace QDUEngine
         }
         std::ofstream file;
         file.open(path);
-        file << object->getData();
+        file << std::setw(4) << object->getData();
         file.close();
     }
 
