@@ -48,6 +48,14 @@ namespace QDUEngine
 
             } else if (checkKey("C", string, act, GLFW_KEY_C, key, action)) {
 
+            } else if (checkKey("UP", string, act, GLFW_KEY_UP, key, action)) {
+
+            } else if (checkKey("DOWN", string, act, GLFW_KEY_DOWN, key, action)) {
+
+            } else if (checkKey("RIGHT", string, act, GLFW_KEY_RIGHT, key, action)) {
+
+            } else if (checkKey("LEFT", string, act, GLFW_KEY_LEFT, key, action)) {
+
             }
         }
         return false;

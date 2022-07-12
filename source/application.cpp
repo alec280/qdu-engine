@@ -236,6 +236,11 @@ namespace QDUEngine
         std::cout << "[Engine] " << msg << std::endl;
     }
 
+    void Application::moveCamera(const Vector3D& by)
+    {
+        m_window.m_cameraPos += by;
+    }
+
     void Application::moveCamera(Vector3D& by)
     {
         m_window.m_cameraPos += by;
@@ -405,5 +410,15 @@ namespace QDUEngine
         if (m_tempDir != nullptr) {
             std::filesystem::remove_all(Grafica::getPath(m_tempDir));
         }
+    }
+
+    Vector3D Application::getCameraPosition()
+    {
+        return m_window.m_cameraPos;
+    }
+
+    void Application::resetCamera()
+    {
+        m_window.m_cameraPos = {0, 10, -12};
     }
 }

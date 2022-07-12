@@ -28,11 +28,11 @@ namespace QDUEngine
 
         auto temp2 = proj.transpose() * tr::lookAt(viewPos, eye, at);
         auto norm = gr::Vector3f(temp2.x(), temp2.y(), temp2.z()).normalized();
-        auto prod = -(viewPos.dot(gr::Vector3f(plane.x, plane.y, plane.z))) / norm.dot(gr::Vector3f(plane.x, plane.y, plane.z));
+        auto planeF = gr::Vector3f(plane.x, plane.y, plane.z);
+        auto prod = -(viewPos.dot(planeF)) / norm.dot(planeF);
 
-        auto depthFactor = depth != 0.f ? (depth - viewPos.z()) / (norm.z() * prod) : 1.f;
+        auto depthFactor = depth != 0.f ? (depth - viewPos.dot(planeF)) / (norm.dot(planeF) * prod) : 1.f;
         auto result = viewPos + norm * prod * depthFactor;
-        std::cout << result << std::endl;
         return Vector3(result.x(),result.y(),result.z());
     }
 

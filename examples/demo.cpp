@@ -173,6 +173,10 @@ public:
         bindKey("C", "cell");
         bindKey("H", "hunt");
         bindKey("X", "speedster");
+        bindKey("LEFT", "cameraLeft");
+        bindKey("UP", "cameraUp");
+        bindKey("DOWN", "cameraDown");
+        bindKey("RIGHT", "cameraRight");
         bindJoystick("LS_X", "right");
         bindJoystick("LS_Y", "down");
         bindJoystick("RS_X", "right");
@@ -205,6 +209,7 @@ public:
     }
     void onTransition() noexcept override
     {
+        resetCamera();
         if (m_scene.getName() == "obstacles.json" && !m_obstaclesLoaded) {
             setNavigationMesh(&m_scene,
                     "examples/assets/obstacles_nav_mesh.obj",
@@ -229,7 +234,15 @@ public:
     explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon) {}
     void onAction(Scene* scene, const char* action, float) override
     {
-        if (compare(action, "map")) {
+        if (compare(action, "cameraUp")) {
+            m_application->moveCamera(Vector3(0, -1, 0));
+        } else if (compare(action, "cameraDown")) {
+            m_application->moveCamera(Vector3(0, 1, 0));
+        } else if (compare(action, "cameraRight")) {
+            m_application->moveCamera(Vector3(1, 0, 0));
+        } else if (compare(action, "cameraLeft")) {
+            m_application->moveCamera(Vector3(-1, 0, 0));
+        } else if (compare(action, "map")) {
             std::cout << "Rebind left: ";
             char tmp = (char)std::cin.get();
             if (std::cin.fail()) {
