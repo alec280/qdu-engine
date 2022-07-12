@@ -49,6 +49,7 @@ namespace QDUEngine
         void start(const char* name, const Vector2D& window_size, Input* input);
         void update(Scene* scene, bool debug, Vector3D debugCameraPos);
         Vector3D screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth);
+        Vector3D m_cameraPos{0, 10, -12};
         Grafica::PhongTextureShaderProgram* m_pipeline{};
         std::vector<LoadedComponent> m_loadedComponents{};
         PerspectiveData m_perspective{};

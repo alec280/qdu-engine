@@ -236,6 +236,11 @@ namespace QDUEngine
         std::cout << "[Engine] " << msg << std::endl;
     }
 
+    void Application::moveCamera(Vector3D& by)
+    {
+        m_window.m_cameraPos += by;
+    }
+
     void Application::playAudio(const char* path, bool is3D, Vector3D pos)
     {
         m_audio.playAudio(path, is3D, pos);

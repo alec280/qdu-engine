@@ -25,6 +25,7 @@ namespace QDUEngine
         bool isPaused();
         void loadSceneFrom(const char* path);
         std::shared_ptr<VisualComponent> loadVisualComponent(nlohmann::json& data);
+        void moveCamera(Vector3D& by);
         void playAudio(const char* path, bool is3D, Vector3D pos);
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);

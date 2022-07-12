@@ -17,8 +17,8 @@ namespace QDUEngine
         double xNorm = 2.0 * screenPos.x / m_perspective.size.x - 1.0;
         double zNorm = 2.0 * screenPos.y / m_perspective.size.y - 1.0;
 
-        gr::Vector3f const viewPos(0, 10, -12);
-        gr::Vector3f const eye(0, 0, 0);
+        gr::Vector3f viewPos(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z);
+        gr::Vector3f eye(m_cameraPos.x, m_cameraPos.y - 10, m_cameraPos.z + 12);
         gr::Vector3f const at(0, 0, -1);
 
         auto clip = gr::Vector4f((float)xNorm, (float)-zNorm, -1.0, 1.0);
@@ -30,7 +30,9 @@ namespace QDUEngine
         auto norm = gr::Vector3f(temp2.x(), temp2.y(), temp2.z()).normalized();
         auto prod = -(viewPos.dot(gr::Vector3f(plane.x, plane.y, plane.z))) / norm.dot(gr::Vector3f(plane.x, plane.y, plane.z));
 
-        auto result = viewPos + norm * prod;
+        auto depthFactor = depth != 0.f ? (depth - viewPos.z()) / (norm.z() * prod) : 1.f;
+        auto result = viewPos + norm * prod * depthFactor;
+        std::cout << result << std::endl;
         return Vector3(result.x(),result.y(),result.z());
     }
 
@@ -354,8 +356,8 @@ namespace QDUEngine
 
     void Window::update(Scene* scene, bool debug, Vector3D debugCameraPos)
     {
-        gr::Vector3f const viewPos(0, 10, -12);
-        gr::Vector3f const eye(0, 0, 0);
+        gr::Vector3f viewPos(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z);
+        gr::Vector3f eye(m_cameraPos.x, m_cameraPos.y - 10, m_cameraPos.z + 12);
         gr::Vector3f const at(0, 0, -1);
         gr::Matrix4f view{};
 
