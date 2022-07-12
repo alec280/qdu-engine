@@ -29,6 +29,7 @@ namespace QDUEngine
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);
         static void saveGameObject(GameObject* object, const char *path);
+        void saveScene(const char* path);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setPaused(bool value);
         void setNavigationMesh(Scene* scene, const char* objPath, const char* texturePath);
@@ -50,7 +51,7 @@ namespace QDUEngine
         void doTransition();
         float getRunningAverage();
         static void log(const char* msg);
-        void saveScene();
+        void saveScene(const char* path, bool temp);
         void setDebugMode(bool value);
     };
 }

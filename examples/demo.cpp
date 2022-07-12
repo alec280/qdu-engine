@@ -199,6 +199,9 @@ public:
         auto saveTo = getAbsolutePath("examples/out/enemy.json");
         saveGameObject(&enemy, saveTo.c_str());
         playAudio("examples/assets/trumpet_mono.wav", false, Vector3(0, 0, 0));
+
+        saveTo = getAbsolutePath("examples/out/my_scene.json");
+        saveScene(saveTo.c_str());
     }
     void onTransition() noexcept override
     {

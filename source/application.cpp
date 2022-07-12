@@ -298,18 +298,25 @@ namespace QDUEngine
             return;
         }
         std::ofstream file;
+        auto filePath = std::filesystem::path(path);
+        std::filesystem::create_directories(filePath.parent_path());
         file.open(path);
         file << std::setw(4) << object->getData();
         file.close();
     }
 
-    void Application::saveScene()
+    void Application::saveScene(const char* path)
     {
-        if (m_scene.m_name.empty()) {
+        saveScene(path, false);
+    }
+
+    void Application::saveScene(const char* path, bool temp)
+    {
+        if (m_scene.m_name.empty() && temp) {
             return;
         }
-        if (m_tempDir == nullptr) {
-            log("Can't save current scene without temporary directory.");
+        if (m_tempDir == nullptr && temp) {
+            log("Can't save temp scene without temporary directory.");
             return;
         }
         auto data = m_scene.getData();
@@ -324,11 +331,17 @@ namespace QDUEngine
                 }
             }
         }
-        std::string fileName = "/" + m_scene.m_name;
         std::ofstream file;
-        std::filesystem::create_directories(Grafica::getPath(m_tempDir));
-        auto path = Grafica::getPath(m_tempDir + fileName);
-        file.open(path);
+        if (temp) {
+            std::string fileName = "/" + m_scene.m_name;
+            std::filesystem::create_directories(Grafica::getPath(m_tempDir));
+            auto finalPath = Grafica::getPath(m_tempDir + fileName);
+            file.open(finalPath);
+        } else {
+            auto filePath = std::filesystem::path(path);
+            std::filesystem::create_directories(filePath.parent_path());
+            file.open(path);
+        }
         file << std::setw(4) << data;
         file.close();
     }
@@ -369,7 +382,7 @@ namespace QDUEngine
     void Application::setScene(Scene& scene)
     {
         log("Ending previous scene.");
-        saveScene();
+        saveScene("", true);
         m_audio.stopAll(&m_scene);
         m_scene.end();
         m_scene = scene;
