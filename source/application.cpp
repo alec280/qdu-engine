@@ -346,6 +346,11 @@ namespace QDUEngine
         file.close();
     }
 
+    Vector3D Application::screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth)
+    {
+        return m_window.screenToWorld(screenPos, plane, depth);
+    }
+
     void Application::setDebugMode(bool value)
     {
         if (value == m_debugMode) {

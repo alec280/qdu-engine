@@ -30,6 +30,7 @@ namespace QDUEngine
         void run(const char *name, float windowSizeX, float windowSizeY);
         static void saveGameObject(GameObject* object, const char *path);
         void saveScene(const char* path);
+        Vector3D screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setPaused(bool value);
         void setNavigationMesh(Scene* scene, const char* objPath, const char* texturePath);

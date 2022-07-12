@@ -286,6 +286,8 @@ public:
     }
     void onCursorAction(const char* action, Vector2D& pos) override
     {
+        auto zPlane = Vector3(0, 0, 1);
+        std::cout << "World pos: " << m_application->screenToWorld(pos, zPlane, 0) << std::endl;
         if (compare(action, "leftClick")) {
             m_combo[0] = pos.x < 200;
             m_combo[1] = false;
