@@ -127,30 +127,15 @@ public:
         speedster.setAudioComponent(audio);
         m_scene.addGameObject(speedster);
     }
-    void userStart() noexcept override
+    void startGame()
     {
-        // Application settings.
-        bindCursorButton(Input::CursorButton::LEFT, "leftClick");
-        bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
-        bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
-        bindKey("A", "left");
-        bindKey("W", "up");
-        bindKey("S", "down");
-        bindKey("D", "right");
-        bindKey("M", "map");
-        bindKey("P", "pause");
-        bindKey("C", "cell");
-        bindKey("LEFT", "cameraLeft");
-        bindKey("UP", "cameraUp");
-        bindKey("DOWN", "cameraDown");
-        bindKey("RIGHT", "cameraRight");
-        bindJoystick("LS_X", "right");
-        bindJoystick("LS_Y", "down");
-        bindJoystick("RS_X", "right");
-        bindJoystick("RS_Y", "down");
-        setTempDir("examples/tmp");
+        // Clean previous.
+        m_coinVisuals.clear();
+        m_enemyVisuals.clear();
+        resetCamera();
+        gameStatus = 0;
 
-        // Load most of the objects from disk.
+        // Load most objects from disk.
         loadSceneFrom("examples/data/level_1.json");
 
         // Add main character to the scene.
@@ -194,10 +179,37 @@ public:
         );
         auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
         navMeshVisual->move(Vector(-0.5, -0.5));
+    }
+    void userStart() noexcept override
+    {
+        // Application settings.
+        bindCursorButton(Input::CursorButton::LEFT, "leftClick");
+        bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
+        bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
+        bindKey("A", "left");
+        bindKey("W", "up");
+        bindKey("S", "down");
+        bindKey("D", "right");
+        bindKey("M", "map");
+        bindKey("P", "pause");
+        bindKey("C", "cell");
+        bindKey("R", "reset");
+        bindKey("LEFT", "cameraLeft");
+        bindKey("UP", "cameraUp");
+        bindKey("DOWN", "cameraDown");
+        bindKey("RIGHT", "cameraRight");
+        bindJoystick("LS_X", "right");
+        bindJoystick("LS_Y", "down");
+        bindJoystick("RS_X", "right");
+        bindJoystick("RS_Y", "down");
+        setTempDir("examples/tmp");
+
+        // Add gameObjects.
+        startGame();
 
         // Just to showcase data saving.
         auto saveTo = getAbsolutePath("examples/out/player.json");
-        saveGameObject(&player, saveTo.c_str());
+        saveGameObject(m_scene.getMainObject().get(), saveTo.c_str());
         saveTo = getAbsolutePath("examples/out/my_scene.json");
         saveScene(saveTo.c_str());
     }
@@ -306,6 +318,8 @@ public:
                     std::cout << "You are in cell: " << navMesh->getCell(pos) << std::endl;
                 }
             }
+        } else if (compare(action, "reset") && gameStatus == -1) {
+            m_application->startGame();
         } else {
             if (gameStatus != 0) {
                 return;
