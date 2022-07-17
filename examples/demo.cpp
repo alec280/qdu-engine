@@ -66,15 +66,15 @@ public:
             return;
         }
         m_time += timeStep;
-        double posX = sin(m_time) * 0.003;
-        visual->move(Vector((float)posX,0));
-        audio->move(Vector3((float)posX,0, 0));
+        auto pos = Vector(sin(m_time) * 0.003, 0);
+        visual->move(pos);
+        audio->move(pos);
     }
 private:
     float m_time = 0.f;
 };
 
-class EnemyInput : public InputComponent {
+class BombInput : public InputComponent {
 public:
     void onAction(Scene* scene, const char* action, float value) override {}
     void onCursorAction(const char* action, Vector2D& pos) override {}
@@ -95,20 +95,26 @@ public:
 
 class Dungeon : public Application {
 public:
-    void addCompanion(Vector2D& pos)
+    void spawnBomb(Vector2D& pos)
     {
-        auto enemyInput = std::make_shared<EnemyInput>();
-        auto companion = getGameObjectFrom("examples/data/companion.json");
-        companion.getVisualComponent()->move(pos);
-        auto companionPtr = std::make_shared<GameObject>(companion);
-        enemyInput->setGameObject(companionPtr);
-        companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
-        auto audio = getAudio("examples/assets/double_bell.wav");
-        audio->move(pos);
-        companion.setAudioComponent(audio);
-        m_scene.addGameObject(companion);
-        audio->play();
-        std::cout << "Companion added!" << std::endl;
+        if (m_bomb != nullptr) {
+            auto audio = m_bomb->getAudioComponent();
+            auto visual = m_bomb->getVisualComponent();
+            visual->scale(Vector3(0.5, 0.5, 0.5));
+            visual->move(pos - visual->getPosition());
+            playAudio("examples/assets/double_bell.wav", false, {});
+            return;
+        }
+        auto bombInput = std::make_shared<BombInput>();
+        auto bomb = getGameObjectFrom("examples/data/bomb.json");
+        bomb.getVisualComponent()->move(pos);
+        auto bombPtr = std::make_shared<GameObject>(bomb);
+        bombInput->setGameObject(bombPtr);
+        bomb.setInputComponent((std::shared_ptr<InputComponent>&)bombInput);
+        playAudio("examples/assets/double_bell.wav", false, {});
+        m_scene.addGameObject(bomb);
+        m_bomb = bombPtr;
+        std::cout << "Bomb dropped!" << std::endl;
     }
     void addSpeedster()
     {
@@ -132,6 +138,7 @@ public:
         // Clean previous.
         m_coinVisuals.clear();
         m_enemyVisuals.clear();
+        m_bomb = nullptr;
         resetCamera();
         gameStatus = 0;
 
@@ -165,8 +172,7 @@ public:
         for (auto& pos : m_enemyPos) {
             auto redCube = getTexturedCube("examples/assets/enemy.png");
             redCube->move(pos);
-            auto enemyInput = std::make_shared<EnemyInput>();
-            auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
+            auto enemy = Static(redCube);
             m_scene.addGameObject(enemy);
             m_enemyVisuals.push_back(redCube);
         }
@@ -194,6 +200,7 @@ public:
         bindKey("P", "pause");
         bindKey("C", "cell");
         bindKey("R", "reset");
+        bindKey("ENTER", "bomb");
         bindKey("LEFT", "cameraLeft");
         bindKey("UP", "cameraUp");
         bindKey("DOWN", "cameraDown");
@@ -237,6 +244,7 @@ public:
             addSpeedster();
         }
     }
+    std::shared_ptr<GameObject> m_bomb = nullptr;
     std::vector<std::shared_ptr<VisualComponent>> m_coinVisuals{};
     std::vector<std::shared_ptr<VisualComponent>> m_enemyVisuals{};
 private:
@@ -318,6 +326,9 @@ public:
                     std::cout << "You are in cell: " << navMesh->getCell(pos) << std::endl;
                 }
             }
+        } else if (compare(action, "bomb") && gameStatus == 0 && m_selectedCell != -1) {
+            auto pos = m_application->getNavigationMesh()->getCellPosition(m_selectedCell);
+            m_application->spawnBomb(pos);
         } else if (compare(action, "reset") && gameStatus == -1) {
             m_application->startGame();
         } else {
@@ -326,6 +337,17 @@ public:
             }
             auto main = scene->getMainObject();
             auto mainPos = main->getVisualComponent()->getPosition();
+            if (mainPos == m_lastPos) {
+                return;
+            }
+            m_lastPos = mainPos;
+            auto bomb = m_application->m_bomb;
+            if (bomb) {
+                std::cout << bomb->getVisualComponent()->getPosition() << std::endl;
+                if (mainPos == bomb->getVisualComponent()->getPosition()) {
+                    bomb->getVisualComponent()->scale(Vector3(0, 0, 0));
+                }
+            }
             int coinIdx = -1;
             for (int i = 0; i < m_application->m_coinVisuals.size(); i++) {
                 auto visual = m_application->m_coinVisuals[i];
@@ -346,30 +368,27 @@ public:
                 m_application->onTransition();
                 return;
             }
-            if (mainPos != m_lastPos) {
-                m_lastPos = mainPos;
-                auto newPosVector = std::vector<Vector2D>{};
-                auto navMesh = scene->getNavigationMesh();
-                for (auto& visual : m_application->m_enemyVisuals) {
-                    auto enemyPos = visual->getPosition();
-                    auto path = navMesh->getPath(enemyPos, mainPos);
-                    if (path.size() > 1) {
-                        auto newPos = navMesh->getCellPosition(path[1]);
-                        for (auto& otherVisual : m_application->m_enemyVisuals) {
-                            if (visual == otherVisual) {
-                                continue;
-                            }
-                            if (newPos == otherVisual->getPosition()) {
-                                newPos = 2 * enemyPos - newPos;
-                            }
+            auto newPosVector = std::vector<Vector2D>{};
+            auto navMesh = scene->getNavigationMesh();
+            for (auto& visual : m_application->m_enemyVisuals) {
+                auto enemyPos = visual->getPosition();
+                auto path = navMesh->getPath(enemyPos, mainPos);
+                if (path.size() > 1) {
+                    auto newPos = navMesh->getCellPosition(path[1]);
+                    for (auto& otherVisual : m_application->m_enemyVisuals) {
+                        if (visual == otherVisual) {
+                            continue;
                         }
-                        visual->move(newPos - enemyPos);
-                        if (newPos == mainPos) {
-                            std::cout << "Game Over" << std::endl;
-                            main->getVisualComponent()->scale(Vector3(0, 0, 0));
-                            gameStatus = -1;
-                            break;
+                        if (newPos == otherVisual->getPosition()) {
+                            newPos = 2 * enemyPos - newPos;
                         }
+                    }
+                    visual->move(newPos - enemyPos);
+                    if (newPos == mainPos) {
+                        std::cout << "Game Over" << std::endl;
+                        main->getVisualComponent()->scale(Vector3(0, 0, 0));
+                        gameStatus = -1;
+                        break;
                     }
                 }
             }
@@ -377,33 +396,20 @@ public:
     }
     void onCursorAction(const char* action, Vector2D& pos) override
     {
-        auto zPlane = Vector3(0, 0, 1);
-        auto worldPos = m_application->screenToWorld(pos, zPlane, 0);
+        if (gameStatus != 0) {
+            return;
+        }
         if (compare(action, "leftClick")) {
-            m_combo[0] = pos.x < 200;
-            m_combo[1] = false;
-        } else if (compare(action, "middleClick")) {
-            if (!m_combo[0] || m_combo[1]) {
-                m_combo[1] = false;
-            } else if (pos.x > 200 && pos.x < 400) {
-                m_combo[1] = true;
-            } else {
-                m_combo[0] = false;
-            }
-        } else if (compare(action, "rightClick")) {
-            if (!m_combo[0] || !m_combo[1]) {
-                return;
-            }
-            auto integerPosition = Vector(ceil(worldPos.x), ceil(worldPos.y));
-            m_application->addCompanion(integerPosition);
-            m_combo[0] = false;
-            m_combo[1] = false;
+            auto zPlane = Vector3(0, 0, 1);
+            auto worldPos = m_application->screenToWorld(pos, zPlane, 0);
+            auto worldPos2D = Vector(worldPos.x, worldPos.y);
+            m_selectedCell = m_application->getNavigationMesh()->getCell(worldPos2D);
         }
     }
     void onUpdate(float timeStep) override {}
 private:
-    bool m_combo[2]{false, false};
     Vector2D m_lastPos = {4, 2};
+    int m_selectedCell = -1;
     Dungeon* m_application;
 };
 

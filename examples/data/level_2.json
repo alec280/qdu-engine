@@ -558,16 +558,6 @@
         "radius": 7,
         "pitch": 1
       }
-    },
-    {
-      "visual": {
-        "source": "examples/assets/bomb.png",
-        "posX": 1,
-        "posY": 0,
-        "scaleX": 0.5,
-        "scaleY": 0.5,
-        "scaleZ": 0.5
-      }
     }
   ]
 }
