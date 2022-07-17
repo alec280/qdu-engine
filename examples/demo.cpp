@@ -97,6 +97,9 @@ class Dungeon : public Application {
 public:
     void spawnBomb(Vector2D& pos)
     {
+        if (m_bombUsed) {
+            return;
+        }
         if (m_bomb != nullptr) {
             auto audio = m_bomb->getAudioComponent();
             auto visual = m_bomb->getVisualComponent();
@@ -139,6 +142,7 @@ public:
         m_coinVisuals.clear();
         m_enemyVisuals.clear();
         m_bomb = nullptr;
+        m_bombUsed = false;
         resetCamera();
         gameStatus = 0;
 
@@ -244,6 +248,7 @@ public:
             addSpeedster();
         }
     }
+    bool m_bombUsed = false;
     std::shared_ptr<GameObject> m_bomb = nullptr;
     std::vector<std::shared_ptr<VisualComponent>> m_coinVisuals{};
     std::vector<std::shared_ptr<VisualComponent>> m_enemyVisuals{};
@@ -343,7 +348,6 @@ public:
             m_lastPos = mainPos;
             auto bomb = m_application->m_bomb;
             if (bomb) {
-                std::cout << bomb->getVisualComponent()->getPosition() << std::endl;
                 if (mainPos == bomb->getVisualComponent()->getPosition()) {
                     bomb->getVisualComponent()->scale(Vector3(0, 0, 0));
                 }
@@ -371,7 +375,20 @@ public:
             auto newPosVector = std::vector<Vector2D>{};
             auto navMesh = scene->getNavigationMesh();
             for (auto& visual : m_application->m_enemyVisuals) {
+                if (visual->getScale() == Vector3(0, 0, 0)) {
+                    continue;
+                }
                 auto enemyPos = visual->getPosition();
+                if (bomb) {
+                    auto bombVisual = bomb->getVisualComponent();
+                    if (enemyPos == bombVisual->getPosition() &&
+                    bombVisual->getScale() != Vector3(0, 0, 0) && !m_application->m_bombUsed) {
+                        visual->scale(Vector3(0, 0, 0));
+                        bomb->getVisualComponent()->scale(Vector3(0, 0, 0));
+                        m_application->m_bombUsed = true;
+                        continue;
+                    }
+                }
                 auto path = navMesh->getPath(enemyPos, mainPos);
                 if (path.size() > 1) {
                     auto newPos = navMesh->getCellPosition(path[1]);
@@ -379,7 +396,7 @@ public:
                         if (visual == otherVisual) {
                             continue;
                         }
-                        if (newPos == otherVisual->getPosition()) {
+                        if (newPos == otherVisual->getPosition() && otherVisual->getScale().x != 0) {
                             newPos = 2 * enemyPos - newPos;
                         }
                     }
