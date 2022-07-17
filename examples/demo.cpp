@@ -2,97 +2,56 @@
 
 using namespace QDUEngine;
 
+int gameStatus = 0;
+
 class PlayerInput : public InputComponent {
 public:
     void onAction(Scene* scene, const char* action, float value) override
     {
+        if (gameStatus == -1) {
+            return;
+        }
         auto audio = m_gameObject->getAudioComponent();
         auto visual = m_gameObject->getVisualComponent();
         if (visual == nullptr || audio == nullptr) {
             return;
         }
-        if (compare(action, "left")) {
-            visual->move(Vector(-value, 0));
-            audio->move(Vector(-value, 0));
-        } else if (compare(action, "right")) {
-            visual->move(Vector(value, 0));
-            audio->move(Vector(value, 0));
-        } else if (compare(action, "down")) {
-            visual->move(Vector(0, value));
-            audio->move(Vector(0, value));
-        } else if (compare(action, "up")) {
-            visual->move(Vector(0, -value));
-            audio->move(Vector(0, -value));
-        }
-    }
-    void onCursorAction(const char* action, Vector2D& pos) override {}
-    void onUpdate(float timeStep) override {}
-};
-
-class EnemyInput : public InputComponent {
-public:
-    void onAction(Scene* scene, const char* action, float value) override {}
-    void onCursorAction(const char* action, Vector2D& pos) override
-    {
-        auto audio = m_gameObject->getAudioComponent();
-        auto visual = m_gameObject->getVisualComponent();
-        if (visual == nullptr) {
-            return;
-        }
-        if (compare(action, "leftClick")) {
-            if (pos.x < 300) {
-                if (audio) {
-                    audio->move(Vector(-1, 0));
-                }
-                visual->move(Vector(-1, 0));
-            } else {
-                if (audio) {
-                    audio->move(Vector(1, 0));
-                }
-                visual->move(Vector(1, 0));
-            }
-        }
-    }
-    void onUpdate(float timeStep) override {}
-};
-
-class HunterInput : public InputComponent {
-public:
-    void onAction(Scene* scene, const char* action, float value) override
-    {
-        if (compare(action, "hunt")) {
-            auto main = scene->getMainObject();
-            auto navMesh = scene->getNavigationMesh();
-            if (!main || !navMesh){
+        if (value != -1.f && value != 1.f && value != 0.f) {
+            if (!m_canUseJoystick) {
                 return;
             }
-            auto from = m_gameObject->getVisualComponent()->getPosition();
-            auto to = main->getVisualComponent()->getPosition();
-            auto path = navMesh->getPath(from, to);
-            m_path.clear();
-            for (auto& cell : path) {
-                m_path.push_back(navMesh->getCellPosition(cell));
-            }
+            m_joystickCoolOff = 0.25;
+            m_canUseJoystick = false;
         }
-    }
-    void onCursorAction(const char* action, Vector2D& pos) override {}
-    void onUpdate(float timeStep) override {
-        m_delay -= timeStep;
-        if (m_delay > 0) {
+        float standardValue = (float)(0 < value) - (float)(value < 0);
+        auto potentialMove = Vector2D{};
+        if (compare(action, "left")) {
+            potentialMove = Vector(-standardValue, 0);
+        } else if (compare(action, "right")) {
+            potentialMove = Vector(standardValue, 0);
+        } else if (compare(action, "down")) {
+            potentialMove = Vector(0, standardValue);
+        } else if (compare(action, "up")) {
+            potentialMove = Vector(0, -standardValue);
+        }
+        auto potentialPos = visual->getPosition() + potentialMove;
+        if (scene->getNavigationMesh()->getCell(potentialPos) == -1) {
             return;
         }
-        m_delay = 0.1;
-        if (!m_path.empty()) {
-            auto current = m_gameObject->getVisualComponent()->getPosition();
-            auto to = m_path.front();
-            auto moveBy = to - current;
-            m_gameObject->getVisualComponent()->move(moveBy);
-            m_path.erase(std::remove(m_path.begin(), m_path.end(), to), m_path.end());
+        visual->move(potentialMove);
+        audio->move(potentialMove);
+    }
+    void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onUpdate(float timeStep) override
+    {
+        m_joystickCoolOff -= timeStep;
+        if (m_joystickCoolOff <= 0) {
+            m_canUseJoystick = true;
         }
     }
 private:
-    float m_delay = 0.1;
-    std::vector<Vector2D> m_path{};
+    float m_joystickCoolOff = 0.f;
+    bool m_canUseJoystick = true;
 };
 
 class SpeedsterInput : public InputComponent {
@@ -107,11 +66,19 @@ public:
             return;
         }
         m_time += timeStep;
-        visual->move(Vector(sin(m_time) * 3,0) - visual->getPosition());
-        audio->move(Vector3(sin(m_time) * 3,0, 0) - audio->getPosition());
+        auto pos = Vector(sin(m_time) * 0.003, 0);
+        visual->move(pos);
+        audio->move(pos);
     }
 private:
     float m_time = 0.f;
+};
+
+class BombInput : public InputComponent {
+public:
+    void onAction(Scene* scene, const char* action, float value) override {}
+    void onCursorAction(const char* action, Vector2D& pos) override {}
+    void onUpdate(float timeStep) override {}
 };
 
 class Static : public GameObject {
@@ -128,39 +95,104 @@ public:
 
 class Dungeon : public Application {
 public:
-    void addCompanion(Vector2D& pos)
+    void spawnBomb(Vector2D& pos)
     {
-        auto enemyInput = std::make_shared<EnemyInput>();
-        auto companion = getGameObjectFrom("examples/data/companion.json");
-        companion.getVisualComponent()->move(pos);
-        auto companionPtr = std::make_shared<GameObject>(companion);
-        enemyInput->setGameObject(companionPtr);
-        companion.setInputComponent((std::shared_ptr<InputComponent>&)enemyInput);
-        auto audio = getAudio("examples/assets/double_bell.wav");
-        audio->move(pos);
-        companion.setAudioComponent(audio);
-        m_scene.addGameObject(companion);
-        audio->play();
-        std::cout << "Companion added!" << std::endl;
+        if (m_bombUsed) {
+            return;
+        }
+        if (m_bomb != nullptr) {
+            auto audio = m_bomb->getAudioComponent();
+            auto visual = m_bomb->getVisualComponent();
+            visual->scale(Vector3(0.5, 0.5, 0.5));
+            visual->move(pos - visual->getPosition());
+            playAudio("examples/assets/double_bell.wav", false, {});
+            return;
+        }
+        auto bombInput = std::make_shared<BombInput>();
+        auto bomb = getGameObjectFrom("examples/data/bomb.json");
+        bomb.getVisualComponent()->move(pos);
+        auto bombPtr = std::make_shared<GameObject>(bomb);
+        bombInput->setGameObject(bombPtr);
+        bomb.setInputComponent((std::shared_ptr<InputComponent>&)bombInput);
+        playAudio("examples/assets/double_bell.wav", false, {});
+        m_scene.addGameObject(bomb);
+        m_bomb = bombPtr;
+        std::cout << "Bomb dropped!" << std::endl;
     }
     void addSpeedster()
     {
-        auto redCube = getTexturedCube("examples/assets/enemy.png");
+        auto greenCube = getTexturedCube("examples/assets/companion.png");
+        greenCube->move(Vector(-4, -10));
         auto speedsterInput = std::make_shared<SpeedsterInput>();
-        auto speedster = Character(redCube, (std::shared_ptr<InputComponent>&)speedsterInput);
+        auto speedster = Character(greenCube, (std::shared_ptr<InputComponent>&)speedsterInput);
         auto audio = getAudio("examples/assets/trumpet_mono.wav");
         audio->setAsLooping(true);
         audio->setAs3D(true);
-        audio->setRadius(3);
+        audio->setRadius(5);
         audio->setAutoPlay(true);
         audio->setPitch(2);
+        audio->move(Vector(-4, -10));
         audio->play();
         speedster.setAudioComponent(audio);
         m_scene.addGameObject(speedster);
-        std::cout << "Speedster added!" << std::endl;
+    }
+    void startGame()
+    {
+        // Clean previous.
+        m_coinVisuals.clear();
+        m_enemyVisuals.clear();
+        m_bomb = nullptr;
+        m_bombUsed = false;
+        resetCamera();
+        gameStatus = 0;
+
+        // Load most objects from disk.
+        loadSceneFrom("examples/data/level_1.json");
+
+        // Add main character to the scene.
+        auto blueCube = getTexturedCube("examples/assets/player.png");
+        auto playerInput = std::make_shared<PlayerInput>();
+        auto audio = getAudio("");
+        audio->setAsListener(true);
+        audio->move(Vector(4, 2));
+        blueCube->move(Vector(4, 2));
+        moveCamera(Vector3(4, 0, 0));
+        auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
+        player.setAudioComponent(audio);
+        m_scene.addMainObject(player);
+
+        // Add coins to the scene.
+        auto coinScale = Vector3(0.5, 0.1, 0.99);
+        for (auto& pos : m_coinPos) {
+            auto coinCube = getTexturedCube("examples/assets/coin.png");
+            coinCube->scale(coinScale);
+            coinCube->move(pos);
+            auto coin = Static(coinCube);
+            m_scene.addGameObject(coin);
+            m_coinVisuals.push_back(coinCube);
+        }
+
+        // Add enemies to the scene.
+        for (auto& pos : m_enemyPos) {
+            auto redCube = getTexturedCube("examples/assets/enemy.png");
+            redCube->move(pos);
+            auto enemy = Static(redCube);
+            m_scene.addGameObject(enemy);
+            m_enemyVisuals.push_back(redCube);
+        }
+
+        // Add first nav mesh.
+        setNavigationMesh(
+                &m_scene,
+                "examples/assets/level_1_nav_mesh.obj",
+                "examples/assets/white.png"
+        );
+        auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
+        navMeshVisual->move(Vector(-0.5, -0.5));
     }
     void userStart() noexcept override
     {
+        // Application settings.
         bindCursorButton(Input::CursorButton::LEFT, "leftClick");
         bindCursorButton(Input::CursorButton::MIDDLE, "middleClick");
         bindCursorButton(Input::CursorButton::RIGHT, "rightClick");
@@ -171,62 +203,80 @@ public:
         bindKey("M", "map");
         bindKey("P", "pause");
         bindKey("C", "cell");
-        bindKey("H", "hunt");
-        bindKey("X", "speedster");
+        bindKey("R", "reset");
+        bindKey("ENTER", "bomb");
+        bindKey("LEFT", "cameraLeft");
+        bindKey("UP", "cameraUp");
+        bindKey("DOWN", "cameraDown");
+        bindKey("RIGHT", "cameraRight");
         bindJoystick("LS_X", "right");
         bindJoystick("LS_Y", "down");
         bindJoystick("RS_X", "right");
         bindJoystick("RS_Y", "down");
         setTempDir("examples/tmp");
 
-        loadSceneFrom("examples/data/garden.json");
-        auto blueCube = getTexturedCube("examples/assets/player.png");
-        auto playerInput = std::make_shared<PlayerInput>();
-        auto audio = getAudio("");
-        audio->setAsListener(true);
-        audio->move(Vector(-2, -2));
-        blueCube->move(Vector(-2, -2));
-        auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
-        player.setAudioComponent(audio);
-        m_scene.addMainObject(player);
+        // Add gameObjects.
+        startGame();
 
-        auto redCube = getTexturedCube("examples/assets/enemy.png");
-        auto enemyInput = std::make_shared<EnemyInput>();
-        redCube->move(QDUEngine::Vector(2, 2));
-        auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
-        m_scene.addGameObject(enemy);
-
-        auto saveTo = getAbsolutePath("/examples/out/enemy.json");
-        saveGameObject(&enemy, saveTo.c_str());
-        playAudio("examples/assets/trumpet_mono.wav", false, Vector3(0, 0, 0));
+        // Just to showcase data saving.
+        auto saveTo = getAbsolutePath("examples/out/player.json");
+        saveGameObject(m_scene.getMainObject().get(), saveTo.c_str());
+        saveTo = getAbsolutePath("examples/out/my_scene.json");
+        saveScene(saveTo.c_str());
     }
     void onTransition() noexcept override
     {
-        if (m_scene.getName() == "obstacles.json" && !m_obstaclesLoaded) {
+        resetCamera();
+
+        // Set second nav mesh.
+        if (m_scene.getName() == "level_2.json") {
             setNavigationMesh(&m_scene,
-                    "examples/assets/obstacles_nav_mesh.obj",
+                    "examples/assets/level_2_nav_mesh.obj",
                     "examples/assets/white.png");
-            m_obstaclesLoaded = true;
             auto navMeshVisual = m_scene.getNavigationMesh()->getVisualComponent();
             navMeshVisual->move(Vector(-0.5, -0.5));
-
-            auto redCube = getTexturedCube("examples/assets/enemy.png");
-            auto enemyInput = std::make_shared<HunterInput>();
-            redCube->move(QDUEngine::Vector(0, 3));
-            auto enemy = Character(redCube, (std::shared_ptr<InputComponent>&)enemyInput);
-            m_scene.addGameObject(enemy);
+            auto blueCube = getTexturedCube("examples/assets/player.png");
+            auto playerInput = std::make_shared<PlayerInput>();
+            auto audio = getAudio("");
+            audio->setAsListener(true);
+            audio->move(Vector(4, 0));
+            blueCube->move(Vector(4, 0));
+            moveCamera(Vector3(4, 0, 0));
+            auto player = Character(blueCube, (std::shared_ptr<InputComponent>&)playerInput);
+            player.setAudioComponent(audio);
+            m_scene.addMainObject(player);
+            addSpeedster();
         }
     }
+    bool m_bombUsed = false;
+    std::shared_ptr<GameObject> m_bomb = nullptr;
+    std::vector<std::shared_ptr<VisualComponent>> m_coinVisuals{};
+    std::vector<std::shared_ptr<VisualComponent>> m_enemyVisuals{};
 private:
-    bool m_obstaclesLoaded = false;
+    std::vector<Vector2D> m_coinPos = {
+            {-2, -2},{-2, -1},{-2, -3},{10, -2},{10, -1},{10, -3},
+            {5, -6},{6, -6},{2, -6},{3, -6},{4, -6}, {-3, 3},
+            {-3, -7}, {11, -7}, {11, 3}
+    };
+    std::vector<Vector2D> m_enemyPos = {
+            {0, -4},{8, -4}
+    };
 };
 
 class GlobalInput : public InputComponent {
 public:
-    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon), m_spawnPos(Vector(0, 0)) {}
+    explicit GlobalInput(Dungeon* dungeon) : m_application(dungeon) {}
     void onAction(Scene* scene, const char* action, float) override
     {
-        if (compare(action, "map")) {
+        if (compare(action, "cameraUp")) {
+            m_application->moveCamera(Vector3(0, -1, 0));
+        } else if (compare(action, "cameraDown")) {
+            m_application->moveCamera(Vector3(0, 1, 0));
+        } else if (compare(action, "cameraRight")) {
+            m_application->moveCamera(Vector3(1, 0, 0));
+        } else if (compare(action, "cameraLeft")) {
+            m_application->moveCamera(Vector3(-1, 0, 0));
+        } else if (compare(action, "map")) {
             std::cout << "Rebind left: ";
             char tmp = (char)std::cin.get();
             if (std::cin.fail()) {
@@ -262,8 +312,6 @@ public:
             }
             std::cin.ignore(1);
             m_application->bindKey(&tmp, "right");
-        } else if (compare(action, "speedster")) {
-            m_application->addSpeedster();
         } else if (compare(action, "pause")) {
             auto paused = m_application->isPaused();
             if (paused) {
@@ -277,40 +325,109 @@ public:
             auto mainObj = m_application->getMainObject();
             if (navMesh && mainObj) {
                 auto pos = mainObj->getVisualComponent()->getPosition();
-                std::cout << "Main object is in cell: " << navMesh->getCell(pos) << std::endl;
+                if (gameStatus == -1) {
+                    std::cout << "You were in cell: " << navMesh->getCell(pos) << std::endl;
+                } else {
+                    std::cout << "You are in cell: " << navMesh->getCell(pos) << std::endl;
+                }
+            }
+        } else if (compare(action, "bomb") && gameStatus == 0 && m_selectedCell != -1) {
+            auto pos = m_application->getNavigationMesh()->getCellPosition(m_selectedCell);
+            m_application->spawnBomb(pos);
+        } else if (compare(action, "reset") && gameStatus == -1) {
+            m_application->startGame();
+        } else {
+            if (gameStatus != 0) {
+                return;
+            }
+            auto main = scene->getMainObject();
+            auto mainPos = main->getVisualComponent()->getPosition();
+            if (mainPos == m_lastPos) {
+                return;
+            }
+            m_lastPos = mainPos;
+            auto bomb = m_application->m_bomb;
+            if (bomb) {
+                if (mainPos == bomb->getVisualComponent()->getPosition()) {
+                    bomb->getVisualComponent()->scale(Vector3(0, 0, 0));
+                }
+            }
+            int coinIdx = -1;
+            for (int i = 0; i < m_application->m_coinVisuals.size(); i++) {
+                auto visual = m_application->m_coinVisuals[i];
+                if (visual->getPosition() == mainPos) {
+                    visual->scale(Vector3(0, 0, 0));
+                    coinIdx = i;
+                    break;
+                }
+            }
+            if (coinIdx != -1) {
+                m_application->playAudio("examples/assets/coin.wav", false, {});
+                m_application->m_coinVisuals.erase(m_application->m_coinVisuals.begin() + coinIdx);
+            }
+            if (m_application->m_coinVisuals.empty()) {
+                std::cout << "You won!" << std::endl;
+                gameStatus = 1;
+                m_application->loadSceneFrom("examples/data/level_2.json");
+                m_application->onTransition();
+                return;
+            }
+            auto newPosVector = std::vector<Vector2D>{};
+            auto navMesh = scene->getNavigationMesh();
+            for (auto& visual : m_application->m_enemyVisuals) {
+                if (visual->getScale() == Vector3(0, 0, 0)) {
+                    continue;
+                }
+                auto enemyPos = visual->getPosition();
+                if (bomb) {
+                    auto bombVisual = bomb->getVisualComponent();
+                    if (enemyPos == bombVisual->getPosition() &&
+                    bombVisual->getScale() != Vector3(0, 0, 0) && !m_application->m_bombUsed) {
+                        visual->scale(Vector3(0, 0, 0));
+                        bomb->getVisualComponent()->scale(Vector3(0, 0, 0));
+                        m_application->m_bombUsed = true;
+                        continue;
+                    }
+                }
+                auto path = navMesh->getPath(enemyPos, mainPos);
+                if (path.size() > 1) {
+                    auto newPos = navMesh->getCellPosition(path[1]);
+                    for (auto& otherVisual : m_application->m_enemyVisuals) {
+                        if (visual == otherVisual) {
+                            continue;
+                        }
+                        if (newPos == otherVisual->getPosition() && otherVisual->getScale().x != 0) {
+                            newPos = 2 * enemyPos - newPos;
+                        }
+                    }
+                    visual->move(newPos - enemyPos);
+                    if (newPos == mainPos) {
+                        std::cout << "Game Over" << std::endl;
+                        main->getVisualComponent()->scale(Vector3(0, 0, 0));
+                        gameStatus = -1;
+                        break;
+                    }
+                }
             }
         }
     }
     void onCursorAction(const char* action, Vector2D& pos) override
     {
+        if (gameStatus != 0) {
+            return;
+        }
         if (compare(action, "leftClick")) {
-            m_combo[0] = pos.x < 200;
-            m_combo[1] = false;
-        } else if (compare(action, "middleClick")) {
-            if (!m_combo[0] || m_combo[1]) {
-                m_combo[1] = false;
-            } else if (pos.x > 200 && pos.x < 400) {
-                m_combo[1] = true;
-            } else {
-                m_combo[0] = false;
-            }
-        } else if (compare(action, "rightClick")) {
-            if (!m_combo[0] || !m_combo[1]) {
-                return;
-            }
-            if (pos.x > 400) {
-                m_application->addCompanion(m_spawnPos);
-                m_spawnPos += Vector(1, 1);
-            }
-            m_combo[0] = false;
-            m_combo[1] = false;
+            auto zPlane = Vector3(0, 0, 1);
+            auto worldPos = m_application->screenToWorld(pos, zPlane, 0);
+            auto worldPos2D = Vector(worldPos.x, worldPos.y);
+            m_selectedCell = m_application->getNavigationMesh()->getCell(worldPos2D);
         }
     }
     void onUpdate(float timeStep) override {}
 private:
-    bool m_combo[2]{false, false};
+    Vector2D m_lastPos = {4, 2};
+    int m_selectedCell = -1;
     Dungeon* m_application;
-    Vector2D m_spawnPos;
 };
 
 int main()

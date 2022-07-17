@@ -58,13 +58,24 @@ target_include_directories(MyGame PRIVATE ${QDU_INCLUDE_DIRECTORY} ${THIRD_PARTY
 Note that executables created this way will also require the OpenAL soft files built before.
 
 ### Quick API
+The engine seeks to provide utilities according to the Entity-Component-System architecture. What follows is a brief description of it's principal classes.
+
 - **Application**: Any application created should extend this class, it contains a scene where to put game objects. It also controls global settings, such as key bindings, window size, and temporary directories. Methods to override:
   - `userStart()` for initialization.
   - `onTransition()` to handle scene changes.
 
-- **InputComponent**: Allows to handle actions. Methods to override:
-  - `onAction()` to handle keyboard keys and joysticks.
-  - `onCursorAction()` to handle cursor clicks.
-  - `onUpdate()` to handle actions dictated by time.
+- **GameObject**: Entity in ECS. Can have any (or none) of the following components:
+
+  - **InputComponent**: Allows to handle actions. Methods to override:
+    - `onAction()` to handle keyboard keys and joysticks.
+    - `onCursorAction()` to handle cursor clicks.
+    - `onUpdate()` to handle actions dictated by time.
+
+  - **AudioComponent**: Allows to play audio from WAV files.
+  - **VisualComponent**: Allows to represent the object in 3D.
+
+- **Scene**: Contains the active GameObjects. Can be switch, stored, and loaded from JSON files.
+
+- **NavigationMesh**: Allows to handle pathfinding inside a Scene with the use of A*. It can be loaded from a OBJ file (requires triangular faces).
 
 For more information, review the `demo.cpp` example inside the `examples` folder.

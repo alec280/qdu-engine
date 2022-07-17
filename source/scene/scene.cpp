@@ -61,6 +61,12 @@ namespace QDUEngine
             }
             data["objects"].push_back(object->getData());
         }
+        for (auto& object : m_gameObjectsQueue) {
+            if (object == m_mainObject || object == m_navigation) {
+                continue;
+            }
+            data["objects"].push_back(object->getData());
+        }
         for (auto& transition : m_transitions) {
             auto vectors = transition.second;
             data["transitions"][transition.first] = {

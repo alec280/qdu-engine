@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include <iostream>
 
 namespace gr = Grafica;
 namespace tr = Grafica::Transformations;
@@ -11,9 +12,28 @@ namespace QDUEngine
         glfwTerminate();
     }
 
-    Vector2D Window::screenToPos()
+    Vector3D Window::screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth)
     {
-        return Vector(0, 0);
+        double xNorm = 2.0 * screenPos.x / m_perspective.size.x - 1.0;
+        double zNorm = 2.0 * screenPos.y / m_perspective.size.y - 1.0;
+
+        gr::Vector3f viewPos(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z);
+        gr::Vector3f eye(m_cameraPos.x, m_cameraPos.y - 10, m_cameraPos.z + 12);
+        gr::Vector3f const at(0, 0, -1);
+
+        auto clip = gr::Vector4f((float)xNorm, (float)-zNorm, -1.0, 1.0);
+
+        gr::Vector4f temp = clip.transpose() * m_projection->inverse();
+        auto proj = gr::Vector4f(temp.x(), temp.y(), -1.0, 0.0);
+
+        auto temp2 = proj.transpose() * tr::lookAt(viewPos, eye, at);
+        auto norm = gr::Vector3f(temp2.x(), temp2.y(), temp2.z()).normalized();
+        auto planeF = gr::Vector3f(plane.x, plane.y, plane.z);
+        auto prod = -(viewPos.dot(planeF)) / norm.dot(planeF);
+
+        auto depthFactor = depth != 0.f ? (depth - viewPos.dot(planeF)) / (norm.dot(planeF) * prod) : 1.f;
+        auto result = viewPos + norm * prod * depthFactor;
+        return Vector3(result.x(),result.y(),result.z());
     }
 
     std::shared_ptr<Grafica::SceneGraphNode> Window::getCubePtr(const char* texturePath)
@@ -329,14 +349,15 @@ namespace QDUEngine
         glUniform1f(glGetUniformLocation(m_pipeline->shaderProgram, "linearAttenuation"), 0.03);
         glUniform1f(glGetUniformLocation(m_pipeline->shaderProgram, "quadraticAttenuation"), 0.01);
 
+        m_perspective = {{window_size.x, window_size.y}, 45, window_size.x / window_size.y, 0.1, 100};
         auto* projection = new gr::Matrix4f(gr::Transformations::perspective(45, window_size.x/window_size.y, 0.1, 100));
         m_projection = projection;
     }
 
     void Window::update(Scene* scene, bool debug, Vector3D debugCameraPos)
     {
-        gr::Vector3f const viewPos(0, 10, -12);
-        gr::Vector3f const eye(0, 0, 0);
+        gr::Vector3f viewPos(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z);
+        gr::Vector3f eye(m_cameraPos.x, m_cameraPos.y - 10, m_cameraPos.z + 12);
         gr::Vector3f const at(0, 0, -1);
         gr::Matrix4f view{};
 

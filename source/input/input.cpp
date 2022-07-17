@@ -48,6 +48,40 @@ namespace QDUEngine
 
             } else if (checkKey("C", string, act, GLFW_KEY_C, key, action)) {
 
+            } else if (checkKey("R", string, act, GLFW_KEY_R, key, action)) {
+
+            } else if (checkKey("ENTER", string, act, GLFW_KEY_ENTER, key, action)) {
+
+            } else if (checkKey("DELETE", string, act, GLFW_KEY_DELETE, key, action)) {
+
+            } else if (checkKey("UP", string, act, GLFW_KEY_UP, key, action)) {
+
+            } else if (checkKey("DOWN", string, act, GLFW_KEY_DOWN, key, action)) {
+
+            } else if (checkKey("RIGHT", string, act, GLFW_KEY_RIGHT, key, action)) {
+
+            } else if (checkKey("LEFT", string, act, GLFW_KEY_LEFT, key, action)) {
+
+            } else if (checkKey("0", string, act, GLFW_KEY_0, key, action)) {
+
+            } else if (checkKey("1", string, act, GLFW_KEY_1, key, action)) {
+
+            } else if (checkKey("2", string, act, GLFW_KEY_2, key, action)) {
+
+            } else if (checkKey("3", string, act, GLFW_KEY_3, key, action)) {
+
+            } else if (checkKey("4", string, act, GLFW_KEY_4, key, action)) {
+
+            } else if (checkKey("5", string, act, GLFW_KEY_5, key, action)) {
+
+            } else if (checkKey("6", string, act, GLFW_KEY_6, key, action)) {
+
+            } else if (checkKey("7", string, act, GLFW_KEY_7, key, action)) {
+
+            } else if (checkKey("8", string, act, GLFW_KEY_8, key, action)) {
+
+            } else if (checkKey("9", string, act, GLFW_KEY_9, key, action)) {
+
             }
         }
         return false;

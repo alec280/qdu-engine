@@ -1,0 +1,563 @@
+{
+  "transitions": {},
+  "objects": [
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -3,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 0,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 1,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 2,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 3,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -7
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 11,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 9,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 8,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 7,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 6,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 5,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 3,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 2,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 1,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 4,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 5,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 6,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 7,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 8,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 9,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 11,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 12,
+        "posY": -8
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -3,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 0,
+        "posY": 4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -3
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -4,
+        "posY": -7
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -1,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 0,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": -2,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 0,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": -5
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": -4
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": 1
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 10,
+        "posY": 0
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 9,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 8,
+        "posY": 2
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 9,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/wall.png",
+        "posX": 8,
+        "posY": -6
+      }
+    },
+    {
+      "visual": {
+        "source": "examples/assets/box.png",
+        "posX": 4,
+        "posY": -2
+      },
+      "audio": {
+        "source": "examples/assets/trumpet_mono.wav",
+        "posX": 4,
+        "posY": -2,
+        "posZ": 0,
+        "isListener": false,
+        "loop": true,
+        "is3D": true,
+        "autoPlay": true,
+        "radius": 7,
+        "pitch": 1
+      }
+    }
+  ]
+}

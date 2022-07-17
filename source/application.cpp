@@ -236,6 +236,16 @@ namespace QDUEngine
         std::cout << "[Engine] " << msg << std::endl;
     }
 
+    void Application::moveCamera(const Vector3D& by)
+    {
+        m_window.m_cameraPos += by;
+    }
+
+    void Application::moveCamera(Vector3D& by)
+    {
+        m_window.m_cameraPos += by;
+    }
+
     void Application::playAudio(const char* path, bool is3D, Vector3D pos)
     {
         m_audio.playAudio(path, is3D, pos);
@@ -298,18 +308,25 @@ namespace QDUEngine
             return;
         }
         std::ofstream file;
+        auto filePath = std::filesystem::path(path);
+        std::filesystem::create_directories(filePath.parent_path());
         file.open(path);
-        file << object->getData();
+        file << std::setw(4) << object->getData();
         file.close();
     }
 
-    void Application::saveScene()
+    void Application::saveScene(const char* path)
     {
-        if (m_scene.m_name.empty()) {
+        saveScene(path, false);
+    }
+
+    void Application::saveScene(const char* path, bool temp)
+    {
+        if (m_scene.m_name.empty() && temp) {
             return;
         }
-        if (m_tempDir == nullptr) {
-            log("Can't save current scene without temporary directory.");
+        if (m_tempDir == nullptr && temp) {
+            log("Can't save temp scene without temporary directory.");
             return;
         }
         auto data = m_scene.getData();
@@ -324,13 +341,24 @@ namespace QDUEngine
                 }
             }
         }
-        std::string fileName = "/" + m_scene.m_name;
         std::ofstream file;
-        std::filesystem::create_directories(Grafica::getPath(m_tempDir));
-        auto path = Grafica::getPath(m_tempDir + fileName);
-        file.open(path);
+        if (temp) {
+            std::string fileName = "/" + m_scene.m_name;
+            std::filesystem::create_directories(Grafica::getPath(m_tempDir));
+            auto finalPath = Grafica::getPath(m_tempDir + fileName);
+            file.open(finalPath);
+        } else {
+            auto filePath = std::filesystem::path(path);
+            std::filesystem::create_directories(filePath.parent_path());
+            file.open(path);
+        }
         file << std::setw(4) << data;
         file.close();
+    }
+
+    Vector3D Application::screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth)
+    {
+        return m_window.screenToWorld(screenPos, plane, depth);
     }
 
     void Application::setDebugMode(bool value)
@@ -369,7 +397,7 @@ namespace QDUEngine
     void Application::setScene(Scene& scene)
     {
         log("Ending previous scene.");
-        saveScene();
+        saveScene("", true);
         m_audio.stopAll(&m_scene);
         m_scene.end();
         m_scene = scene;
@@ -382,5 +410,15 @@ namespace QDUEngine
         if (m_tempDir != nullptr) {
             std::filesystem::remove_all(Grafica::getPath(m_tempDir));
         }
+    }
+
+    Vector3D Application::getCameraPosition()
+    {
+        return m_window.m_cameraPos;
+    }
+
+    void Application::resetCamera()
+    {
+        m_window.m_cameraPos = {0, 10, -12};
     }
 }

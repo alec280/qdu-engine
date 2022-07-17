@@ -17,6 +17,7 @@ namespace QDUEngine
         Scene getSceneFrom(const char* path);
         static std::string getAbsolutePath(const char* path);
         std::shared_ptr<AudioComponent> getAudio(const char* audioPath);
+        Vector3D getCameraPosition();
         std::shared_ptr<GameObject> getMainObject();
         std::shared_ptr<NavigationMesh> getNavigationMesh();
         std::shared_ptr<VisualComponent> getTexturedMesh(const char* objPath, const char* texturePath);
@@ -25,10 +26,15 @@ namespace QDUEngine
         bool isPaused();
         void loadSceneFrom(const char* path);
         std::shared_ptr<VisualComponent> loadVisualComponent(nlohmann::json& data);
+        void moveCamera(const Vector3D& by);
+        void moveCamera(Vector3D& by);
         void playAudio(const char* path, bool is3D, Vector3D pos);
+        void resetCamera();
         void run(const char* name, const Vector2D& windowSize);
         void run(const char *name, float windowSizeX, float windowSizeY);
         static void saveGameObject(GameObject* object, const char *path);
+        void saveScene(const char* path);
+        Vector3D screenToWorld(Vector2D& screenPos, Vector3D& plane, float depth);
         void setGlobalInput(std::shared_ptr<InputComponent>& inputComponent);
         void setPaused(bool value);
         void setNavigationMesh(Scene* scene, const char* objPath, const char* texturePath);
@@ -50,7 +56,7 @@ namespace QDUEngine
         void doTransition();
         float getRunningAverage();
         static void log(const char* msg);
-        void saveScene();
+        void saveScene(const char* path, bool temp);
         void setDebugMode(bool value);
     };
 }
