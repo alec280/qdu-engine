@@ -10,7 +10,9 @@ namespace QDUEngine
         virtual void userStart() = 0;
         virtual void onTransition() = 0;
         void bindCursorButton(Input::CursorButton cursorButton, const char* action);
+        void bindKey(std::string& key, const char* action);
         void bindKey(const char* key, const char* action);
+        void bindJoystick(std::string& key, const char* action);
         void bindJoystick(const char* key, const char* action);
         GameObject getGameObjectFrom(const char* path);
         GameObject getGameObjectFrom(const char* path, std::shared_ptr<InputComponent>& input);

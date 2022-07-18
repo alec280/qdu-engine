@@ -16,6 +16,18 @@ namespace QDUEngine
         m_input.m_actions[std::string(action)] = 0;
     }
 
+    void Application::bindKey(std::string& key, const char* action)
+    {
+        m_input.m_keyBindings[key] = action;
+        m_input.m_actions[std::string(action)] = 0;
+    }
+
+    void Application::bindJoystick(std::string& key, const char* action)
+    {
+        m_input.m_joystickBindings[key] = action;
+        m_input.m_actions[std::string(action)] = 0;
+    }
+
     void Application::bindJoystick(const char* key, const char* action)
     {
         m_input.m_joystickBindings[std::string(key)] = action;

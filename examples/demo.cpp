@@ -278,12 +278,14 @@ public:
         } else if (compare(action, "map")) {
             std::cout << "Rebind left: ";
             char tmp = (char)std::cin.get();
+            std::string newKey;
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_application->bindKey(&tmp, "left");
+            newKey = std::string(&tmp).at(0);
+            m_application->bindKey(newKey, "left");
 
             std::cout << "Rebind up: ";
             tmp = (char)std::cin.get();
@@ -292,7 +294,8 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_application->bindKey(&tmp, "up");
+            newKey = std::string(&tmp).at(0);
+            m_application->bindKey(newKey, "up");
 
             std::cout << "Rebind down: ";
             tmp = (char)std::cin.get();
@@ -301,7 +304,8 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_application->bindKey(&tmp, "down");
+            newKey = std::string(&tmp).at(0);
+            m_application->bindKey(newKey, "down");
 
             std::cout << "Rebind right: ";
             tmp = (char)std::cin.get();
@@ -310,7 +314,8 @@ public:
                 std::cin.ignore();
             }
             std::cin.ignore(1);
-            m_application->bindKey(&tmp, "right");
+            newKey = std::string(&tmp).at(0);
+            m_application->bindKey(newKey, "right");
         } else if (compare(action, "pause")) {
             auto paused = m_application->isPaused();
             if (paused) {
