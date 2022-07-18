@@ -66,9 +66,8 @@ public:
             return;
         }
         m_time += timeStep;
-        auto pos = Vector(sin(m_time) * 0.003, 0);
-        visual->move(pos);
-        audio->move(pos);
+        visual->move(Vector(sin(m_time) * 3,-10) - visual->getPosition());
+        audio->move(Vector3(sin(m_time) * 3,-10, 0) - audio->getPosition());
     }
 private:
     float m_time = 0.f;
